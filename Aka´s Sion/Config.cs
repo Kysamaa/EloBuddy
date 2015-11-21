@@ -251,15 +251,15 @@ namespace AddonTemplate
 
             public class MiscMenu
             {
-                private static readonly CheckBox _InterruptR;
+                private static readonly CheckBox _InterruptQ;
                 private static readonly CheckBox _KSQ;
                 private static readonly CheckBox _KSW;
                 private static readonly CheckBox _KSR;
                 private static readonly CheckBox _KSE;
 
-                public static bool InterruptR
+                public static bool InterruptQ
                 {
-                    get { return _InterruptR.CurrentValue; }
+                    get { return _InterruptQ.CurrentValue; }
                 }
 
                 public static bool KSQ
@@ -288,7 +288,7 @@ namespace AddonTemplate
                     _KSW = Menu.Add("KSW", new CheckBox("Ks W"));
                     _KSE = Menu.Add("KSE", new CheckBox("Ks E"));
                     _KSR = Menu.Add("KSR", new CheckBox("Ks R(Broken!)", false));
-                    _InterruptR = Menu.Add("InterruptEQ", new CheckBox("Interrupt Spells using E?"));
+                    _InterruptQ = Menu.Add("InterruptQ", new CheckBox("Interrupt Spells using Q?"));
                 }
 
                 public static void Initialize()

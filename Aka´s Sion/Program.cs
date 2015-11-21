@@ -71,9 +71,9 @@ namespace AddonTemplate
             {
                 return;
             }
-            if (SettingsMisc.InterruptR && SpellManager.R.IsReady() && SpellManager.R.IsInRange(sender))
+            if (SettingsMisc.InterruptQ && SpellManager.Q.IsReady() && SpellManager.Q.IsInRange(sender))
             {
-                SpellManager.R.Cast(sender);            }
+                SpellManager.Q.Cast(sender);            }
         }
     }
 }
