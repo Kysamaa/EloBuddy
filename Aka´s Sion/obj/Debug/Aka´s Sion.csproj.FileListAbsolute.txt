@@ -1,0 +1,3 @@
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\bin\Debug\Akas Jarvan.exe.config
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\obj\Debug\Akas Jarvan.exe
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\obj\Debug\Akas Jarvan.pdb
