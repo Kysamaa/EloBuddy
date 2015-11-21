@@ -5,7 +5,8 @@ using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Rendering;
 using SharpDX;
-using Settings = AddonTemplate.Config.Modes.MiscMenu;
+using SettingsMisc = AddonTemplate.Config.Modes.MiscMenu;
+using SettingsDraw = AddonTemplate.Config.Modes.Drawing;
 namespace AddonTemplate
 {
     public static class Program
@@ -41,11 +42,34 @@ namespace AddonTemplate
 
         private static void OnDraw(EventArgs args)
         {
-            // Draw range circles of our spells
-            Circle.Draw(Color.Red, SpellManager.Q.Range, Player.Instance.Position);
-            Circle.Draw(Color.Red, SpellManager.W.Range, Player.Instance.Position);
-            Circle.Draw(Color.Red, SpellManager.E.Range, Player.Instance.Position);
-            Circle.Draw(Color.Red, SpellManager.R.Range, Player.Instance.Position);
+            if (SettingsDraw.UseQ)
+            {
+                if (!(SettingsDraw.DrawOnlyReady && !SpellManager.Q.IsReady()))
+                {
+                        Circle.Draw(Color.Red, SpellManager.Q.Range, Player.Instance.Position);
+                }
+            }
+            if (SettingsDraw.UseW)
+            {
+                if (!(SettingsDraw.DrawOnlyReady && !SpellManager.W.IsReady()))
+                {
+                        Circle.Draw(Color.Red, SpellManager.W.Range, Player.Instance.Position);                    
+                }
+            }
+            if (SettingsDraw.UseE)
+            {
+                if (!(SettingsDraw.DrawOnlyReady && !SpellManager.E.IsReady()))
+                {
+                    Circle.Draw(Color.Red, SpellManager.E.Range, Player.Instance.Position);                  
+                }
+            }
+            if (SettingsDraw.UseR)
+            {
+                if (!(SettingsDraw.DrawOnlyReady && !SpellManager.R.IsReady()))
+                {
+                    Circle.Draw(Color.Red, SpellManager.R.Range, Player.Instance.Position);
+                }
+            }
         }
         private static void InterrupterOnOnInterruptableSpell(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs interruptableSpellEventArgs)
         {
@@ -53,7 +77,7 @@ namespace AddonTemplate
             {
                 return;
             }
-            if (Settings.InterruptEQ && SpellManager.E.IsReady() && SpellManager.Q.IsReady() && SpellManager.E.IsInRange(sender))
+            if (SettingsMisc.InterruptEQ && SpellManager.E.IsReady() && SpellManager.Q.IsReady() && SpellManager.E.IsInRange(sender))
             {
                 SpellManager.E.Cast(sender);
                 SpellManager.Q.Cast(sender);

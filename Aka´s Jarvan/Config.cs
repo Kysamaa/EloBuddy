@@ -13,7 +13,7 @@ namespace AddonTemplate
     // complex way that I use
     public static class Config
     {
-        private const string MenuName = "AddonTemplate";
+        private const string MenuName = "Aka´s Jarvan";
 
         private static readonly Menu Menu;
 
@@ -21,9 +21,9 @@ namespace AddonTemplate
         {
             // Initialize the menu
             Menu = MainMenu.AddMenu(MenuName, MenuName.ToLower());
-            Menu.AddGroupLabel("Welcome to this AddonTemplate!");
-            Menu.AddLabel("To change the menu, please have a look at the");
-            Menu.AddLabel("Config.cs class inside the project, now have fun!");
+            Menu.AddGroupLabel("Welcome to my Jarvan Addon have fun! :)");
+            Menu.AddLabel("To see/change the Settings");
+            Menu.AddLabel("Click on Modes :)");
 
             // Initialize the modes
             Modes.Initialize();
@@ -57,6 +57,8 @@ namespace AddonTemplate
                 JungleClear.Initialize();
                 Menu.AddSeparator();
                 MiscMenu.Initialize();
+                Menu.AddSeparator();
+                Drawing.Initialize();
                 Menu.AddSeparator();
 
             }
@@ -272,22 +274,27 @@ namespace AddonTemplate
                 {
                     get { return _InterruptEQ.CurrentValue; }
                 }
+
                 public static bool KSQ
                 {
                     get { return _KSQ.CurrentValue; }
                 }
+
                 public static bool KSR
                 {
                     get { return _KSR.CurrentValue; }
                 }
+
                 public static bool KSE
                 {
                     get { return _KSE.CurrentValue; }
                 }
+
                 public static bool AutoR
                 {
                     get { return _AutoR.CurrentValue; }
                 }
+
                 public static int AutoRxenemies
                 {
                     get { return _autoRxenemies.CurrentValue; }
@@ -308,11 +315,61 @@ namespace AddonTemplate
                 public static void Initialize()
                 {
                 }
+            }
+
+            public static class Drawing
+                {
+                    private static readonly CheckBox _useQ;
+                    private static readonly CheckBox _useW;
+                    private static readonly CheckBox _useE;
+                    private static readonly CheckBox _useR;
+                    private static readonly CheckBox _DrawonlyReady;
+
+                public static bool UseQ
+                    {
+                        get { return _useQ.CurrentValue; }
+                    }
+
+                    public static bool UseW
+                    {
+                        get { return _useW.CurrentValue; }
+                    }
+
+                    public static bool UseE
+                    {
+                        get { return _useE.CurrentValue; }
+                    }
+
+                    public static bool UseR
+                    {
+                        get { return _useR.CurrentValue; }
+                    }
+
+                public static bool DrawOnlyReady
+                {
+                    get { return _DrawonlyReady.CurrentValue; }
+                }
+
+                static Drawing()
+                    {
+                        // Initialize the menu values
+                        Menu.AddGroupLabel("Drawings?");
+                        _useQ = Menu.Add("DrawQ", new CheckBox("Draw Q"));
+                        _useW = Menu.Add("DrawW", new CheckBox("Draw W"));
+                        _useE = Menu.Add("DrawE", new CheckBox("Draw E"));
+                        _useR = Menu.Add("DrawR", new CheckBox("Draw R"));
+                        _DrawonlyReady = Menu.Add("DrawOnlyReady", new CheckBox("Draw Only if Spells are ready"));
+                }
+
+                    public static void Initialize()
+                    {
+                    }
+                }
 
             }
         }
     }
-}
+
             
         
     

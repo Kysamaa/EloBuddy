@@ -1,1 +1,2 @@
 C:\Users\Alex\Desktop\Aka´s Jarvan\AddonTemplate\bin\Debug\Akas Jarvan.exe.config
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Jarvan\bin\Debug\Akas Jarvan.exe.config
