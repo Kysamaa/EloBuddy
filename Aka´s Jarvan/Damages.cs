@@ -1,12 +1,28 @@
-﻿using AddonTemplate;
+﻿using System.Data.SqlTypes;
+using AddonTemplate;
 using EloBuddy;
 using EloBuddy.SDK;
 
 namespace AddonTemplate
 {
     class Damages
-    {
-       public static float QRawDamage()
+    {  
+        public static float FaaRawDamage()
+        {
+            var target = TargetSelector.GetTarget(SpellManager.E.Range, DamageType.Physical);
+            return
+                (int)
+                    (new int[] { 0, 0, 0, 0, 0 }[SpellManager.Q.Level - 1] +
+                     0.1 * (target.Health));
+        }
+
+        public static float FaaDamage(Obj_AI_Base target)
+        {
+            return Player.Instance.CalculateDamageOnUnit(target, DamageType.Physical, FaaRawDamage()) *
+                   (Player.Instance.HasBuff("SummonerExhaustSlow") ? 0.1f : 1);
+        }
+
+        public static float QRawDamage()
         {
             return
                 (int)

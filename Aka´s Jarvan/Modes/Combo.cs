@@ -2,6 +2,8 @@
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
+using EloBuddy.SDK.Menu;
+using EloBuddy.SDK.Menu.Values;
 using SharpDX;
 
 // Using the config like this makes your life easier, trust me
@@ -19,6 +21,15 @@ namespace AddonTemplate.Modes
 
         public override void Execute()
         {
+            if (Settings.UseRk && R.IsReady() && E.IsReady() && Q.IsReady())
+            {
+                var target = TargetSelector.GetTarget(R.Range, DamageType.Physical);
+                if (target != null && Damages.RDamage(target) + Damages.QDamage(target) + Damages.EDamage(target) + Damages.FaaDamage(target) > target.Health)
+                {
+                    R.Cast(target);
+                }
+            }
+
             var qtarget = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
             if (Settings.UseE && E.IsReady() &&
                 (qtarget.IsValidTarget(Q.Range) && Q.IsReady()))
@@ -51,7 +62,7 @@ namespace AddonTemplate.Modes
                     }
                 }
             }
-            if (Settings.UseR && R.IsReady())
+            if (Settings.UseRi && R.IsReady())
             {
                 var target = TargetSelector.GetTarget(R.Range, DamageType.Physical);
                 if (R.IsReady() && target != null)
@@ -59,6 +70,7 @@ namespace AddonTemplate.Modes
                     R.Cast(target);
                 }
             }
+
 
         }
     }

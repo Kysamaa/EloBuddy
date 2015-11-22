@@ -72,7 +72,8 @@ namespace AddonTemplate
                 private static readonly CheckBox _useQ;
                 private static readonly CheckBox _useW;
                 private static readonly CheckBox _useE;
-                private static readonly CheckBox _useR;
+                private static readonly CheckBox _useRk;
+                private static readonly CheckBox _useRi;
 
                 public static bool UseQ
                 {
@@ -88,12 +89,14 @@ namespace AddonTemplate
                 {
                     get { return _useE.CurrentValue; }
                 }
-
-                public static bool UseR
+                public static bool UseRk
                 {
-                    get { return _useR.CurrentValue; }
+                    get { return _useRk.CurrentValue; }
                 }
-
+                public static bool UseRi
+                {
+                    get { return _useRi.CurrentValue; }
+                }
                 static Combo()
                 {
                     // Initialize the menu values
@@ -101,10 +104,13 @@ namespace AddonTemplate
                     _useQ = Menu.Add("comboUseQ", new CheckBox("Use Q"));
                     _useW = Menu.Add("comboUseW", new CheckBox("Use W"));
                     _useE = Menu.Add("comboUseE", new CheckBox("Use E"));
-                    _useR = Menu.Add("comboUseR", new CheckBox("Use R(Rush for it!)", false)); // Default false
+                    Menu.AddLabel("Only activate one of the Use R at the same time!");
+                    _useRk = Menu.Add("comboUseRk", new CheckBox("Use R(if killable with Combo"));
+                    _useRi = Menu.Add("comboUseRi", new CheckBox("Use R(Engage", false));
                 }
+            
 
-                public static void Initialize()
+            public static void Initialize()
                 {
                 }
             }
@@ -354,7 +360,16 @@ namespace AddonTemplate
                 }
 
             }
+        public static void AddStringList(this Menu m, string uniqueId, string displayName, string[] values, int defaultValue = 0)
+        {
+            var mode = m.Add(uniqueId, new Slider(displayName, defaultValue, 0, values.Length - 1));
+            mode.DisplayName = displayName + ": " + values[mode.CurrentValue];
+            mode.OnValueChange += delegate (ValueBase<int> sender, ValueBase<int>.ValueChangeArgs args)
+            {
+                sender.DisplayName = displayName + ": " + values[args.NewValue];
+            };
         }
+    }
     }
 
             
