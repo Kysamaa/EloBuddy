@@ -264,11 +264,9 @@ namespace AddonTemplate
             public class MiscMenu
             {
                 private static readonly CheckBox _InterruptEQ;
-                private static readonly CheckBox _AutoR;
                 private static readonly CheckBox _KSQ;
                 private static readonly CheckBox _KSE;
                 private static readonly CheckBox _KSR;
-                private static readonly Slider _autoRxenemies;
 
                 public static bool InterruptEQ
                 {
@@ -290,15 +288,6 @@ namespace AddonTemplate
                     get { return _KSE.CurrentValue; }
                 }
 
-                public static bool AutoR
-                {
-                    get { return _AutoR.CurrentValue; }
-                }
-
-                public static int AutoRxenemies
-                {
-                    get { return _autoRxenemies.CurrentValue; }
-                }
 
                 static MiscMenu()
                 {
@@ -307,9 +296,7 @@ namespace AddonTemplate
                     _KSQ = Menu.Add("KSQ", new CheckBox("Ks Q"));
                     _KSE = Menu.Add("KSE", new CheckBox("Ks E"));
                     _KSR = Menu.Add("KSR", new CheckBox("Ks R"));
-                    _AutoR = Menu.Add("AutoR", new CheckBox("Auto R x Enemies?"));
                     _InterruptEQ = Menu.Add("InterruptEQ", new CheckBox("Interrupt Spells using EQ?"));
-                    _autoRxenemies = Menu.Add("autoRxenemies", new Slider("Minimum enemies around to ult", 4, 1, 5));
                 }
 
                 public static void Initialize()

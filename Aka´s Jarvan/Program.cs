@@ -14,7 +14,6 @@ namespace AddonTemplate
         // Change this line to the champion you want to make the addon for,
         // watch out for the case being correct!
         public const string ChampName = "JarvanIV";
-
         public static void Main(string[] args)
         {
             // Wait till the loading screen has passed

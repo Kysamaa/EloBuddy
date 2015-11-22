@@ -1,6 +1,7 @@
 ﻿using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
+using SharpDX;
 
 namespace AddonTemplate
 {
@@ -13,6 +14,7 @@ namespace AddonTemplate
         public static Spell.Active W { get; private set; }
         public static Spell.Skillshot E { get; private set; }
         public static Spell.Targeted R { get; private set; }
+        public static Vector3 Epos = default(Vector3);
 
         static SpellManager()
         {

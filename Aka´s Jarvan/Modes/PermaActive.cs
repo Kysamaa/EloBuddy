@@ -68,20 +68,6 @@ namespace AddonTemplate.Modes
                     R.Cast(enemy);
                     break;
                 }
-
-                if (Settings.AutoR && R.IsReady() && !Player.Instance.IsRecalling())
-                {
-                    var ultableEnemies = enemies.Where(e => R.IsInRange(e)).ToList();
-                    if (ultableEnemies.Count() >= Settings.AutoRxenemies)
-                    {
-                        if (W.IsReady() && Player.Instance.Mana >= 160)
-                        {
-                            W.Cast(Player.Instance);
-                        }
-                        R.Cast();
-                        return;
-                    }
-                }
             }
         }
     }

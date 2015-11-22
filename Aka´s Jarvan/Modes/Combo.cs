@@ -1,6 +1,8 @@
-﻿using EloBuddy;
+﻿using System;
+using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
+using SharpDX;
 
 // Using the config like this makes your life easier, trust me
 using Settings = AddonTemplate.Config.Modes.Combo;
@@ -17,53 +19,51 @@ namespace AddonTemplate.Modes
 
         public override void Execute()
         {
-            if (Settings.UseE)
+            var qtarget = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
+            if (Settings.UseE && E.IsReady() &&
+                (qtarget.IsValidTarget(Q.Range) && Q.IsReady()))
             {
-                var etarget = TargetSelector.GetTarget(E.Range, DamageType.Magical);
-                var eprediction = E.GetPrediction(etarget);
-                if (eprediction.HitChance >= HitChance.High)
-                {
-                    if (E.IsReady() && etarget != null)
-                    {
-                        E.Cast(eprediction.CastPosition);
-                    }
-                }
+                var vec = qtarget.ServerPosition - ObjectManager.Player.Position;
+                var castBehind = E.GetPrediction(qtarget).CastPosition + Vector3.Normalize(vec)*100;
+                E.Cast(castBehind);
+                Q.Cast(castBehind);
             }
+
+
             if (Settings.UseW)
             {
                 var target = TargetSelector.GetTarget(W.Range, DamageType.Physical);
-                    if (W.IsReady() && target != null)
+                if (W.IsReady() && target != null)
+                {
+                    W.Cast();
+                }
+            }
+
+            if (Settings.UseQ && Q.IsReady() && !E.IsReady())
+            {
+                var wtarget = TargetSelector.GetTarget(W.Range, DamageType.Physical);
+                var prede = Q.GetPrediction(wtarget);
+                if (prede.HitChance >= HitChance.High)
+                {
+                    if (wtarget != null)
                     {
-                        W.Cast();
+                        Q.Cast(prede.CastPosition);
                     }
                 }
-            
-            if (Settings.UseQ)
+            }
+            if (Settings.UseR && R.IsReady())
+            {
+                var target = TargetSelector.GetTarget(R.Range, DamageType.Physical);
+                if (R.IsReady() && target != null)
                 {
-                    var target = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
-                    var prediction = Q.GetPrediction(target);
-                    if (prediction.HitChance >= HitChance.High)
-                    {
-                        if (Q.IsReady() && target != null)
-                        {
-                            Q.Cast(prediction.CastPosition);
-                        }
-
-
-                    }
-                }
-                if (Settings.UseR && R.IsReady())
-                {
-                    var target = TargetSelector.GetTarget(R.Range, DamageType.Physical);
-                    if (R.IsReady() && target != null)
-                    {
-                        R.Cast(target);
-                    }
+                    R.Cast(target);
                 }
             }
 
         }
     }
+}
+
 
 
 

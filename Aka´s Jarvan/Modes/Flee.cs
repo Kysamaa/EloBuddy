@@ -16,17 +16,17 @@ namespace AddonTemplate.Modes
 
         public override void Execute()
         {
-            if (Settings.UseE && E.IsReady())
+            if (Settings.UseE)
             {
-                if (E.IsReady())
+                if (E.IsReady() && Q.IsReady())
                 {
                     E.Cast(Game.CursorPos);
                 }
 
             }
-            if (Settings.UseQ && Q.IsReady())
+            if (Settings.UseQ)
             {
-                if (Q.IsReady())
+                if (Q.IsReady() && !E.IsReady())
                 {
                     Q.Cast(Game.CursorPos);
                 }

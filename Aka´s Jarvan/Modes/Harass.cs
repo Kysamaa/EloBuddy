@@ -1,6 +1,7 @@
 ﻿using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
+using SharpDX;
 
 // Using the config like this makes your life easier, trust me
 using Settings = AddonTemplate.Config.Modes.Harass;
@@ -19,26 +20,24 @@ namespace AddonTemplate.Modes
         {
             // TODO: Add harass logic here
             // See how I used the Settings.UseQ and Settings.Mana here, this is why I love
-            // my way of using the menu in the Config class!
-            if (Settings.UseE && Player.Instance.ManaPercent > Settings.Mana && E.IsReady())
-            {
-                var target = TargetSelector.GetTarget(E.Range, DamageType.Physical);
-                var prede = E.GetPrediction(target);
-                if (prede.HitChance >= HitChance.Medium)
+            // my way of using the menu in the Config class
+                var qtarget = TargetSelector.GetTarget(E.Range, DamageType.Physical);
+                if (Settings.UseE && E.IsReady() && Player.Instance.ManaPercent > Settings.Mana &&
+                    (qtarget.IsValidTarget(Q.Range) && Q.IsReady()))
                 {
-                    if (target != null)
-                    {
-                        E.Cast(prede.CastPosition);
-                    }
+                    var vec = qtarget.ServerPosition - ObjectManager.Player.Position;
+                    var castBehind = E.GetPrediction(qtarget).CastPosition + Vector3.Normalize(vec) * 100;
+                    E.Cast(castBehind);
+                    Q.Cast(castBehind);
                 }
-            }
-            if (Settings.UseQ && Player.Instance.ManaPercent > Settings.Mana && Q.IsReady())
+
+            if (Config.Modes.Combo.UseQ && Q.IsReady() && Player.Instance.ManaPercent > Settings.Mana)
             {
-                var target = TargetSelector.GetTarget(E.Range, DamageType.Physical);
-                var prede = Q.GetPrediction(target);
+                var wtarget = TargetSelector.GetTarget(W.Range, DamageType.Physical);
+                var prede = Q.GetPrediction(wtarget);
                 if (prede.HitChance >= HitChance.Medium)
                 {
-                    if (target != null)
+                    if (wtarget != null)
                     {
                         Q.Cast(prede.CastPosition);
                     }
