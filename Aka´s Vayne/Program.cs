@@ -25,7 +25,6 @@ namespace AddonTemplate
             Interrupter.OnInterruptableSpell += Events.Interrupter_OnInterruptableSpell;
             Obj_AI_Base.OnBasicAttack += Events.ObjAiBaseOnOnBasicAttack;
             GameObject.OnCreate += Events.GameObject_OnCreate;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
         }
 
         private static void OnLoadingComplete(EventArgs args)
@@ -45,7 +44,7 @@ namespace AddonTemplate
 
             // Listen to events we need
             Drawing.OnDraw += OnDraw;
-
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
         }
 
         private static void OnDraw(EventArgs args)

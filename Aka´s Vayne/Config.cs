@@ -351,7 +351,7 @@ namespace AddonTemplate
                     {
                         // Initialize the menu values
                         Menu.AddGroupLabel("Drawings?");
-                    _useQ = Menu.Add("DrawE", new CheckBox("Draw Q"));
+                    _useQ = Menu.Add("DrawQ", new CheckBox("Draw Q"));
                     _useE = Menu.Add("DrawE", new CheckBox("Draw E"));
                         _DrawonlyReady = Menu.Add("DrawOnlyReady", new CheckBox("Draw Only if Spells are ready"));
                 }
