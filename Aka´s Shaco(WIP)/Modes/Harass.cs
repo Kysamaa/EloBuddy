@@ -20,15 +20,16 @@ namespace AddonTemplate.Modes
             // TODO: Add harass logic here
             // See how I used the Settings.UseQ and Settings.Mana here, this is why I love
             // my way of using the menu in the Config class!
-            if (Settings.UseW && Player.Instance.ManaPercent > Settings.Mana && W.IsReady())
+            if (Settings.UseE && Player.Instance.ManaPercent > Settings.Mana && E.IsReady())
             {
-                var target = TargetSelector.GetTarget(W.Range, DamageType.Physical);
+                var target = TargetSelector.GetTarget(E.Range, DamageType.Magical);
                 if (target != null)
-                    {
-                        W.Cast();
-                    }
+                {
+                    E.Cast(target);
                 }
             }
         }
     }
+}
+
 

@@ -13,7 +13,7 @@ namespace AddonTemplate
     // complex way that I use
     public static class Config
     {
-        private const string MenuName = "Aka´s Darius";
+        private const string MenuName = "Aka´s Shaco";
 
         private static readonly Menu Menu;
 
@@ -21,7 +21,7 @@ namespace AddonTemplate
         {
             // Initialize the menu
             Menu = MainMenu.AddMenu(MenuName, MenuName.ToLower());
-            Menu.AddGroupLabel("Welcome to my Darius Addon have fun! :)");
+            Menu.AddGroupLabel("Welcome to my Shaco Addon have fun! :)");
             Menu.AddLabel("To see/change the Settings");
             Menu.AddLabel("Click on Modes :)");
 
@@ -112,20 +112,8 @@ namespace AddonTemplate
             public static class Harass
             {
 
-                private static readonly CheckBox _UseQ;
-                private static readonly CheckBox _useW;
                 private static readonly CheckBox _useE;
                 private static readonly Slider _Mana;
-
-                public static bool UseQ
-                {
-                    get { return _UseQ.CurrentValue; }
-                }
-
-                public static bool UseW
-                {
-                    get { return _useW.CurrentValue; }
-                }
 
                 public static bool UseE
                 {
@@ -142,9 +130,7 @@ namespace AddonTemplate
                     // Here is another option on how to use the menu, but I prefer the
                     // way that I used in the combo class
                     Menu.AddGroupLabel("Harass");
-                   _UseQ = Menu.Add("UseQHarrass", new CheckBox("Use Q(Auto)"));
-                    _useW = Menu.Add("UseWHarass", new CheckBox("Use W"));
-                    _useE = Menu.Add("UseEHarass", new CheckBox("Use E(Auto)"));
+                    _useE = Menu.Add("UseEHarass", new CheckBox("Use E"));
                     // Adding a slider, we have a little more options with them, using {0} {1} and {2}
                     // in the display name will replace it with 0=current 1=min and 2=max value
                     _Mana = Menu.Add("ManaHarass", new Slider("Maximum mana usage in percent ({0}%)", 40));
@@ -157,21 +143,33 @@ namespace AddonTemplate
 
             public static class Flee
             {
+                private static readonly CheckBox _useQ;
                 private static readonly CheckBox _useW;
+                private static readonly CheckBox _useE;
 
 
+                public static bool UseQ
+                {
+                    get { return _useQ.CurrentValue; }
+                }
                 public static bool UseW
                 {
                     get { return _useW.CurrentValue; }
                 }
-
+                public static bool UseE
+                {
+                    get { return _useE.CurrentValue; }
+                }
 
                 static Flee()
                 {
                     // Initialize the menu values
                     Menu.AddGroupLabel("Flee");
+                    _useQ = Menu.Add("FleeUseQ", new CheckBox("Use Q"));
                     _useW = Menu.Add("FleeUseW", new CheckBox("Use W"));
+                    _useE = Menu.Add("FleeUseE", new CheckBox("Use E"));
                 }
+
 
                 public static void Initialize()
                 {
@@ -218,6 +216,7 @@ namespace AddonTemplate
             {
                 private static readonly CheckBox _useQ;
                 private static readonly CheckBox _useW;
+                private static readonly CheckBox _useE;
 
                 public static bool UseQ
                 {
@@ -229,6 +228,10 @@ namespace AddonTemplate
                     get { return _useW.CurrentValue; }
                 }
 
+                public static bool UseE
+                {
+                    get { return _useE.CurrentValue; }
+                }
 
                 static LaneClear()
                 {
@@ -236,6 +239,7 @@ namespace AddonTemplate
                     Menu.AddGroupLabel("LaneClear");
                     _useQ = Menu.Add("LCQ", new CheckBox("Use Q"));
                     _useW = Menu.Add("LCW", new CheckBox("Use W"));
+                    _useE = Menu.Add("LCE", new CheckBox("Use E"));
                 }
 
                 public static void Initialize()
@@ -245,14 +249,22 @@ namespace AddonTemplate
 
             public class MiscMenu
             {
-                private static readonly CheckBox _InterruptE;
+                private static readonly CheckBox _InterruptW;
                 private static readonly CheckBox _KSQ;
                 private static readonly CheckBox _KSW;
+                private static readonly CheckBox _KSE;
                 private static readonly CheckBox _KSR;
+                private static readonly CheckBox _dR;
+                private static readonly CheckBox _CO;
 
-                public static bool InterruptE
+                public static bool CloneOrbwalk
                 {
-                    get { return _InterruptE.CurrentValue; }
+                    get { return _CO.CurrentValue; }
+                }
+
+                public static bool InterruptW
+                {
+                    get { return _InterruptW.CurrentValue; }
                 }
 
                 public static bool KSQ
@@ -270,15 +282,26 @@ namespace AddonTemplate
                     get { return _KSW.CurrentValue; }
                 }
 
+                public static bool KSE
+                {
+                    get { return _KSE.CurrentValue; }
+                }
+                public static bool dR
+                {
+                    get { return _dR.CurrentValue; }
+                }
 
                 static MiscMenu()
                 {
 
                     Menu.AddGroupLabel("Misc");
                     _KSQ = Menu.Add("KSQ", new CheckBox("Ks Q"));
-                    _KSW = Menu.Add("KSE", new CheckBox("Ks W"));
+                    _KSW = Menu.Add("KSW", new CheckBox("Ks W"));
+                    _KSE = Menu.Add("KSE", new CheckBox("Ks E"));
                     _KSR = Menu.Add("KSR", new CheckBox("Ks R"));
-                    _InterruptE = Menu.Add("InterruptEQ", new CheckBox("Interrupt Spells using E?"));
+                    _CO = Menu.Add("CO", new CheckBox("Clone Orbwalk?"));
+                    _dR = Menu.Add("dR", new CheckBox("Dodge Spells using R?"));
+                    _InterruptW = Menu.Add("InterruptW", new CheckBox("Interrupt Spells using W?"));
                 }
 
                 public static void Initialize()

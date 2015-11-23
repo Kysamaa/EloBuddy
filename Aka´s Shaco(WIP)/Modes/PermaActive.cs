@@ -36,9 +36,10 @@ namespace AddonTemplate.Modes
                     {
                         continue;
                     }
+                    var pos = QLogic.GetQPos(enemy, true);
                     if (Settings.KSQ)
                     {
-                        Q.Cast();
+                        Q.Cast(pos);
                         break;
                     }
                 }
@@ -50,58 +51,41 @@ namespace AddonTemplate.Modes
                     {
                         continue;
                     }
+                    var pos = QLogic.GetQPos(enemy, true, 100);
                     if (Settings.KSW)
                     {
-                        W.Cast();
+                        W.Cast(pos);
                         break;
                     }
                 }
-                if (Settings.KSR && R.IsReady())
+                if (Settings.KSE && SpellManager.E.IsReady() && Damages.EDamage(enemy) > enemy.Health &&
+                    SpellManager.E.IsInRange(enemy))
                 {
-
-                    if (enemy.IsValidTarget(R.Range) && !enemy.IsZombie && !enemy.IsInvulnerable && !enemy.IsDead)
+                    if (enemy.HasBuffOfType(BuffType.SpellImmunity) || enemy.HasBuffOfType(BuffType.SpellShield))
                     {
-                        int passiveCounter = enemy.GetBuffCount("dariushemo") <= 0
-                            ? 0
-                            : enemy.GetBuffCount("dariushemo");
-                        if (!enemy.HasBuffOfType(BuffType.Invulnerability) && !enemy.HasBuffOfType(BuffType.SpellShield))
-                        {
-                            if (Damages.RDamage(enemy, passiveCounter) >= enemy.Health + Damages.PassiveDmg(enemy, 1))
-                            {
-                                if (!enemy.HasBuffOfType(BuffType.Invulnerability)
-                                    && !enemy.HasBuffOfType(BuffType.SpellShield))
-                                {
-                                    R.Cast(enemy);
-                                }
-                            }
-                        }
+                        continue;
+                    }
+                    if (Settings.KSE)
+                    {
+                        E.Cast(enemy);
+                        break;
                     }
                 }
-                if (Config.Modes.Harass.UseQ && Player.Instance.ManaPercent > Config.Modes.Harass.Mana &&
-                    Q.IsReady())
+                if (Settings.KSR && SpellManager.R.IsReady() && Damages.RDamage(enemy) > enemy.Health &&
+                    SpellManager.R.IsInRange(enemy))
+                {
+                    if (enemy.HasBuffOfType(BuffType.SpellImmunity) || enemy.HasBuffOfType(BuffType.SpellShield))
                     {
-                        var target = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
-                        if (target != null)
-                        {
-                            Q.Cast();
-                        }
+                        continue;
                     }
-                    if (Config.Modes.Harass.UseE && Player.Instance.ManaPercent > Config.Modes.Harass.Mana &&
-                        E.IsReady())
+                    if (Settings.KSR)
                     {
-                        var target = TargetSelector.GetTarget(E.Range, DamageType.Physical);
-                        var eprediction = E.GetPrediction(target);
-                        if (eprediction.HitChance >= HitChance.High)
-                        {
-                            if (E.IsReady() && target != null)
-                            {
-                                E.Cast(eprediction.CastPosition);
-                            }
-                        }
+                        R.Cast();
+                        break;
                     }
                 }
             }
         }
     }
-
+}
 

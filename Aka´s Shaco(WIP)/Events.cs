@@ -1,0 +1,48 @@
+﻿
+using System;
+using System.Linq;
+using EloBuddy;
+using EloBuddy.SDK;
+using EloBuddy.SDK.Events;
+using EloBuddy.SDK.Menu;
+using EloBuddy.SDK.Rendering;
+using SharpDX;
+
+namespace AddonTemplate
+{
+    public static class Events
+    {
+        static Events()
+        {
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+        }
+
+        static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!Config.Modes.MiscMenu.dR) return;
+            if (sender.IsAlly) return;
+            if (!sender.IsEnemy) return;
+
+
+            if (DangerDB.TargetedList.Contains(args.SData.Name))
+            {
+                if (args.Target.IsMe)
+                    SpellManager.R.Cast();
+            }
+
+            if (DangerDB.CircleSkills.Contains(args.SData.Name))
+            {
+                if (ObjectManager.Player.Distance(args.End) < args.SData.LineWidth)
+                    SpellManager.R.Cast();
+            }
+
+            if (DangerDB.Skillshots.Contains(args.SData.Name))
+            {
+                if (new Geometry.Polygon.Rectangle(args.Start, args.End, args.SData.LineWidth).IsInside(ObjectManager.Player))
+                {
+                    SpellManager.R.Cast();
+                }
+            }
+        }
+    }
+}
