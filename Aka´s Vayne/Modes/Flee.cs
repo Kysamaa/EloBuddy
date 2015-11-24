@@ -1,4 +1,5 @@
-﻿using EloBuddy;
+﻿using AddonTemplate.Logic;
+using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
 
@@ -26,7 +27,7 @@ namespace AddonTemplate.Modes
             }
             if (Settings.UseQ)
             {
-                if (Q.IsReady() && !QLogic.IsDangerousPosition(Game.CursorPos))
+                if (Q.IsReady() && !(Game.CursorPos.IsDangerousPosition()))
                 {
                     Player.CastSpell(SpellSlot.Q, Game.CursorPos);
                 }

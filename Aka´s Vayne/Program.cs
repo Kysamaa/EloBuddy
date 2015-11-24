@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using EloBuddy;
@@ -39,6 +40,7 @@ namespace AddonTemplate
             }
 
             // Initialize the classes that we need
+            Cache.Load();
             Config.Initialize();
             SpellManager.Initialize();
             ModeManager.Initialize();

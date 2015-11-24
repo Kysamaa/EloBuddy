@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using AddonTemplate.Logic;
 using EloBuddy;
 using EloBuddy.SDK;
+using EloBuddy.SDK.Menu.Values;
 using Settings = AddonTemplate.Config.Modes.LaneClear;
 
 namespace AddonTemplate.Modes
@@ -16,27 +19,17 @@ namespace AddonTemplate.Modes
         public override void Execute()
         {
 
-            if ((Settings.UseQ) && SpellManager.Q.IsReady())
+            if (Q.IsReady() && Settings.UseQ && ObjectManager.Player.ManaPercent > Settings.UseQSlider)
             {
-                var minions =
-                    EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy,
-                        Player.Instance.Position,
-                        Q.Range).Where(
-                            m => !m.IsDead && m.IsValid && !m.IsInvulnerable && Player.Instance.GetAutoAttackDamage(m) + Damages.QDamage(m) > m.Health);
+                var Minions = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, ObjectManager.Player.Position, Q.Range, true);
+                foreach (var minions in
+                    Minions.Where(
+                        minions => minions.Health < ObjectManager.Player.GetSpellDamage(minions, SpellSlot.Q)))
                 {
-                    foreach (var m in minions)
+                    if (minions.IsValidTarget(E.Range) && minions.IsVisible)
                     {
-                        if (Player.Instance.Position.Extend(Game.CursorPos, 300).Distance(m) >
-                            Player.Instance.GetAutoAttackRange(m))
-                            return;
-                        var cursorPos = Game.CursorPos;
-                        Orbwalker.ForcedTarget = m;
-                        if (!QLogic.IsDangerousPosition(cursorPos))
-                            Player.CastSpell(SpellSlot.Q,
-                                Player.Instance.Position.Extend(Game.CursorPos, 300).Distance(m) <=
-                                Player.Instance.GetAutoAttackRange(m)
-                                    ? Game.CursorPos
-                                    : m.Position);
+                        Player.CastSpell(SpellSlot.Q, ObjectManager.Player.GetTumblePos());
+                        Orbwalker.ForcedTarget = minions;
                     }
                 }
             }

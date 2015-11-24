@@ -8,7 +8,7 @@ using EloBuddy.SDK;
 using EloBuddy.SDK.Menu.Values;
 using SharpDX;
 
-namespace AddonTemplate
+namespace AddonTemplate.Logic
 {
     static class QLogic
     {
@@ -22,7 +22,7 @@ namespace AddonTemplate
             var positionAfter = ObjectManager.Player.ServerPosition.To2D().Extend(Game.CursorPos.To2D(), 300f).To3D();
             var distanceAfterTumble = Vector3.DistanceSquared(positionAfter, target.ServerPosition);
 
-            if (distanceAfterTumble <= 550 * 550 && distanceAfterTumble >= 100 * 100 && !IsDangerousPosition(positionAfter))
+            if (distanceAfterTumble <= 550 * 550 && distanceAfterTumble >= 100 * 100 && (!positionAfter.IsDangerousPosition()))
             {
                 Player.CastSpell(SpellSlot.Q, position);
             }
@@ -39,7 +39,7 @@ namespace AddonTemplate
         {
             foreach (AIHeroClient qTarget in HeroManager.Enemies.Where(x => x.IsValidTarget(550)))
             {
-                if (!IsDangerousPosition(Game.CursorPos))
+                if (!Game.CursorPos.IsDangerousPosition())
                 {
                     Player.CastSpell(SpellSlot.Q, Game.CursorPos);
                 }
@@ -63,16 +63,6 @@ namespace AddonTemplate
                 Player.CastSpell(SpellSlot.Q, Game.CursorPos);
             }
 
-        }
-        public static bool IsDangerousPosition( Vector3 pos)
-        {
-            var collFlags = NavMesh.GetCollisionFlags(pos);
-            return
-
-                HeroManager.Enemies.Any(
-                    e => e.IsValidTarget() && e.IsVisible &&
-                         e.Distance(pos) < Config.Modes.Combo.QLogicSlider) || collFlags.HasFlag(CollisionFlags.Wall) ||
-                collFlags.HasFlag(CollisionFlags.Building);
         }
     }
 }

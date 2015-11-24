@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Linq;
+using AddonTemplate.Logic;
 using EloBuddy;
 using EloBuddy.SDK;
 using Settings = AddonTemplate.Config.Modes.JungleClear;

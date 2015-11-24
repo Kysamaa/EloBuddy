@@ -76,6 +76,7 @@ namespace AddonTemplate
             {
                 private static readonly CheckBox _useQs;
                 private static readonly CheckBox _useQa;
+                private static readonly CheckBox _useQp;
                 private static readonly CheckBox _kite;
                 private static readonly CheckBox _useE;
                 private static readonly CheckBox _Ekill;
@@ -90,6 +91,10 @@ namespace AddonTemplate
                 public static bool UseQa
                 {
                     get { return _useQa.CurrentValue; }
+                }
+                public static bool UseQp
+                {
+                    get { return _useQp.CurrentValue; }
                 }
 
 
@@ -125,8 +130,9 @@ namespace AddonTemplate
                 {
                     // Initialize the menu values
                     Menu.AddGroupLabel("Combo");
-                    _useQs = Menu.Add("comboUseQs", new CheckBox("Use Q(smart)"));
+                    _useQs = Menu.Add("comboUseQs", new CheckBox("Use Q(smart)", false));
                     _useQa = Menu.Add("comboUseQa", new CheckBox("Use Q(aka)", false));
+                    _useQp = Menu.Add("comboUseQp", new CheckBox("Use Q(Prada)"));
                     _kite = Menu.Add("comboUseQKite", new CheckBox("Use Q Kite Melee´s?"));
                     _Ekill = Menu.Add("Ekill", new CheckBox("Use E if killable?"));
                     _useE = Menu.Add("comboUseE", new CheckBox("Use E"));
@@ -239,17 +245,22 @@ namespace AddonTemplate
             public static class LaneClear
             {
                 private static readonly CheckBox _useQ;
+                private static readonly Slider _useQSlider;
 
                 public static bool UseQ
                 {
                     get { return _useQ.CurrentValue; }
                 }
-
+                public static int UseQSlider
+                {
+                    get { return _useQSlider.CurrentValue; }
+                }
                 static LaneClear()
                 {
                     // Initialize the menu values
                     Menu.AddGroupLabel("LaneClear");
                     _useQ = Menu.Add("LCQ", new CheckBox("Use Q"));
+                    _useQSlider = Menu.Add("LCQMana", new Slider("Maximum mana usage in percent ({0}%)", 40));
                 }
 
                 public static void Initialize()
@@ -333,6 +344,7 @@ namespace AddonTemplate
                 {
                     get { return _condemn3.CurrentValue; }
                 }
+
                 public static int Condemndistance
                 {
                     get { return _condemndistance.CurrentValue; }

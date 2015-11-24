@@ -8,7 +8,7 @@ using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu.Values;
 using SharpDX;
-
+using AddonTemplate.Utility;
 using Settings = AddonTemplate.Config.Modes.Condemn;
 
 namespace AddonTemplate
@@ -28,17 +28,24 @@ namespace AddonTemplate
                     for (int i = 0; i < 40; i++)
                     {
                         Vector3 finalPosition = targetPosition + (pushDirection*checkDistance*i);
+                        var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
                         var collFlags = NavMesh.GetCollisionFlags(finalPosition);
                         if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building))
-                        {
-                            SpellManager.E.Cast(target);
-                        }
+
+                            if (Settings.Condemn3 && enemiesCount > 1 && enemiesCount <= 3)
+                            {
+                                SpellManager.E.Cast(target);
+                            }
                     }
                 }
             }
         }
 
-        public static bool AsunasAllyFountain(Vector3 position)
+
+
+
+        public static
+            bool AsunasAllyFountain(Vector3 position)
         {
             float fountainRange = 750;
             var map = (Game.MapId == GameMapId.SummonersRift);
@@ -75,14 +82,25 @@ namespace AddonTemplate
                         Vector3 finalPosition =
                             EPred.UnitPosition.To2D().Extend(ObjectManager.Player.ServerPosition.To2D(), -i).To3D();
                         var collFlags = NavMesh.GetCollisionFlags(finalPosition);
-                        if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building) || AsunasAllyFountain(FinalPosition))
-                            SpellManager.E.Cast(En);
+                        var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
+                        if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building) ||
+                            AsunasAllyFountain(FinalPosition))
+
+                            if (Settings.Condemn3 && enemiesCount > 1 && enemiesCount <= 3)
+                            {
+                                SpellManager.E.Cast(En);
+                            }
                     }
                 }
             }
         }
 
-        public static void Condemn3()
+
+
+
+
+        public static
+            void Condemn3()
         {
             foreach (
                 var enemy in
@@ -92,14 +110,18 @@ namespace AddonTemplate
                             !x.HasBuffOfType(BuffType.SpellImmunity) &&
                             IsCondemable(x)))
             {
-                if (Settings.Condemn3)
-                {
-                    SpellManager.E.Cast(enemy);
-                }
+                var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
+
+                    if (Settings.Condemn3 && enemiesCount > 1 && enemiesCount <= 3)
+                    {
+                        SpellManager.E.Cast(enemy);
+                    }
+
             }
         }
 
-        public static long LastCheck;
+        public static
+            long LastCheck;
 
         public static bool IsCondemable(AIHeroClient unit, Vector2 pos = new Vector2())
         {

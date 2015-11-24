@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Data;
+using System.Linq;
+using AddonTemplate.Logic;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
@@ -30,8 +32,11 @@ namespace AddonTemplate.Modes
             }
             if (Settings.UseQs && SpellManager.Q.IsReady())
             {
-                QLogic.QCombo(target);
-                Qisoutofrange(target);
+                QLogic2.Cast(Game.CursorPos);
+            }
+            if (Settings.UseQp && SpellManager.Q.IsReady())
+            {
+                QLogic2.Cast(target.GetTumblePos());
             }
             if (Config.Modes.Condemn.Condemn1 && SpellManager.E.IsReady())
             {
