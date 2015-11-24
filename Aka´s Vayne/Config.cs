@@ -327,6 +327,7 @@ namespace AddonTemplate
                 private static readonly CheckBox _condemn1;
                 private static readonly CheckBox _condemn2;
                 private static readonly CheckBox _condemn3;
+                private static readonly CheckBox _tf;
                 private static readonly Slider _condemndistance;
 
                 public static bool Condemn1
@@ -344,6 +345,10 @@ namespace AddonTemplate
                 {
                     get { return _condemn3.CurrentValue; }
                 }
+                public static bool tf
+                {
+                    get { return _tf.CurrentValue; }
+                }
 
                 public static int Condemndistance
                 {
@@ -357,6 +362,7 @@ namespace AddonTemplate
                     _condemn1 = Menu.Add("condemnmethod1", new CheckBox("Condemn 1(Hiki)", false));
                     _condemn2 = Menu.Add("condemnmethod2", new CheckBox("Condemn 2(VHR)"));
                     _condemn3 = Menu.Add("condemnmethod3", new CheckBox("Condemn 3(Fluxy)", false));
+                    _tf = Menu.Add("TfE", new CheckBox("Teamfight E"));
                     _condemndistance = Menu.Add("pushDistance", new Slider("Condemn Push Distance", 410, 350, 420));
                 }
 

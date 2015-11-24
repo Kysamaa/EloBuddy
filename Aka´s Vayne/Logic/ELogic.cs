@@ -11,7 +11,7 @@ using SharpDX;
 using AddonTemplate.Utility;
 using Settings = AddonTemplate.Config.Modes.Condemn;
 
-namespace AddonTemplate
+namespace AddonTemplate.Logic
 {
     class ELogic
     {
@@ -32,10 +32,22 @@ namespace AddonTemplate
                         var collFlags = NavMesh.GetCollisionFlags(finalPosition);
                         if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building))
 
-                            if (Settings.Condemn3 && enemiesCount > 1 && enemiesCount <= 3)
+                        {
+                            if (Settings.tf)
                             {
-                                SpellManager.E.Cast(target);
+                                if (Settings.Condemn1 && enemiesCount > 1 && enemiesCount <= 3)
+                                {
+                                    SpellManager.E.Cast(target);
+                                }
                             }
+                            else if (!Settings.tf)
+                            {
+                                if (Settings.Condemn1)
+                                {
+                                    SpellManager.E.Cast(target);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -85,37 +97,91 @@ namespace AddonTemplate
                         var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
                         if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building) ||
                             AsunasAllyFountain(FinalPosition))
-
-                            if (Settings.Condemn3 && enemiesCount > 1 && enemiesCount <= 3)
+                        {
+                            if (Settings.tf)
                             {
-                                SpellManager.E.Cast(En);
+                                if (Settings.Condemn2 && enemiesCount > 1 && enemiesCount <= 3)
+                                {
+                                    SpellManager.E.Cast(En);
+                                }
                             }
+                            else if (!Settings.tf)
+                            {
+                                if (Settings.Condemn2)
+                                {
+                                    SpellManager.E.Cast(En);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
 
+        public static void Condemn4(Obj_AI_Base hero)
+        {
+
+            if (!hero.IsValidTarget(550) || hero.HasBuffOfType(BuffType.SpellShield) ||
+    hero.HasBuffOfType(BuffType.SpellImmunity) || hero.IsDashing())
+                return;
+
+            var pP = Heroes.Player.ServerPosition;
+            var p = hero.ServerPosition;
+            var pD = Settings.Condemndistance;
+
+            if ((!p.Extend(pP, -pD).IsWall() && !p.Extend(pP, -pD/2f).IsWall() && !p.Extend(pP, -pD/3f).IsWall()))
+                return;
+            var angle = 0.20*50;
+            const float travelDistance = 0.5f;
+            var alpha = new Vector2((float) (p.X + travelDistance*Math.Cos(Math.PI/180*angle)),
+                (float) (p.X + travelDistance*Math.Sin(Math.PI/180*angle)));
+            var beta = new Vector2((float) (p.X - travelDistance*Math.Cos(Math.PI/180*angle)),
+                (float) (p.X - travelDistance*Math.Sin(Math.PI/180*angle)));
+
+            for (var i = 15; i < pD; i += 100)
+            {
+                if (pP.To2D().Extend(alpha,
+                    i)
+                    .To3D().IsWall() && pP.To2D().Extend(beta, i).To3D().IsWall())
+                {
+                    SpellManager.E.Cast(hero);
+                }
+            }
+        }
+    
 
 
 
 
-        public static
+    public static
             void Condemn3()
         {
-            foreach (
-                var enemy in
-                    HeroManager.Enemies.Where(
-                        x =>
-                            x.IsValidTarget(SpellManager.E.Range) && !x.HasBuffOfType(BuffType.SpellShield) &&
-                            !x.HasBuffOfType(BuffType.SpellImmunity) &&
-                            IsCondemable(x)))
-            {
-                var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
+        foreach (
+            var enemy in
+                HeroManager.Enemies.Where(
+                    x =>
+                        x.IsValidTarget(SpellManager.E.Range) && !x.HasBuffOfType(BuffType.SpellShield) &&
+                        !x.HasBuffOfType(BuffType.SpellImmunity) &&
+                        IsCondemable(x)))
+        {
+            var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
 
-                    if (Settings.Condemn3 && enemiesCount > 1 && enemiesCount <= 3)
+                {
+                    if (Settings.tf)
                     {
-                        SpellManager.E.Cast(enemy);
+                        if (Settings.Condemn3 && enemiesCount > 1 && enemiesCount <= 3)
+                        {
+                            SpellManager.E.Cast(enemy);
+                        }
                     }
+                    else if (!Settings.tf)
+                    {
+                        if (Settings.Condemn3)
+                        {
+                            SpellManager.E.Cast(enemy);
+                        }
+                    }
+                }
 
             }
         }
@@ -189,6 +255,16 @@ namespace AddonTemplate
 
                 }
             }
+        }
+
+        public static int CountHerosInRange(AIHeroClient target, bool checkteam, float range = 1200f)
+        {
+            var objListTeam =
+                ObjectManager.Get<AIHeroClient>()
+                    .Where(
+                        x => x.IsValidTarget(range, false));
+
+            return objListTeam.Count(hero => checkteam ? hero.Team != target.Team : hero.Team == target.Team);
         }
     }
 }

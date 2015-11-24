@@ -16,7 +16,7 @@ namespace AddonTemplate.Modes
 
         public override void Execute()
         {
-            if (Settings.UseQ && SpellManager.Q.IsReady())
+            if (Settings.UseQ && SpellManager.Q.IsReady() && !Game.CursorPos.IsDangerousPosition())
             {
                 QLogic.QJungleClear();
             }

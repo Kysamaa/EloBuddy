@@ -19,7 +19,7 @@ namespace AddonTemplate.Modes
         public override void Execute()
         {
 
-            if (Q.IsReady() && Settings.UseQ && ObjectManager.Player.ManaPercent > Settings.UseQSlider)
+            if (Q.IsReady() && Settings.UseQ && ObjectManager.Player.ManaPercent > Settings.UseQSlider && !Game.CursorPos.IsDangerousPosition())
             {
                 var Minions = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, ObjectManager.Player.Position, Q.Range, true);
                 foreach (var minions in

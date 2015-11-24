@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using AddonTemplate.Logic;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
@@ -34,7 +35,7 @@ namespace AddonTemplate.Modes
         {
                 foreach (AIHeroClient qTarget in HeroManager.Enemies.Where(x => x.IsValidTarget(550)))
                 {
-                    if (qTarget.Buffs.Any(buff => buff.Name == "vaynesilvereddebuff" && buff.Count == 2))
+                    if (qTarget.Buffs.Any(buff => buff.Name == "vaynesilvereddebuff" && buff.Count == 2) && !Game.CursorPos.IsDangerousPosition())
                     {
                     Player.CastSpell(SpellSlot.Q, Game.CursorPos);
                 }
