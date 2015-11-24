@@ -26,7 +26,7 @@ namespace AddonTemplate.Modes
             }
             if (Settings.UseQ)
             {
-                if (Q.IsReady())
+                if (Q.IsReady() && !QLogic.IsDangerousPosition(Game.CursorPos))
                 {
                     Player.CastSpell(SpellSlot.Q, Game.CursorPos);
                 }

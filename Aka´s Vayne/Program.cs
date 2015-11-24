@@ -25,6 +25,7 @@ namespace AddonTemplate
             Interrupter.OnInterruptableSpell += Events.Interrupter_OnInterruptableSpell;
             Obj_AI_Base.OnBasicAttack += Events.ObjAiBaseOnOnBasicAttack;
             GameObject.OnCreate += Events.GameObject_OnCreate;
+            Obj_AI_Base.OnProcessSpellCast += Events.OnProcessSpell;
         }
 
         private static void OnLoadingComplete(EventArgs args)
@@ -44,7 +45,6 @@ namespace AddonTemplate
 
             // Listen to events we need
             Drawing.OnDraw += OnDraw;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
         }
 
         private static void OnDraw(EventArgs args)
@@ -65,35 +65,6 @@ namespace AddonTemplate
             }
 
         }
-        private static void Obj_AI_Base_OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            var target = (Obj_AI_Base)args.Target;
 
-            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit) &&
-                 Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) &&
-                 Config.Modes.LaneClear.UseQ) && SpellManager.Q.IsReady())
-            {
-                var source =
-                    EntityManager.MinionsAndMonsters.EnemyMinions
-                        .Where(
-                            a =>
-                                a.NetworkId != target.NetworkId &&
-                                a.Distance(Player.Instance) < 300 + Player.Instance.GetAutoAttackRange(a) &&
-                                Prediction.Health.GetPrediction(a, (int)Player.Instance.AttackDelay) <
-                                Player.Instance.GetAutoAttackDamage(a, true) + Damages.QDamage(a))
-                        .OrderBy(a => a.Health)
-                        .FirstOrDefault();
-
-                if (source == null || Player.Instance.Position.Extend(Game.CursorPos, 300).Distance(source) >
-                    Player.Instance.GetAutoAttackRange(source))
-                    return;
-                Orbwalker.ForcedTarget = source;
-                Player.CastSpell(SpellSlot.Q,
-                    Player.Instance.Position.Extend(Game.CursorPos, 300).Distance(source) <=
-                    Player.Instance.GetAutoAttackRange(source)
-                        ? Game.CursorPos
-                        : source.Position);
-            }
-        }
     }
 }

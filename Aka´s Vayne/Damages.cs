@@ -28,6 +28,5 @@ namespace AddonTemplate
                    (Player.Instance.HasBuff("SummonerExhaustSlow") ? 0.5f : 1);
         }
 
-
     }
 }

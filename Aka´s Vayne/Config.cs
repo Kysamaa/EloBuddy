@@ -74,19 +74,37 @@ namespace AddonTemplate
 
             public static class Combo
             {
-                private static readonly CheckBox _useQ;
+                private static readonly CheckBox _useQs;
+                private static readonly CheckBox _useQa;
+                private static readonly CheckBox _kite;
                 private static readonly CheckBox _useE;
+                private static readonly CheckBox _Ekill;
                 private static readonly CheckBox _useR;
                 private static readonly Slider _useRSlider;
+                private static readonly Slider _Qlogicslider;
 
-                public static bool UseQ
+                public static bool UseQs
                 {
-                    get { return _useQ.CurrentValue; }
+                    get { return _useQs.CurrentValue; }
+                }
+                public static bool UseQa
+                {
+                    get { return _useQa.CurrentValue; }
+                }
+
+
+                public static bool Kite
+                {
+                    get { return _kite.CurrentValue; }
                 }
 
                 public static bool UseE
                 {
                     get { return _useE.CurrentValue; }
+                }
+                public static bool Ekill
+                {
+                    get { return _Ekill.CurrentValue; }
                 }
 
                 public static bool UseR
@@ -98,14 +116,23 @@ namespace AddonTemplate
                 {
                     get { return _useRSlider.CurrentValue; }
                 }
+
+                public static int QLogicSlider
+                {
+                    get { return _Qlogicslider.CurrentValue; }
+                }
                 static Combo()
                 {
                     // Initialize the menu values
                     Menu.AddGroupLabel("Combo");
-                    _useQ = Menu.Add("comboUseQ", new CheckBox("Use Q"));
+                    _useQs = Menu.Add("comboUseQs", new CheckBox("Use Q(smart)"));
+                    _useQa = Menu.Add("comboUseQa", new CheckBox("Use Q(aka)", false));
+                    _kite = Menu.Add("comboUseQKite", new CheckBox("Use Q Kite Melee´s?"));
+                    _Ekill = Menu.Add("Ekill", new CheckBox("Use E if killable?"));
                     _useE = Menu.Add("comboUseE", new CheckBox("Use E"));
-                    _useR = Menu.Add("comboUseR", new CheckBox("Use R"));
+                    _useR = Menu.Add("comboUseR", new CheckBox("Use R", false));
                     _useRSlider = Menu.Add("comboRSlider", new Slider("Use R if", 2, 1, 5));
+                    _Qlogicslider = Menu.Add("QLogicSlider", new Slider("Hold distance from enemy:", 370, 100, 500));
                 }
 
                 public static void Initialize()
@@ -315,9 +342,9 @@ namespace AddonTemplate
 
                     Menu.AddGroupLabel("Condemn");
                     Menu.AddLabel("Only Activate 1 at the same time!");
-                    _condemn1 = Menu.Add("condemnmethod1", new CheckBox("Condemn 1(Hiki)"));
+                    _condemn1 = Menu.Add("condemnmethod1", new CheckBox("Condemn 1(Hiki)", false));
                     _condemn2 = Menu.Add("condemnmethod2", new CheckBox("Condemn 2(VHR)"));
-                    _condemn3 = Menu.Add("condemnmethod3", new CheckBox("Condemn 3(Fluxy)"));
+                    _condemn3 = Menu.Add("condemnmethod3", new CheckBox("Condemn 3(Fluxy)", false));
                     _condemndistance = Menu.Add("pushDistance", new Slider("Condemn Push Distance", 410, 350, 420));
                 }
 

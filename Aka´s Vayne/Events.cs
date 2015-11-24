@@ -83,6 +83,15 @@ namespace AddonTemplate
                 SpellManager.E.Cast(e.Sender);
             }
         }
-   
+
+        public static void OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!sender.IsMe) return;
+            if (args.SData.Name.ToLower().Contains("vaynetumble"))
+            {
+                Orbwalker.ResetAutoAttack();
+            }
+        }
+
     }
 }
