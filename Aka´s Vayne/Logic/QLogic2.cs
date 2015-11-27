@@ -31,8 +31,35 @@ namespace AddonTemplate.Logic
                 (pos.UnderTurret(true) && !ObjectManager.Player.UnderTurret(true)) || pos.IsWall();
         }
 
+        public static Vector3 GetAggressiveTumblePos(this Obj_AI_Base target)
+        {
+            var cursorPos = Game.CursorPos;
+
+            if (!cursorPos.IsDangerousPosition()) return cursorPos;
+            //if the target is not a melee and he's alone he's not really a danger to us, proceed to 1v1 him :^ )
+            if (!target.IsMelee && Heroes.Player.CountEnemiesInRange(800) == 1) return cursorPos;
+
+            var aRC = new QGeometry.Circle(ObjectManager.Player.ServerPosition.To2D(), 300).ToPolygon().ToClipperPath();
+            var targetPosition = target.ServerPosition;
+
+
+            foreach (var p in aRC)
+            {
+                var v3 = new Vector2(p.X, p.Y).To3D();
+                var dist = v3.Distance(targetPosition);
+                if (dist > 325 && dist < 450)
+                {
+                    return v3;
+                }
+            }
+            return Vector3.Zero;
+        }
+
         public static Vector3 GetTumblePos(this Obj_AI_Base target)
         {
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            return GetAggressiveTumblePos(target);
+
             var cursorPos = Game.CursorPos;
 
             if (!cursorPos.IsDangerousPosition()) return cursorPos;

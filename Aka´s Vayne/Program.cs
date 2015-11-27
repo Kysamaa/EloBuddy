@@ -5,6 +5,7 @@ using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
+using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
 using SharpDX;
 using SettingsMisc = AddonTemplate.Config.Modes.MiscMenu;
@@ -27,6 +28,12 @@ namespace AddonTemplate
             Obj_AI_Base.OnBasicAttack += Events.ObjAiBaseOnOnBasicAttack;
             GameObject.OnCreate += Events.GameObject_OnCreate;
             Obj_AI_Base.OnProcessSpellCast += Events.OnProcessSpell;
+            Obj_AI_Base.OnBuffGain += Events.Obj_AI_Base_OnBuffGain;
+            Obj_AI_Base.OnBasicAttack += Events.Obj_AI_Base_OnBasicAttack;
+            Player.OnIssueOrder += Events.Player_OnIssueOrder;
+            Game.OnUpdate += Events.Game_OnTick;
+            Obj_AI_Base.OnSpellCast += Events.Obj_AI_Base_OnSpellCast;
+
         }
 
         private static void OnLoadingComplete(EventArgs args)
@@ -67,6 +74,8 @@ namespace AddonTemplate
             }
 
         }
+
+
 
     }
 }

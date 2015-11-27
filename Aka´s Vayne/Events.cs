@@ -15,6 +15,10 @@ namespace AddonTemplate
 {
     class Events
     {
+        static float lastaa, lastaaclick;
+
+        static bool stopmove;
+
         public static AIHeroClient _Player
         {
             get { return ObjectManager.Player; }
@@ -93,5 +97,182 @@ namespace AddonTemplate
             }
         }
 
+        public static void Obj_AI_Base_OnBuffGain(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
+        {
+            if (sender.IsMe && args.Buff.Name == "vaynetumblebonus")
+            {
+                lastaa = 0;
+            }
+        }
+
+        public static void Player_OnIssueOrder(Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
+        {
+            if (sender.IsMe && args.Order.HasFlag(GameObjectOrder.AttackUnit))
+            {
+                lastaaclick = Game.Time*1000;
+            }
+        }
+
+        public static void Game_OnTick(EventArgs args)
+        {
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            {
+                if (AfterAndBeforeAttack)
+                {
+                    Player.CastSpell(SpellSlot.Q, Game.CursorPos);
+                }
+                if (stopmove && Game.Time*1000 > lastaaclick + ObjectManager.Player.AttackCastDelay*1000)
+                {
+                    stopmove = false;
+                }
+                if (!stopmove)
+                {
+                    if (Game.Time*1000 >
+                        lastaa + ObjectManager.Player.AttackCastDelay*1000 - Game.Ping/2)
+                    {
+                        Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+                    }
+                }
+                if (Target != null && Game.Time*1000 > lastaa + ObjectManager.Player.AttackDelay*1000 - Game.Ping/2*4.3)
+                {
+                    stopmove = true;
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
+                }
+                if (Target != null &&
+                    (Target.Distance(ObjectManager.Player) > 500f ||
+                     (ObjectManager.Player.Health/ObjectManager.Player.MaxHealth)*100 <= 95))
+                {
+                    Botrk(Target);
+                }
+            }
+
+        }
+
+        public static void Obj_AI_Base_OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsMe)
+            {
+                stopmove = false;
+                lastaa = Game.Time*1000;
+            }
+
+        }
+
+        public static bool AfterAndBeforeAttack
+        {
+            get
+            {
+                if (Game.Time*1000 <
+                    lastaa + ObjectManager.Player.AttackDelay*1000 - ObjectManager.Player.AttackDelay*1000/1.5 &&
+                    Game.Time*1000 > lastaa + ObjectManager.Player.AttackCastDelay*1000)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public static bool CanUseBotrk
+        {
+            get
+            {
+                if (Game.Time*1000 >=
+                    lastaa + ObjectManager.Player.AttackDelay*1000 - ObjectManager.Player.AttackDelay*1000/1.5 &&
+                    Game.Time*1000 <
+                    lastaa + ObjectManager.Player.AttackDelay*1000 - ObjectManager.Player.AttackDelay*1000/1.7 &&
+                    Game.Time*1000 > lastaa + ObjectManager.Player.AttackCastDelay*1000)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        static AIHeroClient Target
+        {
+            get
+            {
+                foreach (var unit in EntityManager.Heroes.Enemies.
+                    OrderBy(
+                        x =>
+                            x.Health*(x.Armor/(x.Armor + 100)) - x.TotalAttackDamage*x.AttackSpeedMod -
+                            x.TotalMagicalDamage).Where(x =>
+                                x.IsValidTarget(ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius +
+                                                x.BoundingRadius)
+                                && x.Health > 0
+                                && !x.IsDead
+                                && x.IsVisible
+                                && !x.IsZombie
+                                && x.IsTargetable
+                                && !x.HasBuff("JudicatorIntervention") //kayle R
+                                && !x.HasBuff("AlphaStrike") //Master Yi Q
+                                && !x.HasBuff("zhonyasringshield") //zhonya
+                                && !x.HasBuff("VladimirSanguinePool") //vladimir W
+                                && !x.HasBuff("ChronoShift") //zilean R
+                                && !x.HasBuff("yorickrazombie") //yorick R
+                                && !x.HasBuff("mordekaisercotgself") //mordekaiser R
+                                && !x.HasBuff("UndyingRage") //tryndamere R
+                                && !x.HasBuff("sionpassivezombie") //sion Passive
+                                && !x.HasBuff("elisespidere") //elise not visible
+                                && !x.HasBuff("KarthusDeathDefiedBuff") //karthus passive
+                                && !x.HasBuff("kogmawicathiansurprise") //kog'maw passive
+                                && !x.HasBuff("zyrapqueenofthorns") //zyra passive
+                                && !x.HasBuff("monkeykingdecoystealth") //wukong W not visible
+                                && !x.HasBuff("JaxCounterStrike") //Jax E
+                                && !x.HasBuff("Deceive") //Shaco not visible
+                                && !ObjectManager.Player.HasBuff("BlindingDart") //Me Teemo Q
+                                && !x.HasBuff("camouflagestealth") //Teemo not visible
+                                && !x.HasBuff("khazixrstealth") //Kha'Zix not visible
+                                && !x.HasBuff("evelynnstealthmarker") //Evelynn not visible
+                                && !x.HasBuff("akaliwstealth"))) //Akali not visible
+
+
+                {
+                    return unit;
+                }
+                return null;
+            }
+
+        }
+
+        static void Botrk(Obj_AI_Base unit)
+        {
+            if (Item.HasItem(3144) && Item.CanUseItem(3144) && CanUseBotrk)
+                Item.UseItem(3144, unit);
+            if (Item.HasItem(3153) && Item.CanUseItem(3153) && CanUseBotrk)
+                Item.UseItem(3153, unit);
+        }
+
+        public static void Obj_AI_Base_OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!sender.IsMe) return;
+            var target = (Obj_AI_Base)args.Target;
+
+            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && Config.Modes.LaneClear.UseQ) &&
+                    SpellManager.Q.IsReady())
+                {
+                    var source =
+                        EntityManager.MinionsAndMonsters.EnemyMinions
+                            .Where(
+                                a =>
+                                    a.NetworkId != target.NetworkId &&
+                                    a.Distance(Player.Instance) < 300 + Player.Instance.GetAutoAttackRange(a) &&
+                                    Prediction.Health.GetPrediction(a, (int) Player.Instance.AttackDelay) <
+                                    Player.Instance.GetAutoAttackDamage(a, true) + Damages.QDamage(a))
+                            .OrderBy(a => a.Health)
+                            .FirstOrDefault();
+
+                    if (source == null || Player.Instance.Position.Extend(Game.CursorPos, 300).Distance(source) >
+                        Player.Instance.GetAutoAttackRange(source))
+                        return;
+                    Orbwalker.ForcedTarget = source;
+                    Player.CastSpell(SpellSlot.Q,
+                        Player.Instance.Position.Extend(Game.CursorPos, 300).Distance(source) <=
+                        Player.Instance.GetAutoAttackRange(source)
+                            ? Game.CursorPos
+                            : source.Position);
+                }
+            }
+        }
     }
-}
+

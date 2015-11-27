@@ -132,7 +132,7 @@ namespace AddonTemplate
                     Menu.AddGroupLabel("Combo");
                     _useQs = Menu.Add("comboUseQs", new CheckBox("Use Q(smart)", false));
                     _useQa = Menu.Add("comboUseQa", new CheckBox("Use Q(aka)", false));
-                    _useQp = Menu.Add("comboUseQp", new CheckBox("Use Q(Prada)"));
+                    _useQp = Menu.Add("comboUseQp", new CheckBox("Use Q(Prada) => Use this it´s challengerino!"));
                     _kite = Menu.Add("comboUseQKite", new CheckBox("Use Q Kite Melee´s?"));
                     _Ekill = Menu.Add("Ekill", new CheckBox("Use E if killable?"));
                     _useE = Menu.Add("comboUseE", new CheckBox("Use E"));
@@ -327,7 +327,6 @@ namespace AddonTemplate
                 private static readonly CheckBox _condemn1;
                 private static readonly CheckBox _condemn2;
                 private static readonly CheckBox _condemn3;
-                private static readonly CheckBox _tf;
                 private static readonly Slider _condemndistance;
 
                 public static bool Condemn1
@@ -345,10 +344,6 @@ namespace AddonTemplate
                 {
                     get { return _condemn3.CurrentValue; }
                 }
-                public static bool tf
-                {
-                    get { return _tf.CurrentValue; }
-                }
 
                 public static int Condemndistance
                 {
@@ -358,11 +353,10 @@ namespace AddonTemplate
                 {
 
                     Menu.AddGroupLabel("Condemn");
-                    Menu.AddLabel("Only Activate 1 at the same time!");
+                    Menu.AddLabel("Only Activate 1 at the same time!, Fluxy is 360° condemn => the best, the others are less obvious");
                     _condemn1 = Menu.Add("condemnmethod1", new CheckBox("Condemn 1(Hiki)", false));
-                    _condemn2 = Menu.Add("condemnmethod2", new CheckBox("Condemn 2(VHR)"));
-                    _condemn3 = Menu.Add("condemnmethod3", new CheckBox("Condemn 3(Fluxy)", false));
-                    _tf = Menu.Add("TfE", new CheckBox("Teamfight E"));
+                    _condemn2 = Menu.Add("condemnmethod2", new CheckBox("Condemn 2(VHR)", false));
+                    _condemn3 = Menu.Add("condemnmethod3", new CheckBox("Condemn 3(Fluxy)"));
                     _condemndistance = Menu.Add("pushDistance", new Slider("Condemn Push Distance", 410, 350, 420));
                 }
 

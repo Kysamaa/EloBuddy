@@ -28,26 +28,9 @@ namespace AddonTemplate.Logic
                     for (int i = 0; i < 40; i++)
                     {
                         Vector3 finalPosition = targetPosition + (pushDirection*checkDistance*i);
-                        var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
                         var collFlags = NavMesh.GetCollisionFlags(finalPosition);
                         if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building))
-
-                        {
-                            if (Settings.tf)
-                            {
-                                if (Settings.Condemn1 && enemiesCount > 1 && enemiesCount <= 3)
-                                {
-                                    SpellManager.E.Cast(target);
-                                }
-                            }
-                            else if (!Settings.tf)
-                            {
-                                if (Settings.Condemn1)
-                                {
-                                    SpellManager.E.Cast(target);
-                                }
-                            }
-                        }
+                            SpellManager.E.Cast(target);
                     }
                 }
             }
@@ -97,22 +80,7 @@ namespace AddonTemplate.Logic
                         var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
                         if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building) ||
                             AsunasAllyFountain(FinalPosition))
-                        {
-                            if (Settings.tf)
-                            {
-                                if (Settings.Condemn2 && enemiesCount > 1 && enemiesCount <= 3)
-                                {
-                                    SpellManager.E.Cast(En);
-                                }
-                            }
-                            else if (!Settings.tf)
-                            {
-                                if (Settings.Condemn2)
-                                {
-                                    SpellManager.E.Cast(En);
-                                }
-                            }
-                        }
+                            SpellManager.E.Cast(En);
                     }
                 }
             }
@@ -164,26 +132,8 @@ namespace AddonTemplate.Logic
                         !x.HasBuffOfType(BuffType.SpellImmunity) &&
                         IsCondemable(x)))
         {
-            var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
-
-                {
-                    if (Settings.tf)
-                    {
-                        if (Settings.Condemn3 && enemiesCount > 1 && enemiesCount <= 3)
-                        {
-                            SpellManager.E.Cast(enemy);
-                        }
-                    }
-                    else if (!Settings.tf)
-                    {
-                        if (Settings.Condemn3)
-                        {
-                            SpellManager.E.Cast(enemy);
-                        }
-                    }
-                }
-
-            }
+            SpellManager.E.Cast(enemy);
+        }
         }
 
         public static
