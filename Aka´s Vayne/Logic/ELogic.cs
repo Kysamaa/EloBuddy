@@ -86,39 +86,7 @@ namespace AddonTemplate.Logic
             }
         }
 
-        public static void Condemn4(Obj_AI_Base hero)
-        {
-
-            if (!hero.IsValidTarget(550) || hero.HasBuffOfType(BuffType.SpellShield) ||
-    hero.HasBuffOfType(BuffType.SpellImmunity) || hero.IsDashing())
-                return;
-
-            var pP = Heroes.Player.ServerPosition;
-            var p = hero.ServerPosition;
-            var pD = Settings.Condemndistance;
-
-            if ((!p.Extend(pP, -pD).IsWall() && !p.Extend(pP, -pD/2f).IsWall() && !p.Extend(pP, -pD/3f).IsWall()))
-                return;
-            var angle = 0.20*50;
-            const float travelDistance = 0.5f;
-            var alpha = new Vector2((float) (p.X + travelDistance*Math.Cos(Math.PI/180*angle)),
-                (float) (p.X + travelDistance*Math.Sin(Math.PI/180*angle)));
-            var beta = new Vector2((float) (p.X - travelDistance*Math.Cos(Math.PI/180*angle)),
-                (float) (p.X - travelDistance*Math.Sin(Math.PI/180*angle)));
-
-            for (var i = 15; i < pD; i += 100)
-            {
-                if (pP.To2D().Extend(alpha,
-                    i)
-                    .To3D().IsWall() && pP.To2D().Extend(beta, i).To3D().IsWall())
-                {
-                    SpellManager.E.Cast(hero);
-                }
-            }
-        }
-    
-
-
+   
 
 
     public static
@@ -216,5 +184,73 @@ namespace AddonTemplate.Logic
 
             return objListTeam.Count(hero => checkteam ? hero.Team != target.Team : hero.Team == target.Team);
         }
+
+        public static Vector2 GetFirstNonWallPos(Vector2 startPos, Vector2 endPos)
+        {
+            int distance = 0;
+            for (int i = 0; i < Settings.Condemndistance; i += 20)
+            {
+                var cell = startPos.Extend(endPos, endPos.Distance(startPos) + i);
+                if (NavMesh.GetCollisionFlags(cell).HasFlag(CollisionFlags.Wall) ||
+                            NavMesh.GetCollisionFlags(cell).HasFlag(CollisionFlags.Building))
+                {
+                    distance = i - 20;
+                }
+            }
+            return startPos.Extend(endPos, distance + endPos.Distance(startPos));
+        }
+
+        public static List<Vector3> GetRotatedFlashPositions()
+        {
+            const int currentStep = 30;
+            var direction = ObjectManager.Player.Direction.To2D().Perpendicular();
+
+            var list = new List<Vector3>();
+            for (var i = -90; i <= 90; i += currentStep)
+            {
+                var angleRad = Geometry.DegreeToRadian(i);
+                var rotatedPosition = ObjectManager.Player.Position.To2D() + (425f * direction.Rotated(angleRad));
+                list.Add(rotatedPosition.To3D());
+            }
+            return list;
+        }
+
+        public static void LoadFlash()
+        {
+            var testSlot = ObjectManager.Player.GetSpellSlot("summonerflash");
+            if (testSlot != SpellSlot.Unknown)
+            {
+                Console.WriteLine("Flash Slot: {0}", testSlot);
+                Events.FlashSlot = testSlot;
+            }
+            else
+            {
+                Console.WriteLine("Error loading Flash! Not found!");
+            }
+        }
+
+        public static AIHeroClient CondemnCheck(Vector3 fromPosition)
+        {
+            var HeroList = HeroManager.Enemies.Where(
+                                    h =>
+                                        h.IsValidTarget(SpellManager.E.Range) &&
+                                        !h.HasBuffOfType(BuffType.SpellShield) &&
+                                        !h.HasBuffOfType(BuffType.SpellImmunity));
+            foreach (var Hero in HeroList)
+            {
+                var ePred = SpellManager.E2.GetPrediction(Hero);
+                int pushDist = Settings.Condemndistance;
+                for (int i = 0; i < pushDist; i += (int)Hero.BoundingRadius)
+                {
+                    Vector3 loc3 = ePred.UnitPosition.To2D().Extend(fromPosition.To2D(), -i).To3D();
+                    if (loc3.IsWall())
+                    {
+                        return Hero;
+                    }
+                }
+            }
+            return null;
+        }
+
     }
 }

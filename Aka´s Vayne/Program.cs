@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using AddonTemplate.Logic;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
@@ -51,7 +52,7 @@ namespace AddonTemplate
             Config.Initialize();
             SpellManager.Initialize();
             ModeManager.Initialize();
-
+            ELogic.LoadFlash();
             // Listen to events we need
             Drawing.OnDraw += OnDraw;
         }

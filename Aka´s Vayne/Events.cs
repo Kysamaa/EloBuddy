@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AddonTemplate.Logic;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
@@ -18,6 +19,8 @@ namespace AddonTemplate
         static float lastaa, lastaaclick;
 
         static bool stopmove;
+
+        public static SpellSlot FlashSlot;
 
         public static AIHeroClient _Player
         {
@@ -95,6 +98,8 @@ namespace AddonTemplate
             {
                 Orbwalker.ResetAutoAttack();
             }
+
+
         }
 
         public static void Obj_AI_Base_OnBuffGain(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
@@ -115,6 +120,7 @@ namespace AddonTemplate
 
         public static void Game_OnTick(EventArgs args)
         {
+            EloBuddyOrbDisabler();
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
                 if (AfterAndBeforeAttack)
@@ -143,6 +149,20 @@ namespace AddonTemplate
                      (ObjectManager.Player.Health/ObjectManager.Player.MaxHealth)*100 <= 95))
                 {
                     Botrk(Target);
+                }
+            }
+
+            var positions = ELogic.GetRotatedFlashPositions();
+
+            foreach (var p in positions)
+            {
+                var condemnUnit = ELogic.CondemnCheck( p);
+                if (condemnUnit != null && Config.Modes.Condemn.FlashE)
+                {
+                    SpellManager.E.Cast(condemnUnit);
+
+                        ObjectManager.Player.Spellbook.CastSpell(FlashSlot, p);
+                   
                 }
             }
 
@@ -241,6 +261,32 @@ namespace AddonTemplate
                 Item.UseItem(3144, unit);
             if (Item.HasItem(3153) && Item.CanUseItem(3153) && CanUseBotrk)
                 Item.UseItem(3153, unit);
+        }
+
+        static void EloBuddyOrbDisabler()
+        {
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
+            {
+                if (Orbwalker.DisableAttacking)
+                {
+                    Orbwalker.DisableAttacking = false;
+                }
+                if (Orbwalker.DisableMovement)
+                {
+                    Orbwalker.DisableMovement = false;
+                }
+            }
+            else
+            {
+                if (!Orbwalker.DisableAttacking)
+                {
+                    Orbwalker.DisableAttacking = true;
+                }
+                if (!Orbwalker.DisableMovement)
+                {
+                    Orbwalker.DisableMovement = true;
+                }
+            }
         }
 
         public static void Obj_AI_Base_OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

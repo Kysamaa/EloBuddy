@@ -327,6 +327,8 @@ namespace AddonTemplate
                 private static readonly CheckBox _condemn1;
                 private static readonly CheckBox _condemn2;
                 private static readonly CheckBox _condemn3;
+                private static readonly KeyBind _flashe;
+                private static readonly CheckBox _trinket;
                 private static readonly Slider _condemndistance;
 
                 public static bool Condemn1
@@ -345,6 +347,15 @@ namespace AddonTemplate
                     get { return _condemn3.CurrentValue; }
                 }
 
+                public static bool FlashE
+                {
+                    get { return _flashe.CurrentValue; }
+                }
+
+                public static bool trinket
+                {
+                    get { return _trinket.CurrentValue; }
+                }
                 public static int Condemndistance
                 {
                     get { return _condemndistance.CurrentValue; }
@@ -357,6 +368,8 @@ namespace AddonTemplate
                     _condemn1 = Menu.Add("condemnmethod1", new CheckBox("Condemn 1(Hiki)", false));
                     _condemn2 = Menu.Add("condemnmethod2", new CheckBox("Condemn 2(VHR)", false));
                     _condemn3 = Menu.Add("condemnmethod3", new CheckBox("Condemn 3(Fluxy)"));
+                    _flashe = Menu.Add("flashe", new KeyBind("Flash E!", false, KeyBind.BindTypes.HoldActive, 'Y'));
+                    _trinket = Menu.Add("trinket", new CheckBox("Use trinket bush?"));
                     _condemndistance = Menu.Add("pushDistance", new Slider("Condemn Push Distance", 410, 350, 420));
                 }
 

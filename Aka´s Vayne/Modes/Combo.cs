@@ -50,6 +50,10 @@ namespace AddonTemplate.Modes
             {
                 ELogic.Condemn3();
             }
+            if (Config.Modes.Condemn.trinket)
+            {
+                usetrinket(target);
+            }
             if (Settings.UseR && R.IsReady())
             {
                 ComboUltimateLogic();
@@ -87,6 +91,27 @@ namespace AddonTemplate.Modes
                 return;
             }
         }
+
+        public static void usetrinket(Obj_AI_Base target)
+        {
+            if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Trinket).IsReady &&
+                ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Trinket).SData.Name.ToLower().Contains("totem"))
+            {
+                Core.DelayAction(delegate
+                {
+                    if (Config.Modes.Condemn.trinket)
+                    {
+                        var pos = ELogic.GetFirstNonWallPos(ObjectManager.Player.Position.To2D(), target.Position.To2D());
+                        if (NavMesh.GetCollisionFlags(pos).HasFlag(CollisionFlags.Grass))
+                        {
+                            Player.CastSpell(SpellSlot.Trinket,
+                                pos.To3D());
+                        }
+                    }
+                }, 200);
+            }
+        }
+
     }
 
 }
