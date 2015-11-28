@@ -13,8 +13,11 @@ using Settings = AddonTemplate.Config.Modes.Condemn;
 
 namespace AddonTemplate.Logic
 {
+
+
     class ELogic
     {
+
         public static void Condemn1()
         {
             foreach (var target in HeroManager.Enemies.Where(h => h.IsValidTarget(SpellManager.E.Range)))

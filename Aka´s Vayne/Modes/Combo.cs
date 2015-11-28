@@ -25,7 +25,7 @@ namespace AddonTemplate.Modes
         {
             var target = TargetSelector.GetTarget(E.Range, DamageType.Physical);
             var myPosition = Game.CursorPos;
-            if (Settings.UseQa  && SpellManager.Q.IsReady())
+            if (Settings.UseQa && SpellManager.Q.IsReady())
             {
                 QLogic.CastTumble(myPosition, target);
                 Qisoutofrange(target);
@@ -63,6 +63,7 @@ namespace AddonTemplate.Modes
                 Ekill();
             }
         }
+
         public void ComboUltimateLogic()
         {
             if (ObjectManager.Player.CountEnemiesInRange(1000) >= Settings.UseRSlider)
@@ -73,7 +74,7 @@ namespace AddonTemplate.Modes
 
         public static void Ekill()
         {
-            var target = TargetSelector.GetTarget((int)ObjectManager.Player.GetAutoAttackRange(), DamageType.Physical);
+            var target = TargetSelector.GetTarget((int) ObjectManager.Player.GetAutoAttackRange(), DamageType.Physical);
 
             if (target.Health <
                 Player.Instance.GetSpellDamage(target, SpellSlot.E))
@@ -84,7 +85,8 @@ namespace AddonTemplate.Modes
 
         public static void Qisoutofrange(Obj_AI_Base target)
         {
-            if (SpellManager.Q.IsReady() && Player.Instance.Distance(target) > Player.Instance.GetAutoAttackRange(target) &&
+            if (SpellManager.Q.IsReady() &&
+                Player.Instance.Distance(target) > Player.Instance.GetAutoAttackRange(target) &&
                 Player.Instance.Distance(target) < Player.Instance.GetAutoAttackRange(target) + 300)
             {
                 Player.CastSpell(SpellSlot.Q, Game.CursorPos);
@@ -110,8 +112,8 @@ namespace AddonTemplate.Modes
                     }
                 }, 200);
             }
-        }
 
+        }
     }
 
 }

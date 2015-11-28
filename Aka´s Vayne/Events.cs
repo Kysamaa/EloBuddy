@@ -4,18 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AddonTemplate.Logic;
+using AddonTemplate.Utility;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu.Values;
 using SharpDX;
+using Gapcloser = EloBuddy.SDK.Events.Gapcloser;
 using Settings = AddonTemplate.Config.Modes.MiscMenu;
 
 namespace AddonTemplate
 {
     class Events
     {
+
+        public static bool VayneUltiIsActive { get; set; }
+
         static float lastaa, lastaaclick;
 
         static bool stopmove;
@@ -29,13 +34,14 @@ namespace AddonTemplate
 
         public static void Gapcloser_OnGapCloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
         {
-            if (!Settings.Gapclose) return;
-            if (e.End.Distance(_Player) < 200 && sender.IsValidTarget())
+            if (sender == null || sender.IsAlly || !Settings.Gapclose) return;
+
+            if ((sender.IsAttackingPlayer || e.End.Distance(_Player) <= 70))
             {
                 SpellManager.E.Cast(sender);
             }
-
         }
+
 
         public static void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
@@ -62,7 +68,7 @@ namespace AddonTemplate
                         ? target.Position
                         : new Vector3());
 
-                if (pos.IsValid())
+                if (Extensions.IsValid(pos))
                 {
                     Player.CastSpell(SpellSlot.Q, pos);
                 }
@@ -85,7 +91,7 @@ namespace AddonTemplate
                 e.DangerLevel.HasFlag(DangerLevel.Medium))
                 return;
 
-            if (e.Sender.IsValidTarget())
+            if (Extensions.IsValidTarget(e.Sender))
             {
                 SpellManager.E.Cast(e.Sender);
             }
@@ -98,8 +104,6 @@ namespace AddonTemplate
             {
                 Orbwalker.ResetAutoAttack();
             }
-
-
         }
 
         public static void Obj_AI_Base_OnBuffGain(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
@@ -110,22 +114,41 @@ namespace AddonTemplate
             }
         }
 
+
+
         public static void Player_OnIssueOrder(Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
         {
             if (sender.IsMe && args.Order.HasFlag(GameObjectOrder.AttackUnit))
             {
                 lastaaclick = Game.Time*1000;
             }
+
+            if (sender.IsMe
+     && (args.Order == GameObjectOrder.AttackUnit || args.Order == GameObjectOrder.AttackTo)
+     && (Config.Modes.Combo.RnoAA && ObjectManager.Player.CountEnemiesInRange(1000f) > Config.Modes.Combo.RnoAAs)
+     && UltActive() || ObjectManager.Player.HasBuffOfType(BuffType.Invisibility)
+     && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            {
+                args.Process = false;
+            }
+        }
+
+        public static bool UltActive()
+        {
+            return (ObjectManager.Player.HasBuff("vaynetumblefade") && !ObjectManager.Player.UnderTurret());
         }
 
         public static void Game_OnTick(EventArgs args)
-        {
-            EloBuddyOrbDisabler();
+    {
+
+            var target = TargetSelector.GetTarget((int)ObjectManager.Player.GetAutoAttackRange(), DamageType.Physical);
+                EloBuddyOrbDisabler();
+
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
                 if (AfterAndBeforeAttack)
                 {
-                    Player.CastSpell(SpellSlot.Q, Game.CursorPos);
+                    Player.CastSpell(SpellSlot.Q, QLogic2.GetTumblePos(target));
                 }
                 if (stopmove && Game.Time*1000 > lastaaclick + ObjectManager.Player.AttackCastDelay*1000)
                 {
@@ -139,7 +162,8 @@ namespace AddonTemplate
                         Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                     }
                 }
-                if (Target != null && Game.Time*1000 > lastaa + ObjectManager.Player.AttackDelay*1000 - Game.Ping/2*4.3)
+                if (Target != null &&
+                    Game.Time*1000 > lastaa + ObjectManager.Player.AttackDelay*1000 - Game.Ping/2*4.3)
                 {
                     stopmove = true;
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
@@ -156,17 +180,19 @@ namespace AddonTemplate
 
             foreach (var p in positions)
             {
-                var condemnUnit = ELogic.CondemnCheck( p);
+                var condemnUnit = ELogic.CondemnCheck(p);
                 if (condemnUnit != null && Config.Modes.Condemn.FlashE)
                 {
                     SpellManager.E.Cast(condemnUnit);
 
-                        ObjectManager.Player.Spellbook.CastSpell(FlashSlot, p);
-                   
+                    ObjectManager.Player.Spellbook.CastSpell(FlashSlot, p);
+
                 }
             }
 
         }
+
+
 
         public static void Obj_AI_Base_OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
@@ -217,7 +243,7 @@ namespace AddonTemplate
                         x =>
                             x.Health*(x.Armor/(x.Armor + 100)) - x.TotalAttackDamage*x.AttackSpeedMod -
                             x.TotalMagicalDamage).Where(x =>
-                                x.IsValidTarget(ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius +
+                                Extensions.IsValidTarget(x, ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius +
                                                 x.BoundingRadius)
                                 && x.Health > 0
                                 && !x.IsDead
@@ -276,7 +302,7 @@ namespace AddonTemplate
                     Orbwalker.DisableMovement = false;
                 }
             }
-            else
+            else 
             {
                 if (!Orbwalker.DisableAttacking)
                 {
@@ -319,6 +345,9 @@ namespace AddonTemplate
                             : source.Position);
                 }
             }
+
+
+
         }
     }
 

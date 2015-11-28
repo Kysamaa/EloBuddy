@@ -81,8 +81,11 @@ namespace AddonTemplate
                 private static readonly CheckBox _useE;
                 private static readonly CheckBox _Ekill;
                 private static readonly CheckBox _useR;
+                private static readonly CheckBox _Rnoaa;
+                private static readonly Slider _Rnoaas;
                 private static readonly Slider _useRSlider;
                 private static readonly Slider _Qlogicslider;
+
 
                 public static bool UseQs
                 {
@@ -117,6 +120,16 @@ namespace AddonTemplate
                     get { return _useR.CurrentValue; }
                 }
 
+                public static bool RnoAA
+                {
+                    get { return _Rnoaa.CurrentValue; }
+                }
+
+                public static int RnoAAs
+                {
+                    get { return _Rnoaas.CurrentValue; }
+                }
+
                 public static int UseRSlider
                 {
                     get { return _useRSlider.CurrentValue; }
@@ -137,6 +150,8 @@ namespace AddonTemplate
                     _Ekill = Menu.Add("Ekill", new CheckBox("Use E if killable?"));
                     _useE = Menu.Add("comboUseE", new CheckBox("Use E"));
                     _useR = Menu.Add("comboUseR", new CheckBox("Use R", false));
+                    _Rnoaa = Menu.Add("RnoAA", new CheckBox("No AA while stealth", false));
+                    _Rnoaas = Menu.Add("RnoAAs", new Slider("No AA stealth when >= enemy in range", 2, 0, 5));
                     _useRSlider = Menu.Add("comboRSlider", new Slider("Use R if", 2, 1, 5));
                     _Qlogicslider = Menu.Add("QLogicSlider", new Slider("Hold distance from enemy:", 370, 100, 500));
                 }
@@ -275,6 +290,8 @@ namespace AddonTemplate
                 private static readonly CheckBox _InterruptE;
                 private static readonly CheckBox _Gapclose;
                 private static readonly Slider _Dangerlvl;
+                private static readonly Slider _skinId;
+                private static readonly CheckBox _autoBuy;
 
                 public static bool AntiRengar
                 {
@@ -297,6 +314,16 @@ namespace AddonTemplate
                     get { return _Dangerlvl.CurrentValue; }
                 }
 
+                public static int skinId
+                {
+                    get { return _skinId.CurrentValue; }
+                }
+
+                public static bool autoBuy
+                {
+                    get { return _autoBuy.CurrentValue; }
+                }
+
 
                 static MiscMenu()
                 {
@@ -307,6 +334,8 @@ namespace AddonTemplate
                     _AntiRengar = Menu.Add("AntiRengar", new CheckBox("Anti Rengar"));
                     _AntiKalista = Menu.Add("AntiKalista", new CheckBox("Anti Kalista"));
                     _InterruptE = Menu.Add("InterruptE", new CheckBox("Interrupt Spells using E?"));
+                    _autoBuy = Menu.Add("autoBuyStartingItems", new CheckBox("Autobuy Starters"));
+                    _skinId = Menu.Add("skinId", new Slider("Skin Hack", 7, 1, 9));
                     var dangerSlider = _Dangerlvl = Menu.Add("dangerLevel", new Slider("Set Your Danger Level: ", 3, 1, 3));
                     var dangerSliderDisplay = Menu.Add("dangerLevelDisplay",
                         new Label("Danger Level: " + DangerSliderValues[dangerSlider.Cast<Slider>().CurrentValue - 1]));
