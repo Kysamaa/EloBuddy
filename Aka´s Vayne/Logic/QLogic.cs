@@ -1,68 +1,110 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AddonTemplate.Utility;
+using SharpDX;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Menu.Values;
-using SharpDX;
 
 namespace AddonTemplate.Logic
 {
-    static class QLogic
+    public static class QLogic
     {
-        public static void CastTumble(Vector3 position, Obj_AI_Base target)
+        public static Vector3 TumbleOrderPos = Vector3.Zero;
+
+        public static void Cast(Vector3 position)
         {
-            if (!SpellManager.Q.IsReady())
+            TumbleOrderPos = position;
+            if (position != Vector3.Zero)
             {
-                return;
-            }
-
-            var positionAfter = ObjectManager.Player.ServerPosition.To2D().Extend(Game.CursorPos.To2D(), 300f).To3D();
-            var distanceAfterTumble = Vector3.DistanceSquared(positionAfter, target.ServerPosition);
-
-            if (distanceAfterTumble <= 550 * 550 && distanceAfterTumble >= 100 * 100 && (!positionAfter.IsDangerousPosition()))
-            {
-                Player.CastSpell(SpellSlot.Q, position);
-            }
-            if (Config.Modes.Combo.Kite &&
-                EntityManager.Heroes.Enemies.Any(
-                    a => a.IsMelee && a.Distance(Player.Instance) < a.GetAutoAttackRange(Player.Instance)))
-            {
-                Player.CastSpell(SpellSlot.Q,
-                    target.Position.Extend(Player.Instance.Position,
-                        target.Position.Distance(Player.Instance) + 300).To3D());
+                Player.CastSpell(SpellSlot.Q, TumbleOrderPos);
             }
         }
-        public static void QCombo(Obj_AI_Base target)
+        public static bool IsDangerousPosition(this Vector3 pos)
         {
-            foreach (AIHeroClient qTarget in HeroManager.Enemies.Where(x => x.IsValidTarget(550)))
+            return
+                EntityManager.Heroes.Enemies.Any(
+                    e => e.IsValidTarget(600) && e.IsVisible &&
+                        e.Distance(pos) < 375) ||
+                Traps.EnemyTraps.Any(t => pos.Distance6(t.Position) < 125) ||
+                (pos.UnderTurret(true) && !ObjectManager.Player.UnderTurret(true)) || pos.IsWall();
+        }
+
+        public static Vector3 GetAggressiveTumblePos(this Obj_AI_Base target)
+        {
+            var cursorPos = Game.CursorPos;
+
+            if (!cursorPos.IsDangerousPosition()) return cursorPos;
+            //if the target is not a melee and he's alone he's not really a danger to us, proceed to 1v1 him :^ )
+            if (!target.IsMelee && Heroes.Player.CountEnemiesInRange(800) == 1) return cursorPos;
+
+            var aRC = new QGeometry.Circle(ObjectManager.Player.ServerPosition.To2D(), 300).ToPolygon().ToClipperPath();
+            var targetPosition = target.ServerPosition;
+
+
+            foreach (var p in aRC)
             {
-                if (!Game.CursorPos.IsDangerousPosition())
+                var v3 = new Vector2(p.X, p.Y).To3D();
+                var dist = v3.Distance(targetPosition);
+                if (dist > 325 && dist < 450)
                 {
-                    Player.CastSpell(SpellSlot.Q, Game.CursorPos);
+                    return v3;
                 }
             }
-            if (Config.Modes.Combo.Kite &&
-                EntityManager.Heroes.Enemies.Any(
-                    a => a.IsMelee && a.Distance(Player.Instance) < a.GetAutoAttackRange(Player.Instance)))
-            {
-                Player.CastSpell(SpellSlot.Q,
-                    target.Position.Extend(Player.Instance.Position,
-                        target.Position.Distance(Player.Instance) + 300).To3D());
-            }
+            return Vector3.Zero;
         }
-        public static void QJungleClear()
-        {
-            var mob =
-                EntityManager.MinionsAndMonsters.GetJungleMonsters(ObjectManager.Player.ServerPosition,
-                    SpellManager.E.Range + 100).Where(t => !t.IsDead && t.IsValid && !t.IsInvulnerable);
-            foreach (var m in mob)
-            {
-                Player.CastSpell(SpellSlot.Q, Game.CursorPos);
-            }
 
+        public static Vector3 GetTumblePos(this Obj_AI_Base target)
+        {
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            return GetAggressiveTumblePos(target);
+
+            var cursorPos = Game.CursorPos;
+
+            if (!cursorPos.IsDangerousPosition()) return cursorPos;
+            //if the target is not a melee and he's alone he's not really a danger to us, proceed to 1v1 him :^ )
+            if (!target.IsMelee && ObjectManager.Player.CountEnemiesInRange2(800) == 1) return cursorPos;
+
+            var aRC = new QGeometry.Circle(ObjectManager.Player.ServerPosition.To2D2(), 300).ToPolygon().ToClipperPath();
+            var targetPosition = target.ServerPosition;
+            var pList = new List<Vector3>();
+            var additionalDistance = (0.106 + Game.Ping / 2000f) * target.MoveSpeed;
+
+
+            foreach (var p in aRC)
+            {
+                var v3 = Extensions.To3D(new Vector2(p.X, p.Y));
+
+                if (target.IsFacing2(ObjectManager.Player))
+                {
+                    if (!v3.IsDangerousPosition() && v3.Distance6(targetPosition) < 550) pList.Add(v3);
+                }
+                else
+                {
+                    if (!v3.IsDangerousPosition() && v3.Distance6(targetPosition) < 550 - additionalDistance) pList.Add(v3);
+                }
+            }
+            if (ObjectManager.Player.UnderTurret() || ObjectManager.Player.CountEnemiesInRange2(800) == 1)
+            {
+                return pList.Count > 1 ? pList.OrderBy(el => el.Distance6(cursorPos)).FirstOrDefault() : Vector3.Zero;
+            }
+            if (!cursorPos.IsDangerousPosition())
+            {
+                return pList.Count > 1 ? pList.OrderBy(el => el.Distance6(cursorPos)).FirstOrDefault() : Vector3.Zero;
+            }
+            return pList.Count > 1 ? pList.OrderByDescending(el => el.Distance6(cursorPos)).FirstOrDefault() : Vector3.Zero;
+        }
+
+        public static void JungleClear()
+        {
+            Obj_AI_Base jungleMobs = EntityManager.MinionsAndMonsters.GetJungleMonsters(ObjectManager.Player.Position, SpellManager.Q.Range, true).FirstOrDefault();
+            {
+                if (Config.Modes.JungleClear.UseQ && SpellManager.Q.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(SpellManager.Q.Range))             
+                {
+                    Player.CastSpell(SpellSlot.Q, ObjectManager.Player.GetTumblePos());
+                }
+            }
         }
     }
 }

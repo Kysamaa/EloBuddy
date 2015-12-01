@@ -6,7 +6,7 @@ using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Menu.Values;
 using SharpDX;
-
+using AddonTemplate.Utility;
 // Using the config like this makes your life easier, trust me
 using Settings = AddonTemplate.Config.Modes.Combo;
 
@@ -24,19 +24,31 @@ namespace AddonTemplate.Modes
         public override void Execute()
         {
             var target = TargetSelector.GetTarget(E.Range, DamageType.Physical);
-            var myPosition = Game.CursorPos;
-            if (Settings.UseQa && SpellManager.Q.IsReady())
+            if (Config.Modes.Items.Useitems)
             {
-                QLogic.CastTumble(myPosition, target);
-                Qisoutofrange(target);
-            }
-            if (Settings.UseQs && SpellManager.Q.IsReady())
-            {
-                QLogic2.Cast(Game.CursorPos);
-            }
-            if (Settings.UseQp && SpellManager.Q.IsReady())
-            {
-                QLogic2.Cast(target.GetTumblePos());
+                if (SpellManager.Heal != null && Config.Modes.Items.UseHeal && SpellManager.Heal.IsReady() && Player.Instance.HealthPercent <= Config.Modes.Items.UseHealhp
+                     && ObjectManager.Player.CountEnemiesInRange2(600) > 0)
+                {
+                    SpellManager.Heal.Cast();
+                }
+                if (Config.Modes.Items.Useitems)
+                {
+                    if (Item.HasItem((int)ItemId.Blade_of_the_Ruined_King, ObjectManager.Player) && Config.Modes.Items.Usebotrk && Item.CanUseItem((int)ItemId.Blade_of_the_Ruined_King)
+                        && Player.Instance.HealthPercent <= Config.Modes.Items.Usebotrkhp)
+                    {
+                        Item.UseItem((int)ItemId.Blade_of_the_Ruined_King, target);
+                    }
+                    if (Item.HasItem((int)ItemId.Bilgewater_Cutlass, ObjectManager.Player) && Config.Modes.Items.Usebilge && Item.CanUseItem((int)ItemId.Bilgewater_Cutlass)
+                       && target.IsValidTarget(ObjectManager.Player.GetAutoAttackRange()))
+                    {
+                        Item.UseItem((int)ItemId.Bilgewater_Cutlass, target);
+                    }
+                    if (Item.HasItem((int)ItemId.Youmuus_Ghostblade, ObjectManager.Player) && Config.Modes.Items.UseYoumuus && Item.CanUseItem((int)ItemId.Youmuus_Ghostblade)
+                       && ObjectManager.Player.Distance4(target.Position) <= ObjectManager.Player.GetAutoAttackRange())
+                    {
+                        Item.UseItem((int)ItemId.Youmuus_Ghostblade);
+                    }
+                }
             }
             if (Config.Modes.Condemn.Condemn1 && SpellManager.E.IsReady())
             {
@@ -58,10 +70,6 @@ namespace AddonTemplate.Modes
             {
                 ComboUltimateLogic();
             }
-            if (Settings.Ekill && E.IsReady())
-            {
-                Ekill();
-            }
         }
 
         public void ComboUltimateLogic()
@@ -69,17 +77,6 @@ namespace AddonTemplate.Modes
             if (ObjectManager.Player.CountEnemiesInRange(1000) >= Settings.UseRSlider)
             {
                 SpellManager.R.Cast();
-            }
-        }
-
-        public static void Ekill()
-        {
-            var target = TargetSelector.GetTarget((int) ObjectManager.Player.GetAutoAttackRange(), DamageType.Physical);
-
-            if (target.Health <
-                Player.Instance.GetSpellDamage(target, SpellSlot.E))
-            {
-                SpellManager.E.Cast(target);
             }
         }
 

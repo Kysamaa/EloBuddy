@@ -1,4 +1,5 @@
 ﻿using System;
+using EloBuddy;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 
@@ -16,6 +17,8 @@ namespace AddonTemplate
         private const string MenuName = "Aka´s Vayne";
 
         private static readonly Menu Menu;
+
+        private static BuffType[] buffs;
 
         public static string[] DangerSliderValues = { "Low", "Medium", "High" };
 
@@ -74,37 +77,34 @@ namespace AddonTemplate
 
             public static class Combo
             {
-                private static readonly CheckBox _useQs;
-                private static readonly CheckBox _useQa;
+                private static readonly CheckBox _useQ;
                 private static readonly CheckBox _useQp;
-                private static readonly CheckBox _kite;
+                private static readonly CheckBox _useQa;
+                private static readonly CheckBox _useQb;
+                private static readonly CheckBox _focusW;
                 private static readonly CheckBox _useE;
                 private static readonly CheckBox _Ekill;
                 private static readonly CheckBox _useR;
                 private static readonly CheckBox _Rnoaa;
                 private static readonly Slider _Rnoaas;
                 private static readonly Slider _useRSlider;
-                private static readonly Slider _Qlogicslider;
+
+                public static bool UseQ
+                {
+                    get { return _useQ.CurrentValue; }
+                }
+
+                public static bool Focus
+                {
+                    get { return _focusW.CurrentValue; }
+                }
 
 
-                public static bool UseQs
-                {
-                    get { return _useQs.CurrentValue; }
-                }
-                public static bool UseQa
-                {
-                    get { return _useQa.CurrentValue; }
-                }
                 public static bool UseQp
                 {
                     get { return _useQp.CurrentValue; }
                 }
 
-
-                public static bool Kite
-                {
-                    get { return _kite.CurrentValue; }
-                }
 
                 public static bool UseE
                 {
@@ -125,6 +125,18 @@ namespace AddonTemplate
                     get { return _Rnoaa.CurrentValue; }
                 }
 
+
+                public static bool UseQb
+                {
+                    get { return _useQb.CurrentValue; }
+                }
+
+                public static bool UseQa
+                {
+                    get { return _useQa.CurrentValue; }
+                }
+
+
                 public static int RnoAAs
                 {
                     get { return _Rnoaas.CurrentValue; }
@@ -135,25 +147,22 @@ namespace AddonTemplate
                     get { return _useRSlider.CurrentValue; }
                 }
 
-                public static int QLogicSlider
-                {
-                    get { return _Qlogicslider.CurrentValue; }
-                }
                 static Combo()
                 {
                     // Initialize the menu values
                     Menu.AddGroupLabel("Combo");
-                    _useQs = Menu.Add("comboUseQs", new CheckBox("Use Q(smart)", false));
-                    _useQa = Menu.Add("comboUseQa", new CheckBox("Use Q(aka)", false));
-                    _useQp = Menu.Add("comboUseQp", new CheckBox("Use Q(Prada) => Use this it´s challengerino!"));
-                    _kite = Menu.Add("comboUseQKite", new CheckBox("Use Q Kite Melee´s?"));
+                    Menu.AddLabel("Only tick one Q mouse/Q prada");
+                    _useQ = Menu.Add("UseQc", new CheckBox("Use Q Mouse", false));
+                    _useQp = Menu.Add("UseQp", new CheckBox("Use Q Prada"));
+                    _useQb = Menu.Add("UseQb", new CheckBox("Use Q before AA?", false));
+                    _useQa = Menu.Add("UseQa", new CheckBox("Use Q after AA?"));
+                    _focusW = Menu.Add("focusWW", new CheckBox("Focus W", false));
                     _Ekill = Menu.Add("Ekill", new CheckBox("Use E if killable?"));
                     _useE = Menu.Add("comboUseE", new CheckBox("Use E"));
                     _useR = Menu.Add("comboUseR", new CheckBox("Use R", false));
                     _Rnoaa = Menu.Add("RnoAA", new CheckBox("No AA while stealth", false));
                     _Rnoaas = Menu.Add("RnoAAs", new Slider("No AA stealth when >= enemy in range", 2, 0, 5));
                     _useRSlider = Menu.Add("comboRSlider", new Slider("Use R if", 2, 1, 5));
-                    _Qlogicslider = Menu.Add("QLogicSlider", new Slider("Hold distance from enemy:", 370, 100, 500));
                 }
 
                 public static void Initialize()
@@ -287,6 +296,7 @@ namespace AddonTemplate
             {
                 private static readonly CheckBox _AntiRengar;
                 private static readonly CheckBox _AntiKalista;
+                private static readonly CheckBox _AntiPanth;
                 private static readonly CheckBox _InterruptE;
                 private static readonly CheckBox _Gapclose;
                 private static readonly Slider _Dangerlvl;
@@ -300,6 +310,10 @@ namespace AddonTemplate
                 public static bool AntiKalista
                 {
                     get { return _AntiKalista.CurrentValue; }
+                }
+                public static bool AntiPanth
+                {
+                    get { return _AntiPanth.CurrentValue; }
                 }
                 public static bool InterruptE
                 {
@@ -333,8 +347,9 @@ namespace AddonTemplate
                     _Gapclose = Menu.Add("GapcloseE", new CheckBox("Gapclose E"));
                     _AntiRengar = Menu.Add("AntiRengar", new CheckBox("Anti Rengar"));
                     _AntiKalista = Menu.Add("AntiKalista", new CheckBox("Anti Kalista"));
+                    _AntiPanth = Menu.Add("AntiPanth", new CheckBox("Anti Pantheon"));
                     _InterruptE = Menu.Add("InterruptE", new CheckBox("Interrupt Spells using E?"));
-                    _autoBuy = Menu.Add("autoBuyStartingItems", new CheckBox("Autobuy Starters"));
+                    _autoBuy = Menu.Add("autoBuyStartingItems", new CheckBox("Autobuy Starters/Trinkets"));
                     _skinId = Menu.Add("skinId", new Slider("Skin Hack", 7, 1, 9));
                     var dangerSlider = _Dangerlvl = Menu.Add("dangerLevel", new Slider("Set Your Danger Level: ", 3, 1, 3));
                     var dangerSliderDisplay = Menu.Add("dangerLevelDisplay",
@@ -441,8 +456,104 @@ namespace AddonTemplate
                     {
                     }
                 }
+            public static class Items
+            {
+                private static readonly CheckBox _useQss;
+                private static readonly CheckBox _useQssactivated;
+                private static readonly Slider _useQssdelay;
+                private static readonly CheckBox _useBotrk;
+                private static readonly CheckBox _useBilge;
+                private static readonly CheckBox _useYoumuus;
+                private static readonly CheckBox _useHeal;
+                private static readonly CheckBox _useitems;
+                private static readonly Slider _healhp;
+                private static readonly Slider _Botrkhp;
 
+                public static bool Qss
+                {
+                    get { return _useQss.CurrentValue; }
+                }
+
+                public static bool QssActivated
+                {
+                    get { return _useQssactivated.CurrentValue; }
+                }
+
+                public static int Qssdelay
+                {
+                    get { return _useQssdelay.CurrentValue; }
+                }
+                public static bool Usebotrk
+                {
+                    get { return _useBotrk.CurrentValue; }
+                }
+
+                public static bool Usebilge
+                {
+                    get { return _useBilge.CurrentValue; }
+                }
+
+                public static bool UseYoumuus
+                {
+                    get { return _useYoumuus.CurrentValue; }
+                }
+
+                public static bool UseHeal
+                {
+                    get { return _useHeal.CurrentValue; }
+                }
+
+                public static bool Useitems
+                {
+                    get { return _useitems.CurrentValue; }
+                }
+
+                public static int Usebotrkhp
+                {
+                    get { return _Botrkhp.CurrentValue; }
+                }
+
+                public static int UseHealhp
+                {
+                    get { return _healhp.CurrentValue; }
+                }
+
+
+
+                static Items()
+                {
+                    // Initialize the menu values
+                    Menu.AddGroupLabel("Items & Heal");
+                    _useQss = Menu.Add("qss", new CheckBox("Use Qss"));
+                    _useQssdelay = Menu.Add("delay", new Slider("Activation Delay", 1000, 0, 2000));
+                    buffs = new[]
+{
+                BuffType.Blind, BuffType.Charm, BuffType.CombatDehancer, BuffType.Fear, BuffType.Flee, BuffType.Knockback,
+                BuffType.Knockup, BuffType.Polymorph, BuffType.Silence, BuffType.Sleep, BuffType.Snare, BuffType.Stun,
+                BuffType.Suppression, BuffType.Taunt, BuffType.Poison
+            };
+
+                    for (int i = 0; i < buffs.Length; i++)
+                    {
+                        _useQssactivated = Menu.Add(buffs[i].ToString(), new CheckBox(buffs[i].ToString(), true));
+                    }
+                    Menu.AddSeparator();
+                    _useitems = Menu.Add("useitems", new CheckBox("Use Items?"));
+                    _useBotrk = Menu.Add("botrk", new CheckBox("Use Botrk"));
+                    _useBilge = Menu.Add("bilge", new CheckBox("Use Bilge"));
+                    _Botrkhp = Menu.Add("myhp", new Slider("Botrk if my HP < %", 20, 0, 100));
+                    _useHeal = Menu.Add("heal", new CheckBox("Use Heal"));
+                    _healhp = Menu.Add("hp", new Slider("Heal if my HP <=", 20, 0, 100));
+                    _useYoumuus = Menu.Add("you", new CheckBox("Use Youmuuuus"));
+                    
+                }
+
+                public static void Initialize()
+                {
+                }
             }
+
+        }
         }
     }
 

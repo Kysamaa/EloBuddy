@@ -28,5 +28,21 @@ namespace AddonTemplate
                    (Player.Instance.HasBuff("SummonerExhaustSlow") ? 0.5f : 1);
         }
 
+        public static float Wdmg(Obj_AI_Base target)
+        {
+            var dmg = (SpellManager.W.Level * 10 + 10) + ((0.03 + (SpellManager.W.Level * 0.01)) * target.MaxHealth);
+            return (float)dmg;
+
+        }
+
+        public static int WTarget(Obj_AI_Base target)
+        {
+            foreach (var buff in target.Buffs)
+            {
+                if (buff.Name == "vaynesilvereddebuff")
+                    return buff.Count;
+            }
+            return -1;
+        }
     }
 }

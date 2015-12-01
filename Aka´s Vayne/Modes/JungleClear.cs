@@ -18,7 +18,7 @@ namespace AddonTemplate.Modes
         {
             if (Settings.UseQ && SpellManager.Q.IsReady() && !Game.CursorPos.IsDangerousPosition())
             {
-                QLogic.QJungleClear();
+                QLogic.JungleClear();
             }
             if (Settings.UseE && SpellManager.E.IsReady())
             {
