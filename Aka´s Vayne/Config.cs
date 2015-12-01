@@ -88,6 +88,7 @@ namespace AddonTemplate
                 private static readonly CheckBox _Rnoaa;
                 private static readonly Slider _Rnoaas;
                 private static readonly Slider _useRSlider;
+                private static readonly Slider _aacancel;
 
                 public static bool UseQ
                 {
@@ -147,6 +148,11 @@ namespace AddonTemplate
                     get { return _useRSlider.CurrentValue; }
                 }
 
+                public static int AACancel
+                {
+                    get { return _aacancel.CurrentValue; }
+                }
+
                 static Combo()
                 {
                     // Initialize the menu values
@@ -163,6 +169,7 @@ namespace AddonTemplate
                     _Rnoaa = Menu.Add("RnoAA", new CheckBox("No AA while stealth", false));
                     _Rnoaas = Menu.Add("RnoAAs", new Slider("No AA stealth when >= enemy in range", 2, 0, 5));
                     _useRSlider = Menu.Add("comboRSlider", new Slider("Use R if", 2, 1, 5));
+                    _aacancel = Menu.Add("aacecnelel", new Slider("AA Cancel", 0, 0, 20));
                 }
 
                 public static void Initialize()

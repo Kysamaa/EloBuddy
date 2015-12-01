@@ -252,7 +252,7 @@ namespace AddonTemplate
                     if (!stopmove)
                     {
                         if (Game.Time*1000 >
-                            lastaa + ObjectManager.Player.AttackCastDelay*1000 - Game.Ping/2)
+                            lastaa + ObjectManager.Player.AttackCastDelay*1000 - Game.Ping/2 + Config.Modes.Combo.AACancel)
                         {
                             Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                         }
