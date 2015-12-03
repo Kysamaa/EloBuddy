@@ -171,7 +171,7 @@ namespace AddonTemplate
             get
             {
                 if (Game.Time * 1000 <
-                    lastaa + ObjectManager.Player.AttackDelay * 1000 - ObjectManager.Player.AttackDelay * 1000 / 1.5)
+                    lastaa + ObjectManager.Player.AttackDelay * 1000 - ObjectManager.Player.AttackDelay * 1000 / 1.5 && Game.Time * 1000 > lastaa + ObjectManager.Player.AttackCastDelay * 1000)
                 {
                     return true;
                 }
@@ -183,7 +183,7 @@ namespace AddonTemplate
         {
             get
             {
-                if (Game.Time * 1000 > lastaa + ObjectManager.Player.AttackCastDelay * 1000)
+                if (Game.Time * 1000 > lastaa + ObjectManager.Player.AttackDelay * 1000 - ObjectManager.Player.AttackDelay * 1000 / 2 && Game.Time * 1000 < lastaa + ObjectManager.Player.AttackDelay * 1000 - ObjectManager.Player.AttackDelay * 1000 / 4)
                 {
                     return true;
                 }
