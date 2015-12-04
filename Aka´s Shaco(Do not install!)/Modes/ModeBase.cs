@@ -8,11 +8,15 @@ namespace AddonTemplate.Modes
         // here to have full features of that spells, if you don't need that,
         // just change it to Spell.SpellBase, this way it's dynamic with still
         // the most needed functions
-        protected Spell.Active Q
+        protected Spell.Targeted Q
         {
             get { return SpellManager.Q; }
         }
-        protected Spell.Active W
+        protected Spell.Targeted Q2
+        {
+            get { return SpellManager.Q2; }
+        }
+        protected Spell.Targeted W
         {
             get { return SpellManager.W; }
         }
@@ -20,7 +24,7 @@ namespace AddonTemplate.Modes
         {
             get { return SpellManager.E; }
         }
-        protected Spell.Active R
+        protected Spell.Targeted R
         {
             get { return SpellManager.R; }
         }

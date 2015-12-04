@@ -26,11 +26,11 @@ namespace AddonTemplate.Modes
                 }
                 if (Settings.UseQ)
                 {
-                    Q.Cast(m);
+                    Q.Cast(m.Position);
                 }
                 if (Settings.UseW)
                 {
-                    W.Cast(m);
+                    W.Cast(m.Position);
                 }
 
             }

@@ -1,14 +1,19 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
+using EloBuddy.SDK.Menu;
 using Settings = AddonTemplate.Config.Modes.MiscMenu;
+using AddonTemplate.Utility;
 
 namespace AddonTemplate.Modes
 {
     public sealed class PermaActive : ModeBase
     {
+        int currentSkin = 0;
+
         public override bool ShouldBeExecuted()
         {
             // Since this is permaactive mode, always execute the loop
@@ -17,6 +22,7 @@ namespace AddonTemplate.Modes
 
         public override void Execute()
         {
+            skinChanger();
 
             if (Player.Instance.IsDead)
             {
@@ -36,10 +42,9 @@ namespace AddonTemplate.Modes
                     {
                         continue;
                     }
-                    var pos = QLogic.GetQPos(enemy, true);
                     if (Settings.KSQ)
                     {
-                        Q.Cast(pos);
+                        Q.Cast(enemy.Position);
                         break;
                     }
                 }
@@ -51,14 +56,13 @@ namespace AddonTemplate.Modes
                     {
                         continue;
                     }
-                    var pos = QLogic.GetQPos(enemy, true, 100);
                     if (Settings.KSW)
                     {
-                        W.Cast(pos);
+                        W.Cast(enemy.Position);
                         break;
                     }
                 }
-                if (Settings.KSE && SpellManager.E.IsReady() && Damages.EDamage(enemy) > enemy.Health &&
+                if (Settings.KSE && SpellManager.E.IsReady() && ObjectManager.Player.GetSpellDamage(enemy, SpellSlot.E) > enemy.Health &&
                     SpellManager.E.IsInRange(enemy))
                 {
                     if (enemy.HasBuffOfType(BuffType.SpellImmunity) || enemy.HasBuffOfType(BuffType.SpellShield))
@@ -80,12 +84,44 @@ namespace AddonTemplate.Modes
                     }
                     if (Settings.KSR)
                     {
-                        R.Cast();
+                        R.Cast(enemy);
                         break;
                     }
                 }
+
+                if (!Settings.CloneOrbwalk) return;
+                if (!hasClone()) return;
+                var target = TargetSelector.GetTarget(E.Range, DamageType.Physical);
+
+                    if (target != null)
+                    {
+                    Core.DelayAction(() => R.Cast(target), 500);
+
+                }
+                    else
+                    {
+                    Core.DelayAction(() => R.Cast(Game.CursorPos), 500);
+                }
+                }
+
+
+            }
+        private void skinChanger()
+        {
+            if (Settings.skinId != currentSkin)
+            {
+                Player.Instance.SetSkinId(Settings.skinId);
+                currentSkin = Settings.skinId;
             }
         }
+
+
+
+        public static bool hasClone()
+        {
+            return Player.GetSpell(SpellSlot.R).Name.Equals("hallucinateguide");
+        }
     }
-}
+    }
+
 

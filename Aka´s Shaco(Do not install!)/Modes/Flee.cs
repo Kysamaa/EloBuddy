@@ -1,4 +1,5 @@
-﻿using EloBuddy;
+﻿using System.Linq;
+using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
 using SharpDX;
@@ -18,16 +19,30 @@ namespace AddonTemplate.Modes
         {
             Q.Cast(Game.CursorPos);
 
-            var clone = Combo.getClone();
+            Program.clone = getClone();
 
-            if (clone != null)
+            if (Program.clone != null)
             {
 
-                var pos = Game.CursorPos.Extend(clone.Position, clone.Distance(Game.CursorPos) + 2000);
+                var pos = Game.CursorPos.Extend(Program.clone.Position, Program.clone.Distance(Game.CursorPos) + 2000);
                 R.Cast((Vector3) pos);
 
             }
 
+
         }
+        public static Obj_AI_Base getClone()
+        {
+            Obj_AI_Base Clone = null;
+            foreach (var unit in ObjectManager.Get<Obj_AI_Base>().Where(clone => !clone.IsMe && clone.Name == ObjectManager.Player.Name))
+            {
+                Clone = unit;
+            }
+
+            return Clone;
+
+        }
+
+
     }
 }

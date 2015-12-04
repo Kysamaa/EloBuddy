@@ -12,12 +12,7 @@ namespace AddonTemplate
 {
     public static class Events
     {
-        static Events()
-        {
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
-        }
-
-        static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        public static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!Config.Modes.MiscMenu.dR) return;
             if (sender.IsAlly) return;

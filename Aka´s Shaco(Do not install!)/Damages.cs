@@ -34,19 +34,6 @@ namespace AddonTemplate
                    (Player.Instance.HasBuff("SummonerExhaustSlow") ? 0.2f : 1);
         }
 
-        public static float ERawDamage()
-        {
-            return
-                (int)
-                    (new int[] { 50, 90, 130, 170, 210 }[SpellManager.E.Level - 1] +
-                     1.0 * (ObjectManager.Player.TotalMagicalDamage + ObjectManager.Player.TotalAttackDamage));
-        }
-
-        public static float EDamage(Obj_AI_Base target)
-        {
-            return Player.Instance.CalculateDamageOnUnit(target, DamageType.Magical, ERawDamage()) *
-                   (Player.Instance.HasBuff("SummonerExhaustSlow") ? 1.0f : 1);
-        }
 
         public static float RRawDamage()
         {

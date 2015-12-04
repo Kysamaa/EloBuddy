@@ -68,6 +68,22 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QLogic.cs" />
     <Compile Include="SpellManager.cs" />
+    <Compile Include="Utility\AntiGapcloser.cs" />
+    <Compile Include="Utility\CustomEvents.cs" />
+    <Compile Include="Utility\Damage.cs" />
+    <Compile Include="Utility\Dash.cs" />
+    <Compile Include="Utility\Geometry.cs" />
+    <Compile Include="Utility\HealthPrediction.cs" />
+    <Compile Include="Utility\Interrupter2.cs" />
+    <Compile Include="Utility\LastCastedSpell.cs" />
+    <Compile Include="Utility\MEC.cs" />
+    <Compile Include="Utility\MinionManager.cs" />
+    <Compile Include="Utility\Orbwalking.cs" />
+    <Compile Include="Utility\Prediction.cs" />
+    <Compile Include="Utility\Spells.cs" />
+    <Compile Include="Utility\TargetSelector2.cs" />
+    <Compile Include="Utility\Utility.cs" />
+    <Compile Include="Utility\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

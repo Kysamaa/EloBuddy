@@ -24,13 +24,13 @@ namespace AddonTemplate.Modes
                 {
                     if (Settings.UseQ)
                     {
-                        Q.Cast(m);
+                        Q.Cast(m.Position);
                     }
                     if (Settings.UseW)
                     {
-                        W.Cast(m);
+                        W.Cast(m.Position);
                     }
-                    if (Settings.UseE && Damages.EDamage(m) > m.Health)
+                    if (Settings.UseE && ObjectManager.Player.GetSpellDamage(m, SpellSlot.E) > m.Health)
                     {
                         E.Cast(m);
                     }

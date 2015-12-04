@@ -17,6 +17,8 @@ namespace AddonTemplate
 
         private static readonly Menu Menu;
 
+
+
         static Config()
         {
             // Initialize the menu
@@ -70,6 +72,8 @@ namespace AddonTemplate
             public static class Combo
             {
                 private static readonly CheckBox _useQ;
+                private static readonly CheckBox _useQ1;
+                private static readonly Slider _useQ1Slider;
                 private static readonly CheckBox _useW;
                 private static readonly CheckBox _useE;
                 private static readonly CheckBox _useR;
@@ -77,6 +81,16 @@ namespace AddonTemplate
                 public static bool UseQ
                 {
                     get { return _useQ.CurrentValue; }
+                }
+
+
+                public static bool UseQ1
+                {
+                    get { return _useQ1.CurrentValue; }
+                }
+                public static int UseQ1Slider
+                {
+                    get { return _useQ1Slider.CurrentValue; }
                 }
 
                 public static bool UseW
@@ -99,9 +113,11 @@ namespace AddonTemplate
                     // Initialize the menu values
                     Menu.AddGroupLabel("Combo");
                     _useQ = Menu.Add("comboUseQ", new CheckBox("Use Q"));
+                    _useQ1 = Menu.Add("comboUseQ1", new CheckBox("Use Q VS Mode if enemies surrond ≤"));
+                    _useQ1Slider = Menu.Add("comboQ1Slider", new Slider("Q vs Mode if ", 2, 1, 5));
                     _useW = Menu.Add("comboUseW", new CheckBox("Use W"));
                     _useE = Menu.Add("comboUseE", new CheckBox("Use E"));
-                    _useR = Menu.Add("comboUseR", new CheckBox("Use R"));
+                    _useR = Menu.Add("comboUseR", new CheckBox("Use R", false));
                 }
 
                 public static void Initialize()
@@ -256,12 +272,12 @@ namespace AddonTemplate
                 private static readonly CheckBox _KSR;
                 private static readonly CheckBox _dR;
                 private static readonly CheckBox _CO;
+                private static readonly Slider _skinId;
 
                 public static bool CloneOrbwalk
                 {
                     get { return _CO.CurrentValue; }
                 }
-
                 public static bool InterruptW
                 {
                     get { return _InterruptW.CurrentValue; }
@@ -290,6 +306,10 @@ namespace AddonTemplate
                 {
                     get { return _dR.CurrentValue; }
                 }
+                public static int skinId
+                {
+                    get { return _skinId.CurrentValue; }
+                }
 
                 static MiscMenu()
                 {
@@ -301,6 +321,7 @@ namespace AddonTemplate
                     _KSR = Menu.Add("KSR", new CheckBox("Ks R"));
                     _CO = Menu.Add("CO", new CheckBox("Clone Orbwalk?"));
                     _dR = Menu.Add("dR", new CheckBox("Dodge Spells using R?"));
+                    _skinId = Menu.Add("skinId", new Slider("Skin Hack", 7, 1, 9));
                     _InterruptW = Menu.Add("InterruptW", new CheckBox("Interrupt Spells using W?"));
                 }
 

@@ -15,10 +15,13 @@ namespace AddonTemplate
         // watch out for the case being correct!
         public const string ChampName = "Shaco";
 
+        public static Obj_AI_Base clone;
+
         public static void Main(string[] args)
         {
             // Wait till the loading screen has passed
             Loading.OnLoadingComplete += OnLoadingComplete;
+            Obj_AI_Base.OnProcessSpellCast += Events.OnProcessSpellCast;
         }
 
         private static void OnLoadingComplete(EventArgs args)

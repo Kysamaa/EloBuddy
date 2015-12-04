@@ -9,19 +9,21 @@ namespace AddonTemplate
         // You will need to edit the types of spells you have for each champ as they
         // don't have the same type for each champ, for example Xerath Q is chargeable,
         // right now it's  set to Active.
-        public static Spell.Active Q { get; private set; }
-        public static Spell.Active W { get; private set; }
+        public static Spell.Targeted Q { get; private set; }
+        public static Spell.Targeted Q2 { get; private set; }
+        public static Spell.Targeted W { get; private set; }
         public static Spell.Targeted E { get; private set; }
-        public static Spell.Active R { get; private set; }
+        public static Spell.Targeted R { get; private set; }
         public static int cloneAct = 0;
 
         static SpellManager()
         {
             // Initialize spells
-            Q = new Spell.Active(SpellSlot.Q, 400);
-            W = new Spell.Active(SpellSlot.W, 425);
+            Q = new Spell.Targeted(SpellSlot.Q, 400);
+            Q2 = new Spell.Targeted(SpellSlot.Q, 1100);
+            W = new Spell.Targeted(SpellSlot.W, 425);
             E = new Spell.Targeted(SpellSlot.E, 625);
-            R = new Spell.Active(SpellSlot.R, 200);
+            R = new Spell.Targeted(SpellSlot.R, 200);
 
         }
 
