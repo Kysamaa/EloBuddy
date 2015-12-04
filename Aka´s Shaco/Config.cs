@@ -160,30 +160,17 @@ namespace AddonTemplate
             public static class Flee
             {
                 private static readonly CheckBox _useQ;
-                private static readonly CheckBox _useW;
-                private static readonly CheckBox _useE;
 
 
                 public static bool UseQ
                 {
                     get { return _useQ.CurrentValue; }
                 }
-                public static bool UseW
-                {
-                    get { return _useW.CurrentValue; }
-                }
-                public static bool UseE
-                {
-                    get { return _useE.CurrentValue; }
-                }
-
                 static Flee()
                 {
                     // Initialize the menu values
                     Menu.AddGroupLabel("Flee");
                     _useQ = Menu.Add("FleeUseQ", new CheckBox("Use Q"));
-                    _useW = Menu.Add("FleeUseW", new CheckBox("Use W"));
-                    _useE = Menu.Add("FleeUseE", new CheckBox("Use E"));
                 }
 
 
