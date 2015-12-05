@@ -39,11 +39,17 @@ namespace AddonTemplate
 
         private static void OnLoadingComplete(EventArgs args)
         {
+            Chat.Print("Aka´s Vayne will load in 5 seconds. ");
+            Core.DelayAction(Start, 5000);
+        }
+
+        private static void Start()
+        {
             // Verify the champion we made this addon for
             if (Player.Instance.ChampionName != ChampName)
             {
-                // Champion is not the one we made this addon for,
-                // therefore we return
+                Chat.Print("No Vayne detected!");
+
                 return;
             }
 

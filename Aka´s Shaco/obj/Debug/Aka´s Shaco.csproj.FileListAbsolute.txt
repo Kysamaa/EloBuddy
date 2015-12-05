@@ -9,3 +9,6 @@ C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Shaco(Do not install!)\bin\Debug\
 C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Shaco(Do not install!)\bin\Debug\SharpDX.Direct3D9.dll
 C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Shaco(Do not install!)\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Shaco(Do not install!)\obj\Debug\Aka´s Shaco.csprojResolveAssemblyReference.cache
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Shaco\bin\Debug\Akas Jarvan.exe.config
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Shaco\obj\Debug\Akas Jarvan.exe
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Shaco\obj\Debug\Akas Jarvan.pdb

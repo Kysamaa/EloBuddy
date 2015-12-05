@@ -22,20 +22,20 @@ namespace AddonTemplate
             if (DangerDB.TargetedList.Contains(args.SData.Name))
             {
                 if (args.Target.IsMe)
-                    SpellManager.R.Cast();
+                    SpellManager.R.Cast(sender);
             }
 
             if (DangerDB.CircleSkills.Contains(args.SData.Name))
             {
                 if (ObjectManager.Player.Distance(args.End) < args.SData.LineWidth)
-                    SpellManager.R.Cast();
+                    SpellManager.R.Cast(sender);
             }
 
             if (DangerDB.Skillshots.Contains(args.SData.Name))
             {
                 if (new Geometry.Polygon.Rectangle(args.Start, args.End, args.SData.LineWidth).IsInside(ObjectManager.Player))
                 {
-                    SpellManager.R.Cast();
+                    SpellManager.R.Cast(sender);
                 }
             }
         }
