@@ -143,8 +143,8 @@ namespace Aka_s_Vayne_reworked
 
             DrawingMenu = VMenu.AddSubMenu("Drawings", "Drawings");
             DrawingMenu.AddGroupLabel("Drawings?");
-            DrawingMenu.Add("DrawQ", new CheckBox("Draw Q"));
-            DrawingMenu.Add("DrawE", new CheckBox("Draw E"));
+            DrawingMenu.Add("DrawQ", new CheckBox("Draw Q", false));
+            DrawingMenu.Add("DrawE", new CheckBox("Draw E", false));
             DrawingMenu.Add("DrawOnlyReady", new CheckBox("Draw Only if Spells are ready"));
 
             ItemMenu = VMenu.AddSubMenu("Items & Heal", "items");
