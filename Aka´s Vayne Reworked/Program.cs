@@ -68,7 +68,7 @@ namespace Aka_s_Vayne_reworked
                 Heal = new Spell.Active(slot, 600);
             }
 
-            VMenu = MainMenu.AddMenu("Aka´s Vanye", "akavayne");
+            VMenu = MainMenu.AddMenu("Aka´s Vayne", "akavayne");
             VMenu.AddGroupLabel("Welcome to my Vayne Addon have fun! :)");
             VMenu.AddLabel("To see/change the Settings");
             VMenu.AddLabel("Click on Modes :)");
