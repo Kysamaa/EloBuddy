@@ -92,8 +92,9 @@ namespace Aka_s_Vayne_reworked
             HarassMenu = VMenu.AddSubMenu("Harass", "Harass");
             HarassMenu.AddGroupLabel("Harass");
             HarassMenu.AddLabel("I would prefer to tick only 1 of the Options, I prefer the Q one.");
-            HarassMenu.Add("UseQHarrass", new CheckBox("Use Q(if 2 W stacks"));
-            HarassMenu.Add("UseEHarass", new CheckBox("Use E(if 2 W stacks", false));
+            HarassMenu.Add("UseQHarass", new CheckBox("Use Q(if 2 W stacks)"));
+            HarassMenu.Add("UseEHarass", new CheckBox("Use E(if 2 W stacks)", false));
+            HarassMenu.Add("UseCHarass", new CheckBox("Use Combo: AA -> Q+AA -> E(broken)", false));
             HarassMenu.Add("ManaHarass", new Slider("Maximum mana usage in percent ({0}%)", 40));
 
             FleeMenu = VMenu.AddSubMenu("Flee", "Flee");
@@ -246,6 +247,9 @@ namespace Aka_s_Vayne_reworked
 
         public static void Harass()
         {
+            var target = TargetSelector.GetTarget((int)ObjectManager.Player.GetAutoAttackRange(),
+       DamageType.Physical);
+
             if (ObjectManager.Player.ManaPercent < HarassMenu["ManaHarass"].Cast<Slider>().CurrentValue)
                 return;
             if (HarassMenu["UseQHarass"].Cast<CheckBox>().CurrentValue && Q.IsReady())

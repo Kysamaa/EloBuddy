@@ -248,6 +248,14 @@ namespace Aka_s_Vayne_reworked
                             Player.CastSpell(SpellSlot.Q, Game.CursorPos);
                         }
                     }
+                    if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+                    {
+                        if (Events.AfterAttack && Program.HarassMenu["UseCHarass"].Cast<CheckBox>().CurrentValue)
+                        {
+                            Player.CastSpell(SpellSlot.Q, QLogic.GetTumblePos(target));
+                            Program.E.Cast(target);
+                        }
+                    }
                     if (stopmove && Game.Time*1000 > lastaaclick + ObjectManager.Player.AttackCastDelay*1000)
                     {
                         stopmove = false;
@@ -429,7 +437,6 @@ namespace Aka_s_Vayne_reworked
                     if (source == null || Player.Instance.Position.Extend(Game.CursorPos, 300).Distance(source) >
                         Player.Instance.GetAutoAttackRange(source))
                         return;
-                    Orbwalker.ForcedTarget = source;
                     Player.CastSpell(SpellSlot.Q,
                         Player.Instance.Position.Extend(Game.CursorPos, 300).Distance(source) <=
                         Player.Instance.GetAutoAttackRange(source)
