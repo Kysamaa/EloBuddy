@@ -13,7 +13,8 @@ namespace AddonTemplate
         public static Spell.Targeted Q2 { get; private set; }
         public static Spell.Targeted W { get; private set; }
         public static Spell.Targeted E { get; private set; }
-        public static Spell.Targeted R { get; private set; }
+        public static Spell.Active R { get; private set; }
+        public static Spell.Targeted R2 { get; private set; }
         public static int cloneAct = 0;
 
         static SpellManager()
@@ -23,8 +24,8 @@ namespace AddonTemplate
             Q2 = new Spell.Targeted(SpellSlot.Q, 1100);
             W = new Spell.Targeted(SpellSlot.W, 425);
             E = new Spell.Targeted(SpellSlot.E, 625);
-            R = new Spell.Targeted(SpellSlot.R, 200);
-
+            R = new Spell.Active(SpellSlot.R, 200);
+            R2 = new Spell.Targeted(SpellSlot.R, 2300);
         }
 
         public static void Initialize()
