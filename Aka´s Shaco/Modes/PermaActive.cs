@@ -95,12 +95,12 @@ namespace AddonTemplate.Modes
 
                     if (target != null)
                     {
-                    Core.DelayAction(() => R.Cast(target), 500);
+                    Core.DelayAction(() => R2.Cast(target), 500);
 
                 }
                     else
                     {
-                    Core.DelayAction(() => R.Cast(Game.CursorPos), 500);
+                    Core.DelayAction(() => R2.Cast(Game.CursorPos), 500);
                 }
                 }
 
