@@ -203,40 +203,6 @@ namespace AkaYasuo
                 }
             }
 
-
-
-
-
-        public static Vector2 LineIntersectionPoint(Vector2 ps1, Vector2 pe1, Vector2 ps2,
-        Vector2 pe2)
-        {
-            // Get A,B,C of first line - points : ps1 to pe1
-            float A1 = pe1.Y - ps1.Y;
-            float B1 = ps1.X - pe1.X;
-            float C1 = A1 * ps1.X + B1 * ps1.Y;
-
-            // Get A,B,C of second line - points : ps2 to pe2
-            float A2 = pe2.Y - ps2.Y;
-            float B2 = ps2.X - pe2.X;
-            float C2 = A2 * ps2.X + B2 * ps2.Y;
-
-            // Get delta and check if the lines are parallel
-            float delta = A1 * B2 - A2 * B1;
-            if (delta == 0)
-                return new Vector2(-1, -1);
-
-            // now return the Vector2 intersection point
-            return new Vector2(
-                (B2 * C1 - B1 * C2) / delta,
-                (A1 * C2 - A2 * C1) / delta
-            );
-        }
-
-        public static Vector3 GetDashPos(Obj_AI_Base unit)
-        {
-            return Player.Instance.Position.Extend(Prediction.Position.PredictUnitPosition(unit, 250), 475).To3D();
-        }
-
         public static
             Vector2 GetDashingEnd(Obj_AI_Base target)
         {
@@ -251,10 +217,10 @@ namespace AkaYasuo
             var targetY = target.Position.Y;
 
             var vector = new Vector2(targetX - baseX, targetY - baseY);
-            var sqrt = Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+            var sqrt = Math.Sqrt(vector.X*vector.X + vector.Y*vector.Y);
 
-            var x = (float)(baseX + (Program.E.Range * (vector.X / sqrt)));
-            var y = (float)(baseY + (Program.E.Range * (vector.Y / sqrt)));
+            var x = (float) (baseX + (Program.E.Range*(vector.X/sqrt)));
+            var y = (float) (baseY + (Program.E.Range*(vector.Y/sqrt)));
 
             return new Vector2(x, y);
         }

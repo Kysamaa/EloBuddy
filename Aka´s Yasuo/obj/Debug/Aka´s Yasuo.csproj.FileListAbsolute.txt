@@ -9,3 +9,6 @@ C:\Users\Alex\Desktop\Yasuo test\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Alex\Desktop\Yasuo test\obj\Debug\Aka´s Yasuo.csprojResolveAssemblyReference.cache
 C:\Users\Alex\Desktop\Yasuo test\obj\Debug\GosuMechanics_Yasuo.exe
 C:\Users\Alex\Desktop\Yasuo test\obj\Debug\GosuMechanics_Yasuo.pdb
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Yasuo\bin\Debug\GosuMechanics_Yasuo.exe.config
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Yasuo\obj\Debug\GosuMechanics_Yasuo.exe
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Yasuo\obj\Debug\GosuMechanics_Yasuo.pdb
