@@ -36,6 +36,7 @@ namespace Aka_s_Vayne_reworked
         public static Spell.Active R;
         public static Spell.Active Heal;
         public static List<Vector2> Points = new List<Vector2>();
+        public static Item totem;
 
         public static Menu VMenu,
             ComboMenu,
@@ -67,6 +68,7 @@ namespace Aka_s_Vayne_reworked
             {
                 Heal = new Spell.Active(slot, 600);
             }
+            totem = new Item((int)ItemId.Warding_Totem_Trinket);
 
             VMenu = MainMenu.AddMenu("Aka´s Vayne", "akavayne");
             VMenu.AddGroupLabel("Welcome to my Vayne Addon have fun! :)");
@@ -172,7 +174,6 @@ namespace Aka_s_Vayne_reworked
             ItemMenu.Add("heal", new CheckBox("Use Heal"));
             ItemMenu.Add("hp", new Slider("Heal if my HP <=", 20, 0, 100));
             ItemMenu.Add("you", new CheckBox("Use Youmuuuus"));
-
 
             Gapcloser.OnGapcloser += Events.Gapcloser_OnGapCloser;
             Interrupter.OnInterruptableSpell += Events.Interrupter_OnInterruptableSpell;
@@ -283,7 +284,9 @@ namespace Aka_s_Vayne_reworked
         }
         public static void Combo()
         {
+
             var target = TargetSelector.GetTarget(E.Range, DamageType.Physical);
+            usetrinket(target);
             if (ItemMenu["useitems"].Cast<CheckBox>().CurrentValue)
             {
                 if (Heal != null && ItemMenu["heal"].Cast<CheckBox>().CurrentValue && Heal.IsReady() && Player.Instance.HealthPercent <= ItemMenu["hp"].Cast<Slider>().CurrentValue
@@ -322,10 +325,6 @@ namespace Aka_s_Vayne_reworked
             {
                 ELogic.Condemn3();
             }
-            if (Program.CondemnMenu["trinket"].Cast<CheckBox>().CurrentValue)
-            {
-                usetrinket(target);
-            }
             if (Program.ComboMenu["comboUseR"].Cast<CheckBox>().CurrentValue && R.IsReady())
             {
                 ComboUltimateLogic();
@@ -343,6 +342,10 @@ namespace Aka_s_Vayne_reworked
 
         public static void usetrinket(Obj_AI_Base target)
         {
+            if (target == null)
+            {
+                return;
+            }
             if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Trinket).IsReady &&
                 ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Trinket).SData.Name.ToLower().Contains("totem"))
             {
@@ -353,8 +356,7 @@ namespace Aka_s_Vayne_reworked
                         var pos = ELogic.GetFirstNonWallPos(ObjectManager.Player.Position.To2D(), target.Position.To2D());
                         if (NavMesh.GetCollisionFlags(pos).HasFlag(CollisionFlags.Grass))
                         {
-                            Player.CastSpell(SpellSlot.Trinket,
-                                pos.To3D());
+                            totem.Cast(pos.To3D());
                         }
                     }
                 }, 200);
