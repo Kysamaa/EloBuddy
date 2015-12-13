@@ -1,4 +1,4 @@
-﻿using Addontemplate;
+﻿
 using AddonTemplate;
 using EloBuddy;
 using EloBuddy.SDK;
@@ -25,7 +25,12 @@ namespace AddonTemplate
                 damage += ObjectManager.Player.GetSpellDamage(target, SpellSlot.R);
             }
 
-            damage += SoldiersManager.ActiveSoldiers.Count * ObjectManager.Player.GetSpellDamage(target, SpellSlot.W);
+            if (SpellManager.Ignite.IsReady())
+            {
+                damage += ObjectManager.Player.GetSummonerSpellDamage(target, DamageLibrary.SummonerSpells.Ignite);
+            }
+
+            damage += Orbwalker.AzirSoldiers.Count * ObjectManager.Player.GetSpellDamage(target, SpellSlot.W);
 
             return (float)damage;
         }

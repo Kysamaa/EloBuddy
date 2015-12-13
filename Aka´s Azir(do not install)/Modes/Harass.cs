@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Addontemplate;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
@@ -27,31 +26,44 @@ namespace AddonTemplate.Modes
                 return;
             }
 
-            if (Orbwalker.AzirSoldiers.Count == 0)
+            if (Settings.UseQ && Q.IsReady() && Player.Instance.ManaPercent >= Settings.Mana)
             {
-                var p = ObjectManager.Player.Position.To2D().Extend(harassTarget.Position.To2D(), W.Range);
-                if (Q.IsReady() || HeroManager.Enemies.Any(h => h.IsValidTarget(W.Range + 200)))
+                foreach (var soldier in Orbwalker.AzirSoldiers)
                 {
-                    W.Cast((Vector3) p);
-                }
-                return;
-            }
-
-            if (Q.IsReady())
-            {
-                var qTarget = TargetSelector.GetTarget(Q.Range, DamageType.Magical);
-                if (qTarget != null)
-                {
-                    foreach (var soldier in SoldiersManager.AllSoldiers)
+                    var pred = Prediction.Position.PredictLinearMissile(harassTarget, Q.Range, Q.Width, Q.CastDelay,
+                        Q.Speed, Int32.MaxValue, soldier.Position, true);
+                    if (pred.HitChance >= HitChance.Medium)
                     {
-                        var pred = Prediction.Position.PredictLinearMissile(qTarget, Q.Range, Q.Width, Q.CastDelay,
-                            Q.Speed, Int32.MaxValue, soldier.Position, true);
-                        if (pred.HitChance >= HitChance.Medium)
-                        {
-                            Q.Cast(pred.CastPosition.Extend(pred.UnitPosition, 115.0f).To3D());
-                        }
+                        Q.Cast(pred.CastPosition.Extend(pred.UnitPosition, 115.0f).To3D());
                     }
                 }
+            }
+
+            if (Config.Modes.Combo.UseW && W.Handle.Ammo > 0 && Player.Instance.ManaPercent >= Settings.Mana && Orbwalker.AzirSoldiers.Count <= Settings.UseSmax)
+            {
+                var p = ObjectManager.Player.Distance(harassTarget, true) > W.RangeSquared
+                    ? ObjectManager.Player.Position.To2D().Extend(harassTarget.Position.To2D(), W.Range)
+                    : harassTarget.Position.To2D();
+                W.Cast((Vector3)p);
+            }
+
+            if (!Config.Modes.Combo.UseE && Player.Instance.ManaPercent >= Settings.Mana &&
+                HeroManager.Enemies.Count(e => e.IsValidTarget(1000)) <= 2 && E.IsReady())
+
+            {
+                foreach (
+                    var soldier in
+                        Orbwalker.AzirSoldiers.Where(
+                            s => ObjectManager.Player.Distance(s) < E.RangeSquared))
+
+
+                {
+                    if (harassTarget.Position.Between(Player.Instance.Position, soldier.ServerPosition))
+                    {
+                        E.Cast(soldier.ServerPosition);
+                    }
+                }
+
             }
         }
     }

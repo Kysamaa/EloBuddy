@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
@@ -14,25 +16,39 @@ namespace AddonTemplate.Modes
         }
 
         public override void Execute()
-        {
-            var monsters =
-                EntityManager.MinionsAndMonsters.GetJungleMonsters(Player.Instance.Position, E.Range)
-                    .Where(t => !t.IsDead && t.IsValid && !t.IsInvulnerable);
-            foreach (var m in monsters)
+        { 
+            var monsters = EntityManager.MinionsAndMonsters.GetJungleMonsters(ObjectManager.Player.Position, 1000.0f).ToList();
+            if (Orbwalker.AzirSoldiers.Count<=Settings.UseSmax && Settings.UseW && W.IsReady() && Player.Instance.ManaPercent >= Settings.Mana)
             {
-                if (Settings.UseE)
+                var farmLoc = EntityManager.MinionsAndMonsters.GetCircularFarmLocation(monsters, W.Width, (int)W.Range);
+                if (farmLoc.HitNumber >= 1)
                 {
-                    E.Cast(m);
+                    W.Cast(farmLoc.CastPosition);
                 }
-                if (Settings.UseQ)
-                {
-                    Q.Cast();
-                }
-                if (Settings.UseW)
-                {
-                    W.Cast();
-                }
+}
 
+            if (Orbwalker.AzirSoldiers.Count > 0 && Settings.UseQ && Q.IsReady() && Player.Instance.ManaPercent >= Settings.Mana)
+            {
+                foreach (var monster in monsters)
+                {
+                    var qCasted = false;
+                    foreach (var soldier in Orbwalker.AzirSoldiers)
+                    {
+                        var pred = Prediction.Position.PredictLinearMissile(soldier, Q.Range, (int)soldier.BoundingRadius * 2, Q.CastDelay,
+                            Q.Speed, Int32.MaxValue, soldier.Position);
+var cols = pred.CollisionObjects.Count();
+                        if (cols >= 2)
+                        {
+                            Q.Cast(monster);
+                            qCasted = true;
+                            break;
+                        }
+                    }
+                    if (qCasted)
+                    {
+                        break;
+                    }
+                }
             }
         }
     }

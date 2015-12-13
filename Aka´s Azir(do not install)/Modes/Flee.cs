@@ -1,7 +1,8 @@
-﻿using EloBuddy;
+﻿using System.Linq;
+using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
-
+using SharpDX;
 using Settings = AddonTemplate.Config.Modes.Flee;
 
 namespace AddonTemplate.Modes
@@ -16,15 +17,16 @@ namespace AddonTemplate.Modes
 
         public override void Execute()
         {
-            if (Config.Modes.Combo.UseW)
-            {
-                var target = TargetSelector.GetTarget(W.Range, DamageType.Physical);
-                if (W.IsReady() && target != null)
-                {
-                    W.Cast();
-                }
-            }
+        }
 
+        public static GameObject GetNearestSoldierToMouse(Vector3 pos)
+        {
+            var soldier = Orbwalker.AzirSoldiers.ToList().OrderBy(x => pos.Distance(x.Position));
+
+            if (soldier.FirstOrDefault() != null)
+                return soldier.FirstOrDefault();
+
+            return null;
         }
     }
 }

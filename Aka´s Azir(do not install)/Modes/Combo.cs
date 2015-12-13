@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Addontemplate;
 using AddonTemplate.Utility;
 using EloBuddy;
 using EloBuddy.SDK;
@@ -16,7 +15,8 @@ namespace AddonTemplate.Modes
 {
     public sealed class Combo : ModeBase
     {
-        public static int _allinT = 0;
+
+
 
         public override bool ShouldBeExecuted()
         {
@@ -32,9 +32,9 @@ namespace AddonTemplate.Modes
                 return;
             }
 
-            if (Settings.UseQ && Q.IsReady())
+            if (Settings.UseQ && Q.IsReady() && !Settings.UseQ2)
             {
-                foreach (var soldier in SoldiersManager.AllSoldiers)
+                foreach (var soldier in Orbwalker.AzirSoldiers)
                 {
                     var pred = Prediction.Position.PredictLinearMissile(qTarget, Q.Range, Q.Width, Q.CastDelay,
                         Q.Speed, Int32.MaxValue, soldier.Position, true);
@@ -43,33 +43,68 @@ namespace AddonTemplate.Modes
                         Q.Cast(pred.CastPosition.Extend(pred.UnitPosition, 115.0f).To3D());
                     }
                 }
-
-            if (Settings.UseW && Orbwalker.AzirSoldiers.Count == 0)
-            {
-                var p = ObjectManager.Player.Distance(qTarget, true) > W.RangeSquared ? ObjectManager.Player.Position.To2D().Extend(qTarget.Position.To2D(), W.Range) : qTarget.Position.To2D();
-                W.Cast((Vector3) p);
             }
 
-            if (Settings.UseE && ((Utils.TickCount - _allinT) < 4000 || (HeroManager.Enemies.Count(e => e.IsValidTarget(1000)) <= 2 && Damages.GetComboDamage(qTarget) > qTarget.Health)) && E.IsReady())
+            if (Settings.UseQ && Q.IsReady() && Settings.UseQ2 && Orbwalker.AzirSoldiers.Count == 2)
             {
-                foreach (var soldier in SoldiersManager.AllSoldiers2.Where(s => ObjectManager.Player.Distance(s, true) < E.RangeSquared))
+                foreach (var soldier in Orbwalker.AzirSoldiers)
                 {
-                            E.Cast(soldier.ServerPosition);
-                        return;
+                    var pred = Prediction.Position.PredictLinearMissile(qTarget, Q.Range, Q.Width, Q.CastDelay,
+                        Q.Speed, Int32.MaxValue, soldier.Position, true);
+                    if (pred.HitChance >= HitChance.High)
+                    {
+                        Q.Cast(pred.CastPosition.Extend(pred.UnitPosition, 115.0f).To3D());
                     }
                 }
             }
 
-            if (Damages.GetComboDamage(qTarget) > qTarget.Health)
+            if (Settings.UseW && W.Handle.Ammo > 0)
+            {
+                var p = ObjectManager.Player.Distance(qTarget, true) > W.RangeSquared
+                    ? ObjectManager.Player.Position.To2D().Extend(qTarget.Position.To2D(), W.Range)
+                    : qTarget.Position.To2D();
+                W.Cast((Vector3) p);
+            }
+
+            if (!Settings.UseE &&
+                (HeroManager.Enemies.Count(e => e.IsValidTarget(1000)) <= 2 &&
+                 Damages.GetComboDamage(qTarget) >= qTarget.Health) && E.IsReady())
+
+            {
+                foreach (
+                    var soldier in
+                        Orbwalker.AzirSoldiers.Where(
+                            s => ObjectManager.Player.Distance(s) < E.RangeSquared))
+
+
+                {
+                    if (qTarget.Position.Between(Player.Instance.Position, soldier.ServerPosition))
+                    {
+                        E.Cast(soldier.ServerPosition);
+                    }
+                }
+
+            }
+
+
+
+            if (Damages.GetComboDamage(qTarget) >= qTarget.Health)
             {
                 if (Settings.UseR && R.IsReady())
                 {
-                    R.Cast(qTarget);
+                    R.Cast(qTarget.Position);
+                }
+                if (Settings.UseIgnite && SpellManager.Ignite.IsReady())
+                {
+                    SpellManager.Ignite.Cast(qTarget);
+
                 }
             }
+
         }
     }
 }
+
                 
             
 

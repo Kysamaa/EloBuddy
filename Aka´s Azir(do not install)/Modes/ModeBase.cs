@@ -16,11 +16,15 @@ namespace AddonTemplate.Modes
         {
             get { return SpellManager.W; }
         }
-        protected Spell.Active E
+        protected Spell.Skillshot E
         {
             get { return SpellManager.E; }
         }
-        protected Spell.Skillshot R
+        protected Spell.Active E2
+        {
+            get { return SpellManager.E2; }
+        }
+        protected static Spell.Skillshot R
         {
             get { return SpellManager.R; }
         }
