@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using AddonTemplate.Utility;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
@@ -78,7 +79,7 @@ namespace AddonTemplate
         private static void InterrupterOnOnInterruptableSpell(Obj_AI_Base sender,
             Interrupter.InterruptableSpellEventArgs interruptableSpellEventArgs)
         {
-            if (!sender.IsEnemy || !(sender is AIHeroClient) || Player.Instance.IsRecalling())
+            if (!sender.IsEnemy || !(sender is AIHeroClient) || Extensions.IsRecalling(Player.Instance))
             {
                 return;
             }
@@ -99,9 +100,8 @@ namespace AddonTemplate
 
         public static void Jump(Vector3 pos)
         {
-
             Vector3 wVec = ObjectManager.Player.ServerPosition +
-                           Vector3.Normalize(pos - ObjectManager.Player.ServerPosition)*SpellManager.W.Range;
+               Vector3.Normalize(pos - ObjectManager.Player.ServerPosition) * SpellManager.W.Range;
 
             if ((SpellManager.E.IsReady()) && Player.Instance.ServerPosition.Distance(pos) < SpellManager.Q.Range)
             {
@@ -124,6 +124,14 @@ namespace AddonTemplate
             return Math.Abs(((source.X * checkPos.Y) + (source.Y * destination.X) + (checkPos.X * destination.Y)) - ((checkPos.Y * destination.X) + (source.X * destination.Y) + (source.Y * checkPos.X))) < 5;
         }
 
+
+        public static Vector3 GetQPos(AIHeroClient target, bool serverPos, int distance = 150)
+        {
+            var enemyPos = serverPos ? target.ServerPosition : target.Position;
+            var myPos = serverPos ? ObjectManager.Player.ServerPosition : ObjectManager.Player.Position;
+
+            return enemyPos + Vector3.Normalize(enemyPos - myPos) * distance;
+        }
 
     }
 }

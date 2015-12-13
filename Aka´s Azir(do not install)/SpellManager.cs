@@ -34,7 +34,7 @@ namespace AddonTemplate
             {
                 Ignite = new Spell.Targeted(slot, 600);
             }
-            var slot2 = ObjectManager.Player.GetSpellSlotFromName("azirpassive");
+            var slot2 = ObjectManager.Player.GetSpellSlotFromName("AzirPassive");
             if (slot2 != SpellSlot.Unknown)
             {
                 Shurimaaa = new Spell.Targeted(slot, 400);

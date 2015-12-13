@@ -78,6 +78,8 @@ namespace AddonTemplate
                 private static readonly CheckBox _useII;
                 private static readonly KeyBind _useI;
                 private static readonly Slider _useIm;
+                private static readonly KeyBind _useM;
+                private static readonly Slider _useMm;
 
                 public static bool UseQ
                 {
@@ -109,6 +111,14 @@ namespace AddonTemplate
                 {
                     get { return _useIm.CurrentValue; }
                 }
+                public static bool UseMechanic
+                {
+                    get { return _useM.CurrentValue; }
+                }
+                public static int UseMechanicMode
+                {
+                    get { return _useMm.CurrentValue; }
+                }
                 public static bool UseR
                 {
                     get { return _useR.CurrentValue; }
@@ -128,6 +138,10 @@ namespace AddonTemplate
                     _useI = Menu.Add("Insec", new KeyBind("Insec", false, KeyBind.BindTypes.HoldActive, 'H'));
                     Menu.AddLabel("1: To Allys 2: To Tower 3: To Mouse");
                     _useIm = Menu.Add("Insecmode", new Slider("Insec Mode", 1, 1, 3));
+                    Menu.AddSeparator();
+                    _useM = Menu.Add("Mechanic", new KeyBind("Mechanic", false, KeyBind.BindTypes.HoldActive, 'Y'));
+                    Menu.AddLabel("1: To Allys 2: To Tower 3: To Mouse");
+                    _useMm = Menu.Add("Mechanicmode", new Slider("Mechanic Mode", 1, 1, 3));
                 }
 
                 public static void Initialize()
