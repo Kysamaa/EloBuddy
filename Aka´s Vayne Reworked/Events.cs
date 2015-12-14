@@ -311,25 +311,6 @@ namespace Aka_s_Vayne_reworked
                     Program.Combo();
                 }
 
-                if (Program.ItemMenu["qss"].Cast<CheckBox>().CurrentValue)
-                {
-                    for (int i = 0; i < Program.buffs.Length; i++)
-                    {
-                        if (myHero.HasBuffOfType(Program.buffs[i]) && Program.ItemMenu[Program.buffs[i].ToString()].Cast<CheckBox>().CurrentValue &&
-                            myHero.CountEnemiesInRange(800) > 0)
-                        {
-                            var delay = Program.ItemMenu["UseQssdelay"].Cast<Slider>().CurrentValue;
-                            if (Item.CanUseItem(3140))
-                            {
-                                Core.DelayAction(() => { Item.UseItem(3140); }, delay);
-                            }
-                            else if (Item.CanUseItem(3139))
-                            {
-                                Core.DelayAction(() => { Item.UseItem(3139); }, delay);
-                            }
-                        }
-                    }
-                }
 
                 if (Game.MapId == GameMapId.SummonersRift)
                 {

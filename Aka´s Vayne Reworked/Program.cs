@@ -25,7 +25,6 @@ namespace Aka_s_Vayne_reworked
             get { return ObjectManager.Player; }
         }
 
-        public static BuffType[] buffs;
 
         public static string[] DangerSliderValues = {"Low", "Medium", "High"};
 
@@ -37,6 +36,7 @@ namespace Aka_s_Vayne_reworked
         public static Spell.Active Heal;
         public static List<Vector2> Points = new List<Vector2>();
         public static Item totem;
+        public static Activator activator;
 
         public static Menu VMenu,
             ComboMenu,
@@ -46,8 +46,7 @@ namespace Aka_s_Vayne_reworked
             LaneClearMenu,
             JungleClearMenu,
             MiscMenu,
-            DrawingMenu,
-            ItemMenu;
+            DrawingMenu;
 
         static void Main(string[] args1)
         {
@@ -150,30 +149,7 @@ namespace Aka_s_Vayne_reworked
             DrawingMenu.Add("DrawE", new CheckBox("Draw E", false));
             DrawingMenu.Add("DrawOnlyReady", new CheckBox("Draw Only if Spells are ready"));
 
-            ItemMenu = VMenu.AddSubMenu("Items & Heal", "items");
-            ItemMenu.AddGroupLabel("Items & Heal");
-            ItemMenu.Add("qss", new CheckBox("Use Qss"));
-            ItemMenu.Add("delay", new Slider("Activation Delay", 1000, 0, 2000));
-            buffs = new[]
-            {
-                BuffType.Blind, BuffType.Charm, BuffType.CombatDehancer, BuffType.Fear, BuffType.Flee,
-                BuffType.Knockback,
-                BuffType.Knockup, BuffType.Polymorph, BuffType.Silence, BuffType.Sleep, BuffType.Snare, BuffType.Stun,
-                BuffType.Suppression, BuffType.Taunt, BuffType.Poison
-            };
-
-            for (int i = 0; i < buffs.Length; i++)
-            {
-                ItemMenu.Add(buffs[i].ToString(), new CheckBox(buffs[i].ToString(), true));
-            }
-            ItemMenu.AddSeparator();
-            ItemMenu.Add("useitems", new CheckBox("Use Items?"));
-            ItemMenu.Add("botrk", new CheckBox("Use Botrk"));
-            ItemMenu.Add("bilge", new CheckBox("Use Bilge"));
-            ItemMenu.Add("myhp", new Slider("Botrk if my HP < %", 20, 0, 100));
-            ItemMenu.Add("heal", new CheckBox("Use Heal"));
-            ItemMenu.Add("hp", new Slider("Heal if my HP <=", 20, 0, 100));
-            ItemMenu.Add("you", new CheckBox("Use Youmuuuus"));
+            activator = new Activator(VMenu);
 
             Gapcloser.OnGapcloser += Events.Gapcloser_OnGapCloser;
             Interrupter.OnInterruptableSpell += Events.Interrupter_OnInterruptableSpell;
@@ -287,32 +263,6 @@ namespace Aka_s_Vayne_reworked
 
             var target = TargetSelector.GetTarget(E.Range, DamageType.Physical);
             usetrinket(target);
-            if (ItemMenu["useitems"].Cast<CheckBox>().CurrentValue)
-            {
-                if (Heal != null && ItemMenu["heal"].Cast<CheckBox>().CurrentValue && Heal.IsReady() && Player.Instance.HealthPercent <= ItemMenu["hp"].Cast<Slider>().CurrentValue
-                     && ObjectManager.Player.CountEnemiesInRange2(600) > 0)
-                {
-                    Heal.Cast();
-                }
-                if (ItemMenu["useitems"].Cast<CheckBox>().CurrentValue)
-                {
-                    if (Item.HasItem((int)ItemId.Blade_of_the_Ruined_King, ObjectManager.Player) && ItemMenu["botrk"].Cast<CheckBox>().CurrentValue && Item.CanUseItem((int)ItemId.Blade_of_the_Ruined_King)
-                        && Player.Instance.HealthPercent <= ItemMenu["myhp"].Cast<Slider>().CurrentValue)
-                    {
-                        Item.UseItem((int)ItemId.Blade_of_the_Ruined_King, target);
-                    }
-                    if (Item.HasItem((int)ItemId.Bilgewater_Cutlass, ObjectManager.Player) && ItemMenu["bilge"].Cast<CheckBox>().CurrentValue && Item.CanUseItem((int)ItemId.Bilgewater_Cutlass)
-                       && target.IsValidTarget(ObjectManager.Player.GetAutoAttackRange()))
-                    {
-                        Item.UseItem((int)ItemId.Bilgewater_Cutlass, target);
-                    }
-                    if (Item.HasItem((int)ItemId.Youmuus_Ghostblade, ObjectManager.Player) && ItemMenu["you"].Cast<CheckBox>().CurrentValue && Item.CanUseItem((int)ItemId.Youmuus_Ghostblade)
-                       && ObjectManager.Player.Distance4(target.Position) <= ObjectManager.Player.GetAutoAttackRange())
-                    {
-                        Item.UseItem((int)ItemId.Youmuus_Ghostblade);
-                    }
-                }
-            }
             if (Program.CondemnMenu["condemnmethod1"].Cast<CheckBox>().CurrentValue && E.IsReady())
             {
                 ELogic.Condemn1();

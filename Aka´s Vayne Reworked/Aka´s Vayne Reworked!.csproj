@@ -53,8 +53,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activator.cs" />
     <Compile Include="Damages.cs" />
     <Compile Include="Events.cs" />
+    <Compile Include="Items.cs" />
     <Compile Include="Logic\ELogic.cs" />
     <Compile Include="Logic\QGeometry.cs" />
     <Compile Include="Logic\QLogic.cs" />
