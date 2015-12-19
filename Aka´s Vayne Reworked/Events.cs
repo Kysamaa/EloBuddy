@@ -412,11 +412,12 @@ namespace Aka_s_Vayne_reworked
                 foreach (var minion in EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy,
                                 Player.Instance.ServerPosition, ObjectManager.Player.GetAutoAttackRange()))
                 {
+                    if (minion == null) return;
                     var dmg = Player.Instance.GetSpellDamage(minion, SpellSlot.Q) + Player.Instance.GetAutoAttackDamage(minion);
                     if (Prediction.Health.GetPrediction(minion, (int)(Player.Instance.AttackDelay * 1000)) <= dmg / 2 && (Orbwalker.LastTarget == null || Orbwalker.LastTarget.NetworkId != minion.NetworkId))
                     {
 
-                        QLogic.Cast(Game.CursorPos);
+                        Player.CastSpell(SpellSlot.Q, Game.CursorPos);
                     }
                 }
             }

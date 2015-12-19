@@ -14,7 +14,7 @@ namespace AddonTemplate
     public static class Config
     {
         private const string MenuName = "Aka´s Sion";
-
+                public static Activator activator;
         private static readonly Menu Menu;
 
         static Config()
@@ -24,7 +24,7 @@ namespace AddonTemplate
             Menu.AddGroupLabel("Welcome to my Sion Addon have fun! :)");
             Menu.AddLabel("To see/change the Settings");
             Menu.AddLabel("Click on Modes :)");
-
+            activator = new Activator(Menu);
             // Initialize the modes
             Modes.Initialize();
         }

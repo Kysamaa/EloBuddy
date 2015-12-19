@@ -30,7 +30,6 @@ namespace AddonTemplate
                 // therefore we return
                 return;
             }
-
             // Initialize the classes that we need
             Config.Initialize();
             SpellManager.Initialize();

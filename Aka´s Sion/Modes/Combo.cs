@@ -1,7 +1,8 @@
 ﻿using System.Runtime.InteropServices;
+using AddonTemplate.Utility;
 using EloBuddy;
 using EloBuddy.SDK;
-using EloBuddy.SDK.Enumerations;
+using HitChance = EloBuddy.SDK.Enumerations.HitChance;
 
 // Using the config like this makes your life easier, trust me
 using Settings = AddonTemplate.Config.Modes.Combo;
@@ -56,17 +57,28 @@ namespace AddonTemplate.Modes
                 var eprediction = Q.GetPrediction(target);
                 if (eprediction.HitChance >= HitChance.High && !ObjectManager.Player.HasBuff("SionR"))
                 {
-                    if (Q.IsReady() && target != null)
+                    if (Q.IsReady() && target != null && Player.Instance.IsFacing(target))
                     {
                         Q.Cast(eprediction.CastPosition);
-                    }
-                    if (!SpellManager.Q.IsInRange(target))
-                    {
-                        Q2.Cast();
                     }
                 }
             }
 
+            if (activatedP)
+            {
+                var target = TargetSelector.GetTarget(2000, DamageType.Physical);
+                if (Q.IsReady() && Player.Instance.Position.Distance(target) > target.GetAutoAttackRange())
+                {
+                    Q.Cast(target);
+                }
+            }
+
+        }
+
+
+        private static bool activatedP
+        {
+            get { return Player.Instance.Spellbook.GetSpell(SpellSlot.Q).Name == "sionpassivespeed"; }
         }
     }
 }
