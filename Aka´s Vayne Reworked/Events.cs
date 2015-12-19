@@ -291,8 +291,9 @@ namespace Aka_s_Vayne_reworked
                     }
                 }
 
+          
 
-                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
                 {
                     Program.Harass();
                 }
@@ -404,26 +405,21 @@ namespace Aka_s_Vayne_reworked
             if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && Program.LaneClearMenu["LCQ"].Cast<CheckBox>().CurrentValue) &&
                     Program.Q.IsReady())
                 {
-                    var source =
-                        EntityManager.MinionsAndMonsters.EnemyMinions
-                            .Where(
-                                a =>
-                                    a.NetworkId != target.NetworkId &&
-                                    a.Distance(Player.Instance) < 300 + Player.Instance.GetAutoAttackRange(a) &&
-                                    Prediction.Health.GetPrediction(a, (int) Player.Instance.AttackDelay) <
-                                    Player.Instance.GetAutoAttackDamage(a, true) + Damages.QDamage(a))
-                            .OrderBy(a => a.Health)
-                            .FirstOrDefault();
-
-                    if (source == null || Player.Instance.Position.Extend(Game.CursorPos, 300).Distance(source) >
-                        Player.Instance.GetAutoAttackRange(source))
-                        return;
-                    Player.CastSpell(SpellSlot.Q,
-                        Player.Instance.Position.Extend(Game.CursorPos, 300).Distance(source) <=
-                        Player.Instance.GetAutoAttackRange(source)
-                            ? Game.CursorPos
-                            : source.Position);
+                if (Orbwalker.CanAutoAttack)
+                {
+                    return;
                 }
+                foreach (var minion in EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy,
+                                Player.Instance.ServerPosition, ObjectManager.Player.GetAutoAttackRange()))
+                {
+                    var dmg = Player.Instance.GetSpellDamage(minion, SpellSlot.Q) + Player.Instance.GetAutoAttackDamage(minion);
+                    if (Prediction.Health.GetPrediction(minion, (int)(Player.Instance.AttackDelay * 1000)) <= dmg / 2 && (Orbwalker.LastTarget == null || Orbwalker.LastTarget.NetworkId != minion.NetworkId))
+                    {
+
+                        QLogic.Cast(Game.CursorPos);
+                    }
+                }
+            }
             var LastHitE = myHero;
 
             foreach (var Etarget in EntityManager.Heroes.Enemies.Where(Etarget => Etarget.IsValidTarget(Program.E.Range) && Etarget.Path.Count() < 2))

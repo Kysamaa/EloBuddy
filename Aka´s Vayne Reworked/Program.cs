@@ -71,8 +71,6 @@ namespace Aka_s_Vayne_reworked
 
             VMenu = MainMenu.AddMenu("Aka´s Vayne", "akavayne");
             VMenu.AddGroupLabel("Welcome to my Vayne Addon have fun! :)");
-            VMenu.AddLabel("To see/change the Settings");
-            VMenu.AddLabel("Click on Modes :)");
 
             ComboMenu = VMenu.AddSubMenu("Combo", "Combo");
             ComboMenu.AddGroupLabel("Combo");
@@ -89,6 +87,7 @@ namespace Aka_s_Vayne_reworked
             ComboMenu.Add("RnoAAs", new Slider("No AA stealth when >= enemy in range", 2, 0, 5));
             ComboMenu.Add("comboRSlider", new Slider("Use R if", 2, 1, 5));
             ComboMenu.Add("AACancel", new Slider("AA Cancel", 0, 0, 20));
+            ComboMenu.Add("fpsdrop", new CheckBox("Anti Fps Drop", false));
 
             HarassMenu = VMenu.AddSubMenu("Harass", "Harass");
             HarassMenu.AddGroupLabel("Harass");
@@ -139,6 +138,7 @@ namespace Aka_s_Vayne_reworked
             CondemnMenu.Add("condemnmethod1", new CheckBox("Condemn 1(Hiki)", false));
             CondemnMenu.Add("condemnmethod2", new CheckBox("Condemn 2(VHR)", false));
             CondemnMenu.Add("condemnmethod3", new CheckBox("Condemn 3(Fluxy)"));
+            CondemnMenu.Add("condemnPercent", new Slider("Condemn 3(Fluxy) Hitchance %", 33, 1));
             CondemnMenu.Add("flashe", new KeyBind("Flash E!", false, KeyBind.BindTypes.HoldActive, 'Y'));
             CondemnMenu.Add("trinket", new CheckBox("Use trinket bush?"));
             CondemnMenu.Add("pushDistance", new Slider("Condemn Push Distance", 410, 350, 420));
@@ -163,7 +163,6 @@ namespace Aka_s_Vayne_reworked
             Obj_AI_Base.OnSpellCast += Events.Obj_AI_Base_OnSpellCast;
 
             ELogic.LoadFlash();
-            // Listen to events we need
             Drawing.OnDraw += OnDraw;
             Traps.Load();
 
@@ -172,14 +171,14 @@ namespace Aka_s_Vayne_reworked
         private static void OnDraw(EventArgs args)
         {
 
-            if (DrawingMenu["DrawE"].Cast<CheckBox>().CurrentValue)
+            if (DrawingMenu["DrawE"].Cast<CheckBox>().CurrentValue && !ComboMenu["fpsdrop"].Cast<CheckBox>().CurrentValue)
             {
                 if (!(DrawingMenu["DrawOnlyReady"].Cast<CheckBox>().CurrentValue && !E.IsReady()))
                 {
                     Circle.Draw(Color.Red, E.Range, Player.Instance.Position);
                 }
             }
-            if (DrawingMenu["DrawQ"].Cast<CheckBox>().CurrentValue)
+            if (DrawingMenu["DrawQ"].Cast<CheckBox>().CurrentValue && !ComboMenu["fpsdrop"].Cast<CheckBox>().CurrentValue)
             {
                 if (!(DrawingMenu["DrawOnlyReady"].Cast<CheckBox>().CurrentValue && !Q.IsReady()))
                 {

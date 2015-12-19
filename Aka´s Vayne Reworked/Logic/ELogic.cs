@@ -20,7 +20,7 @@ namespace AddonTemplate.Logic
 
         public static void Condemn1()
         {
-            foreach (var target in HeroManager.Enemies.Where(h => h.IsValidTarget(Program.E.Range)))
+            foreach (var target in EntityManager.Heroes.Enemies.Where(h => h.IsValidTarget(Program.E.Range)))
             {
                 if (Program.CondemnMenu["condemnmethod1"].Cast<CheckBox>().CurrentValue)
                 {
@@ -59,11 +59,9 @@ namespace AddonTemplate.Logic
 
         public static void Condemn2()
         {
-
-
             foreach (
                 var En in
-                    HeroManager.Enemies.Where(
+                    EntityManager.Heroes.Enemies.Where(
                         hero =>
                             hero.IsValidTarget(Program.E.Range) && !hero.HasBuffOfType(BuffType.SpellShield) &&
                             !hero.HasBuffOfType(BuffType.SpellImmunity)))
@@ -89,22 +87,19 @@ namespace AddonTemplate.Logic
             }
         }
 
-   
-
-
-    public static
+        public static
             void Condemn3()
         {
-        foreach (
-            var enemy in
-                HeroManager.Enemies.Where(
-                    x =>
-                        x.IsValidTarget(Program.E.Range) && !x.HasBuffOfType(BuffType.SpellShield) &&
-                        !x.HasBuffOfType(BuffType.SpellImmunity) &&
-                        IsCondemable(x)))
-        {
-            Program.E.Cast(enemy);
-        }
+            foreach (
+                var enemy in
+                    HeroManager.Enemies.Where(
+                        x =>
+                            x.IsValidTarget(Program.E.Range) && !x.HasBuffOfType(BuffType.SpellShield) &&
+                            !x.HasBuffOfType(BuffType.SpellImmunity) &&
+                            IsCondemable(x)))
+            {
+                Program.E.Cast(enemy);
+            }
         }
 
         public static
@@ -137,7 +132,7 @@ namespace AddonTemplate.Logic
                     }
                 }
             }
-            if ((wallsFound / predictionsList.Count) >= 33 / 100f)
+            if ((wallsFound / predictionsList.Count) >= Program.CondemnMenu["condemnPercent"].Cast<Slider>().CurrentValue / 100f)
             {
                 return true;
             }

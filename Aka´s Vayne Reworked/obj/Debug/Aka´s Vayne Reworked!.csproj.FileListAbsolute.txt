@@ -1,1 +1,2 @@
 C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Vayne Reworked\bin\Debug\Aka´s Vayne reworked.exe.config
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Vayne Reworked\obj\Debug\Aka´s Vayne Reworked!.csprojResolveAssemblyReference.cache
