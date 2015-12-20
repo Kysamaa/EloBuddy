@@ -1091,16 +1091,14 @@ namespace AkaYasuo
             return new Vector2(x, y);
         }
 
-        public static bool UnderTower(Vector3 pos)
+        public static bool UnderTower(Vector3 v)
         {
-            return
-                ObjectManager.Get<Obj_AI_Turret>()
-                    .Any(i => i.IsEnemy && !i.IsDead && i.Distance(pos) < 850 + myHero.BoundingRadius);
+            return EntityManager.Turrets.Enemies.Where(a => a.Health > 0 && !a.IsDead).Any(a => a.Distance(v) < 950);
         }
 
         public static bool UnderEnemyTower(Vector2 pos)
         {
-            return ObjectManager.Get<Obj_AI_Turret>().Any(i => !i.IsDead && i.Distance(pos) <= 900 + myHero.BoundingRadius);
+            return EntityManager.Turrets.Enemies.Where(a => a.Health > 0 && !a.IsDead).Any(a => a.Distance(pos) < 950);
         }
 
         public static void UseItems(Obj_AI_Base unit)
