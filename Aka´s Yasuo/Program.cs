@@ -1019,21 +1019,6 @@ namespace AkaYasuo
                 Drawing.DrawCircle(Yasuo.spot14.To3D(), 150, System.Drawing.Color.Red);
                 Drawing.DrawCircle(Yasuo.spot15.To3D(), 150, System.Drawing.Color.Red);
                 Drawing.DrawCircle(Yasuo.spot16.To3D(), 150, System.Drawing.Color.Red);
-
-                Drawing.DrawCircle(Yasuo.spotA.To3D(), 400, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotB.To3D(), 400, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotC.To3D(), 400, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotD.To3D(), 400, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotE.To3D(), 400, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotF.To3D(), 400, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotG.To3D(), 400, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotH.To3D(), 400, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotI.To3D(), 120, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotJ.To3D(), 120, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotL.To3D(), 400, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotM.To3D(), 200, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotN.To3D(), 400, System.Drawing.Color.Green);
-                Drawing.DrawCircle(Yasuo.spotO.To3D(), 200, System.Drawing.Color.Green);
             }
         }
 

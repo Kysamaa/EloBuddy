@@ -49,7 +49,6 @@ namespace Aka_s_Vayne_reworked
             
         }
 
-
         public static void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
             var rengar = EntityManager.Heroes.Enemies.FirstOrDefault(a => a.Hero == Champion.Rengar);
@@ -82,7 +81,6 @@ namespace Aka_s_Vayne_reworked
             }
         }
 
-
         public static void Obj_AI_Base_OnBuffGain(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
         {
             if (sender.IsMe && args.Buff.Name == "vaynetumblebonus")
@@ -90,7 +88,6 @@ namespace Aka_s_Vayne_reworked
                 lastaa = 0;
             }
         }
-
 
         public static void Interrupter_OnInterruptableSpell(Obj_AI_Base sender,
             Interrupter.InterruptableSpellEventArgs e)

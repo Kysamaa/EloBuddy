@@ -251,7 +251,6 @@ namespace AkaYasuo
             if (Program.FleeMenu["WJ"].Cast<CheckBox>().CurrentValue)
             {
                 Yasuo.WallJump();
-                Yasuo.WallDash();
             }
             foreach (AIHeroClient enemy in EntityManager.Heroes.Enemies)
             {
