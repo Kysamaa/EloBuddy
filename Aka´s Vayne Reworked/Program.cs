@@ -149,7 +149,7 @@ namespace Aka_s_Vayne_reworked
             DrawingMenu.Add("DrawE", new CheckBox("Draw E", false));
             DrawingMenu.Add("DrawOnlyReady", new CheckBox("Draw Only if Spells are ready"));
 
-            //activator = new Activator(VMenu);
+            activator = new Activator(VMenu);
 
             Gapcloser.OnGapcloser += Events.Gapcloser_OnGapCloser;
             Interrupter.OnInterruptableSpell += Events.Interrupter_OnInterruptableSpell;

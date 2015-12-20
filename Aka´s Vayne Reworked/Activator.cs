@@ -14,8 +14,6 @@ namespace Aka_s_Vayne_reworked
     public class Activator
     {
         public static Menu AMenu, Offensive, Defensive, Summoners, Potions, Qss, Sums, SmiteMenu;
-        public static Spell.Targeted Smite;
-
         public Activator(Menu attachToMenu)
         {
             AMenu = attachToMenu;
@@ -37,7 +35,7 @@ namespace Aka_s_Vayne_reworked
             Offensive.Add("cutlassManagerMinMeHP", new Slider("Self HP %", 80));
             Offensive.Add("cutlassManagerMinEnemyHP", new Slider("Enemy HP HP %", 80));
 
-            if (Player.Instance.IsMelee)
+            if (Program._player.IsMelee)
             {
                 Offensive.AddLabel("Tiamat");
                 Offensive.Add("tiamatManager", new CheckBox("Use Tiamat"));
@@ -144,8 +142,6 @@ namespace Aka_s_Vayne_reworked
             SmiteMenu.AddSeparator();
             SmiteMenu.Add("useSlowSmite", new CheckBox("KS with Slow Smite"));
             SmiteMenu.Add("comboWithDuelSmite", new CheckBox("Combo With Duel Smite"));
-
-            Smite = new Spell.Targeted(ObjectManager.Player.GetSpellSlotFromName("summonersmite"), 500);
             Game.OnUpdate += GameOnOnUpdate;
             Obj_AI_Base.OnBuffGain += Obj_AI_Base_OnBuffGain;
         }
@@ -154,10 +150,9 @@ namespace Aka_s_Vayne_reworked
         private static void GameOnOnUpdate(EventArgs args)
         {
             {
-                var target = TargetSelector.GetTarget(1000, DamageType.Physical);
                 AkaActivator.LoadSpells();
                 AutoPotions();
-                if (Player.Instance.CountEnemiesInRange(1000) == 0)
+                if (Program._player.CountEnemiesInRange(1000) == 0)
                 {
                     Sams();
                 }
@@ -187,10 +182,9 @@ namespace Aka_s_Vayne_reworked
                 {
                     Flee();
                 }
-                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) && target != null && AMenu["Combo"].Cast<CheckBox>().CurrentValue)
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) && AMenu["Combo"].Cast<CheckBox>().CurrentValue)
                 {
-
-                    Combo(target);
+                    Combo();
                 }
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && AMenu["LaneClear"].Cast<CheckBox>().CurrentValue)
                 {
@@ -304,43 +298,45 @@ namespace Aka_s_Vayne_reworked
             }
         }
 
-        private static void Combo(AIHeroClient target)
+        private static void Combo()
         {
-            if (Offensive["botrkManager"].Cast<CheckBox>().CurrentValue && Player.Instance.ServerPosition.Distance(target) <= 550 && AkaActivator.Botrk.IsReady() && AkaActivator.Botrk.IsOwned() &&
-                Player.Instance.HealthPercent >= Offensive["botrkManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+            var target = TargetSelector.GetTarget(1000, DamageType.Physical);
+
+            if (Offensive["botrkManager"].Cast<CheckBox>().CurrentValue && Program._player.ServerPosition.Distance(target) <= 550 && AkaActivator.Botrk.IsReady() && AkaActivator.Botrk.IsOwned() &&
+                Program._player.HealthPercent >= Offensive["botrkManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                 target.HealthPercent <= Offensive["botrkManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Botrk.Cast(target);
             }
 
-            if (Offensive["gunbladeManager"].Cast<CheckBox>().CurrentValue && Player.Instance.ServerPosition.Distance(target) <= 700 && AkaActivator.GunBlade.IsReady() && AkaActivator.GunBlade.IsOwned() &&
-    Player.Instance.HealthPercent >= Offensive["gunbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+            if (Offensive["gunbladeManager"].Cast<CheckBox>().CurrentValue && Program._player.ServerPosition.Distance(target) <= 700 && AkaActivator.GunBlade.IsReady() && AkaActivator.GunBlade.IsOwned() &&
+    Program._player.HealthPercent >= Offensive["gunbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
     target.HealthPercent <= Offensive["gunbladeManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.GunBlade.Cast(target);
             }
 
-            if (Offensive["cutlassManager"].Cast<CheckBox>().CurrentValue && Player.Instance.ServerPosition.Distance(target) <= 550 && AkaActivator.Bilgewater.IsReady() && AkaActivator.Bilgewater.IsOwned() &&
-    Player.Instance.HealthPercent >= Offensive["cutlassManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+            if (Offensive["cutlassManager"].Cast<CheckBox>().CurrentValue && Program._player.ServerPosition.Distance(target) <= 550 && AkaActivator.Bilgewater.IsReady() && AkaActivator.Bilgewater.IsOwned() &&
+    Program._player.HealthPercent >= Offensive["cutlassManagerMinMeHP"].Cast<Slider>().CurrentValue &&
     target.HealthPercent <= Offensive["cutlassManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Bilgewater.Cast(target);
             }
 
             if (Offensive["ghostbladeManager"].Cast<CheckBox>().CurrentValue && 
-Player.Instance.HealthPercent >= Offensive["ghostbladeManagerMinMeHP"].Cast<Slider>().CurrentValue && AkaActivator.Youmus.IsReady() && AkaActivator.Youmus.IsOwned() && 
+Program._player.HealthPercent >= Offensive["ghostbladeManagerMinMeHP"].Cast<Slider>().CurrentValue && AkaActivator.Youmus.IsReady() && AkaActivator.Youmus.IsOwned() && 
 target.HealthPercent <= Offensive["ghostbladeManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Youmus.Cast();
             }
-            if (Offensive["tiamatManager"].Cast<CheckBox>().CurrentValue && Player.Instance.ServerPosition.Distance(target) <= 400 && AkaActivator.Tiamat.IsReady() && AkaActivator.Tiamat.IsOwned() &&
-Player.Instance.HealthPercent >= Offensive["tiamatManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+            if (Offensive["tiamatManager"].Cast<CheckBox>().CurrentValue && Program._player.ServerPosition.Distance(target) <= 400 && AkaActivator.Tiamat.IsReady() && AkaActivator.Tiamat.IsOwned() &&
+Program._player.HealthPercent >= Offensive["tiamatManagerMinMeHP"].Cast<Slider>().CurrentValue &&
 target.HealthPercent <= Offensive["tiamatManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Tiamat.Cast();
             }
-            if (Offensive["hydraManager"].Cast<CheckBox>().CurrentValue && Player.Instance.ServerPosition.Distance(target) <= 400 && AkaActivator.Hydra.IsReady() && AkaActivator.Hydra.IsOwned() &&
-Player.Instance.HealthPercent >= Offensive["hydraManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+            if (Offensive["hydraManager"].Cast<CheckBox>().CurrentValue && Program._player.ServerPosition.Distance(target) <= 400 && AkaActivator.Hydra.IsReady() && AkaActivator.Hydra.IsOwned() &&
+Program._player.HealthPercent >= Offensive["hydraManagerMinMeHP"].Cast<Slider>().CurrentValue &&
 target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Hydra.Cast();
@@ -359,12 +355,12 @@ target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue
             }
 
             if (Sums["healManager"].Cast<CheckBox>().CurrentValue && AkaActivator.Heal.IsReady() &&
-                Player.Instance.HealthPercent <= Sums["healManagerMinMeHP"].Cast<Slider>().CurrentValue)
+                Program._player.HealthPercent <= Sums["healManagerMinMeHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Heal.Cast();
             }
             if (Sums["barrierManager"].Cast<CheckBox>().CurrentValue && AkaActivator.Barrier.IsReady() &&
-                Player.Instance.HealthPercent <= Sums["barrierManagerMinMeHP"].Cast<Slider>().CurrentValue)
+                Program._player.HealthPercent <= Sums["barrierManagerMinMeHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Barrier.Cast();
             }
@@ -375,7 +371,7 @@ target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue
                         EntityManager.Heroes.Enemies
                             .Where(
                                 a => a.IsValidTarget(AkaActivator.Ignite.Range) &&
-                                     a.Health < 50 + 20*Player.Instance.Level - (a.HPRegenRate/5*3)))
+                                     a.Health < 50 + 20*Program._player.Level - (a.HPRegenRate/5*3)))
                 {
                     AkaActivator.Ignite.Cast(source);
                 }
@@ -384,39 +380,39 @@ target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue
 
         private static void AutoPotions()
         {
-            if (!Player.Instance.IsInShopRange() &&
+            if (!Program._player.IsInShopRange() &&
                 !(Player.HasBuff("RegenerationPotion") || Player.HasBuff("ItemCrystalFlaskJungle") ||
                   Player.HasBuff("ItemMiniRegenPotion") || Player.HasBuff("ItemCrystalFlask") ||
                   Player.HasBuff("ItemDarkCrystalFlask")))
             {
                 if (Potions["huntersPotManager"].Cast<CheckBox>().CurrentValue &&
-                    Player.Instance.HealthPercent < Potions["huntersPotManagerMinMeHP"].Cast<Slider>().CurrentValue &&
-                    Player.Instance.ManaPercent < Potions["huntersPotManagerMinMeMana"].Cast<Slider>().CurrentValue &&
+                    Program._player.HealthPercent < Potions["huntersPotManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                    Program._player.ManaPercent < Potions["huntersPotManagerMinMeMana"].Cast<Slider>().CurrentValue &&
                     AkaActivator.HuntersPot.IsReady() && AkaActivator.HuntersPot.IsOwned())
                 {
                     AkaActivator.HuntersPot.Cast();
                 }
                 if (Potions["biscuitPotionManager"].Cast<CheckBox>().CurrentValue &&
-                    Player.Instance.HealthPercent < Potions["biscuitPotionManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                    Program._player.HealthPercent < Potions["biscuitPotionManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                     AkaActivator.Biscuit.IsReady() && AkaActivator.Biscuit.IsOwned())
                 {
                     AkaActivator.Biscuit.Cast();
                 }
                 if (Potions["healthPotionManager"].Cast<CheckBox>().CurrentValue &&
-                    Player.Instance.HealthPercent < Potions["healthPotionManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                    Program._player.HealthPercent < Potions["healthPotionManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                     AkaActivator.HPPot.IsReady() && AkaActivator.HPPot.IsOwned())
                 {
                     AkaActivator.HPPot.Cast();
                 }
                 if (Potions["refillPotManager"].Cast<CheckBox>().CurrentValue &&
-                    Player.Instance.HealthPercent < Potions["refillPotManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                    Program._player.HealthPercent < Potions["refillPotManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                     AkaActivator.RefillPot.IsReady() && AkaActivator.RefillPot.IsOwned())
                 {
                     AkaActivator.RefillPot.Cast();
                 }
                 if (Potions["corruptpotManager"].Cast<CheckBox>().CurrentValue &&
-                    Player.Instance.HealthPercent < Potions["corruptpotManagerMinMeHP"].Cast<Slider>().CurrentValue &&
-                    Player.Instance.ManaPercent < Potions["corruptpotManagerMinMeMana"].Cast<Slider>().CurrentValue &&
+                    Program._player.HealthPercent < Potions["corruptpotManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                    Program._player.ManaPercent < Potions["corruptpotManagerMinMeMana"].Cast<Slider>().CurrentValue &&
                     AkaActivator.CorruptPot.IsReady() && AkaActivator.CorruptPot.IsOwned())
                 {
                     AkaActivator.CorruptPot.Cast();
@@ -435,21 +431,21 @@ target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue
                     AkaActivator.Archangles.Cast();
                 }
             }
-            if (Defensive["Face_of_the_Mountain"].Cast<CheckBox>().CurrentValue && (ally.IsMe && Defensive["Face_of_the_Mountain_self"].Cast<CheckBox>().CurrentValue || !ally.IsMe) && ally.Distance(Player.Instance) < 700) 
+            if (Defensive["Face_of_the_Mountain"].Cast<CheckBox>().CurrentValue && (ally.IsMe && Defensive["Face_of_the_Mountain_self"].Cast<CheckBox>().CurrentValue || !ally.IsMe) && ally.Distance(Program._player) < 700) 
             {
                 if (AkaActivator.Mountain.IsReady() && AkaActivator.Mountain.IsOwned())
                 {
                     AkaActivator.Mountain.Cast(ally);
                 }
             }
-            if (Defensive["Locket_of_the_Iron_Solari"].Cast<CheckBox>().CurrentValue && (ally.IsMe && Defensive["Locket_of_the_Iron_Solari_self"].Cast<CheckBox>().CurrentValue || !ally.IsMe && Defensive["Locket_of_the_Iron_Solari_ally"].Cast<CheckBox>().CurrentValue) && ally.Distance(Player.Instance) < 600)
+            if (Defensive["Locket_of_the_Iron_Solari"].Cast<CheckBox>().CurrentValue && (ally.IsMe && Defensive["Locket_of_the_Iron_Solari_self"].Cast<CheckBox>().CurrentValue || !ally.IsMe && Defensive["Locket_of_the_Iron_Solari_ally"].Cast<CheckBox>().CurrentValue) && ally.Distance(Program._player) < 600)
             {
                 if (AkaActivator.Solari.IsReady() && AkaActivator.Solari.IsOwned())
                 {
                     AkaActivator.Solari.Cast();
                 }
             }
-            if (Defensive["Mikaels_Crucible_Heal"].Cast<CheckBox>().CurrentValue && ally.Distance(Player.Instance) < 750)
+            if (Defensive["Mikaels_Crucible_Heal"].Cast<CheckBox>().CurrentValue && ally.Distance(Program._player) < 750)
             {
                 if (AkaActivator.Solari.IsReady() && AkaActivator.Solari.IsOwned())
                 {
@@ -468,41 +464,41 @@ target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue
                 return;
 
             }
-            if (Offensive["botrkManager"].Cast<CheckBox>().CurrentValue && Player.Instance.ServerPosition.Distance(target) <= 550 && AkaActivator.Botrk.IsReady() &&
-                Player.Instance.HealthPercent >= Offensive["botrkManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+            if (Offensive["botrkManager"].Cast<CheckBox>().CurrentValue && Program._player.ServerPosition.Distance(target) <= 550 && AkaActivator.Botrk.IsReady() &&
+                Program._player.HealthPercent >= Offensive["botrkManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                 target.HealthPercent <= Offensive["botrkManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Botrk.Cast(target);
             }
 
-            if (Offensive["gunbladeManager"].Cast<CheckBox>().CurrentValue && Player.Instance.ServerPosition.Distance(target) <= 700 && AkaActivator.GunBlade.IsReady() &&
-    Player.Instance.HealthPercent >= Offensive["gunbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+            if (Offensive["gunbladeManager"].Cast<CheckBox>().CurrentValue && Program._player.ServerPosition.Distance(target) <= 700 && AkaActivator.GunBlade.IsReady() &&
+    Program._player.HealthPercent >= Offensive["gunbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
     target.HealthPercent <= Offensive["gunbladeManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.GunBlade.Cast(target);
             }
 
-            if (Offensive["cutlassManager"].Cast<CheckBox>().CurrentValue && Player.Instance.ServerPosition.Distance(target) <= 550 && AkaActivator.Bilgewater.IsReady() &&
-    Player.Instance.HealthPercent >= Offensive["cutlassManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+            if (Offensive["cutlassManager"].Cast<CheckBox>().CurrentValue && Program._player.ServerPosition.Distance(target) <= 550 && AkaActivator.Bilgewater.IsReady() &&
+    Program._player.HealthPercent >= Offensive["cutlassManagerMinMeHP"].Cast<Slider>().CurrentValue &&
     target.HealthPercent <= Offensive["cutlassManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Bilgewater.Cast(target);
             }
 
             if (Offensive["ghostbladeManager"].Cast<CheckBox>().CurrentValue && AkaActivator.Youmus.IsReady() &&
-Player.Instance.HealthPercent >= Offensive["ghostbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+Program._player.HealthPercent >= Offensive["ghostbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
 target.HealthPercent <= Offensive["ghostbladeManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Youmus.Cast();
             }
-            if (Offensive["tiamatManager"].Cast<CheckBox>().CurrentValue && Player.Instance.ServerPosition.Distance(target) <= 400 && AkaActivator.Tiamat.IsReady() &&
-Player.Instance.HealthPercent >= Offensive["tiamatManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+            if (Offensive["tiamatManager"].Cast<CheckBox>().CurrentValue && Program._player.ServerPosition.Distance(target) <= 400 && AkaActivator.Tiamat.IsReady() &&
+Program._player.HealthPercent >= Offensive["tiamatManagerMinMeHP"].Cast<Slider>().CurrentValue &&
 target.HealthPercent <= Offensive["tiamatManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Tiamat.Cast();
             }
-            if (Offensive["hydraManager"].Cast<CheckBox>().CurrentValue && Player.Instance.ServerPosition.Distance(target) <= 400 && AkaActivator.Hydra.IsReady() &&
-Player.Instance.HealthPercent >= Offensive["hydraManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+            if (Offensive["hydraManager"].Cast<CheckBox>().CurrentValue && Program._player.ServerPosition.Distance(target) <= 400 && AkaActivator.Hydra.IsReady() &&
+Program._player.HealthPercent >= Offensive["hydraManagerMinMeHP"].Cast<Slider>().CurrentValue &&
 target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Hydra.Cast();
@@ -514,27 +510,27 @@ target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue
         private static void LaneClear()
         {
             var minions =
-                EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, Player.Instance.Position,
+                EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, Program._player.Position,
                     500).Where(
                         m => !m.IsDead && m.IsValid && !m.IsInvulnerable);
             foreach (var target in minions)
             {
                 if (Offensive["ghostbladeManager"].Cast<CheckBox>().CurrentValue && AkaActivator.Youmus.IsReady() &&
-                    Player.Instance.HealthPercent >= Offensive["ghostbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                    Program._player.HealthPercent >= Offensive["ghostbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                     target.HealthPercent <= Offensive["ghostbladeManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
                 {
                     AkaActivator.Youmus.Cast();
                 }
                 if (Offensive["tiamatManager"].Cast<CheckBox>().CurrentValue &&
-                    Player.Instance.ServerPosition.Distance(target) <= 400 && AkaActivator.Tiamat.IsReady() &&
-                    Player.Instance.HealthPercent >= Offensive["tiamatManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                    Program._player.ServerPosition.Distance(target) <= 400 && AkaActivator.Tiamat.IsReady() &&
+                    Program._player.HealthPercent >= Offensive["tiamatManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                     target.HealthPercent <= Offensive["tiamatManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
                 {
                     AkaActivator.Tiamat.Cast();
                 }
                 if (Offensive["hydraManager"].Cast<CheckBox>().CurrentValue &&
-                    Player.Instance.ServerPosition.Distance(target) <= 400 && AkaActivator.Hydra.IsReady() &&
-                    Player.Instance.HealthPercent >= Offensive["hydraManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                    Program._player.ServerPosition.Distance(target) <= 400 && AkaActivator.Hydra.IsReady() &&
+                    Program._player.HealthPercent >= Offensive["hydraManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                     target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue)
                 {
                     AkaActivator.Hydra.Cast();
@@ -546,26 +542,26 @@ target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue
         private static void JungleClear()
         {
             var minions =
-                EntityManager.MinionsAndMonsters.GetJungleMonsters(Player.Instance.Position, 500)
+                EntityManager.MinionsAndMonsters.GetJungleMonsters(Program._player.Position, 500)
                     .Where(t => !t.IsDead && t.IsValid && !t.IsInvulnerable);
             foreach (var target in minions)
             {
                 if (Offensive["ghostbladeManager"].Cast<CheckBox>().CurrentValue && AkaActivator.Youmus.IsReady() &&
-                    Player.Instance.HealthPercent >= Offensive["ghostbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                    Program._player.HealthPercent >= Offensive["ghostbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                     target.HealthPercent <= Offensive["ghostbladeManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
                 {
                     AkaActivator.Youmus.Cast();
                 }
                 if (Offensive["tiamatManager"].Cast<CheckBox>().CurrentValue && AkaActivator.Tiamat.IsReady() &&
-                    Player.Instance.ServerPosition.Distance(target) <= 400 &&
-                    Player.Instance.HealthPercent >= Offensive["tiamatManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                    Program._player.ServerPosition.Distance(target) <= 400 &&
+                    Program._player.HealthPercent >= Offensive["tiamatManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                     target.HealthPercent <= Offensive["tiamatManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
                 {
                     AkaActivator.Tiamat.Cast();
                 }
                 if (Offensive["hydraManager"].Cast<CheckBox>().CurrentValue && AkaActivator.Hydra.IsReady() &&
-                    Player.Instance.ServerPosition.Distance(target) <= 400 &&
-                    Player.Instance.HealthPercent >= Offensive["hydraManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                    Program._player.ServerPosition.Distance(target) <= 400 &&
+                    Program._player.HealthPercent >= Offensive["hydraManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                     target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue)
                 {
                     AkaActivator.Hydra.Cast();
@@ -583,55 +579,55 @@ target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue
 
             }
             if (Offensive["botrkManager"].Cast<CheckBox>().CurrentValue &&
-                Player.Instance.ServerPosition.Distance(target) <= 550 && AkaActivator.Botrk.IsReady() &&
-                Player.Instance.HealthPercent >= Offensive["botrkManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                Program._player.ServerPosition.Distance(target) <= 550 && AkaActivator.Botrk.IsReady() &&
+                Program._player.HealthPercent >= Offensive["botrkManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                 target.HealthPercent <= Offensive["botrkManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Botrk.Cast(target);
             }
 
             if (Offensive["gunbladeManager"].Cast<CheckBox>().CurrentValue &&
-                Player.Instance.ServerPosition.Distance(target) <= 700 && AkaActivator.GunBlade.IsReady() &&
-                Player.Instance.HealthPercent >= Offensive["gunbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                Program._player.ServerPosition.Distance(target) <= 700 && AkaActivator.GunBlade.IsReady() &&
+                Program._player.HealthPercent >= Offensive["gunbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                 target.HealthPercent <= Offensive["gunbladeManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.GunBlade.Cast(target);
             }
 
             if (Offensive["cutlassManager"].Cast<CheckBox>().CurrentValue &&
-                Player.Instance.ServerPosition.Distance(target) <= 550 && AkaActivator.Bilgewater.IsReady() &&
-                Player.Instance.HealthPercent >= Offensive["cutlassManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                Program._player.ServerPosition.Distance(target) <= 550 && AkaActivator.Bilgewater.IsReady() &&
+                Program._player.HealthPercent >= Offensive["cutlassManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                 target.HealthPercent <= Offensive["cutlassManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Bilgewater.Cast(target);
             }
 
             if (Offensive["ghostbladeManager"].Cast<CheckBox>().CurrentValue && AkaActivator.Youmus.IsReady() &&
-                Player.Instance.HealthPercent >= Offensive["ghostbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                Program._player.HealthPercent >= Offensive["ghostbladeManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                 target.HealthPercent <= Offensive["ghostbladeManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Youmus.Cast();
             }
             if (Offensive["tiamatManager"].Cast<CheckBox>().CurrentValue &&
-                Player.Instance.ServerPosition.Distance(target) <= 400 && AkaActivator.Tiamat.IsReady() &&
-                Player.Instance.HealthPercent >= Offensive["tiamatManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                Program._player.ServerPosition.Distance(target) <= 400 && AkaActivator.Tiamat.IsReady() &&
+                Program._player.HealthPercent >= Offensive["tiamatManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                 target.HealthPercent <= Offensive["tiamatManagerMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Tiamat.Cast();
             }
             if (Offensive["hydraManager"].Cast<CheckBox>().CurrentValue &&
-                Player.Instance.ServerPosition.Distance(target) <= 400 && AkaActivator.Hydra.IsReady() &&
-                Player.Instance.HealthPercent >= Offensive["hydraManagerMinMeHP"].Cast<Slider>().CurrentValue &&
+                Program._player.ServerPosition.Distance(target) <= 400 && AkaActivator.Hydra.IsReady() &&
+                Program._player.HealthPercent >= Offensive["hydraManagerMinMeHP"].Cast<Slider>().CurrentValue &&
                 target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue)
             {
                 AkaActivator.Hydra.Cast();
             }
         }
 
-        private static void SmiteEvent()
+       private static void SmiteEvent()
         {
-            if (!Smite.IsReady() || Player.Instance.IsDead) return;
-            if (SmiteMenu["smiteActive"].Cast<KeyBind>().CurrentValue)
+            if (SmiteMenu["smiteActive"].Cast<KeyBind>().CurrentValue &&
+                AkaActivator.Smite.Name.Equals("summonersmite"))
             {
                 var unit =
                     EntityManager.MinionsAndMonsters.Monsters
@@ -644,28 +640,28 @@ target.HealthPercent <= Offensive["hydraMinEnemyHP"].Cast<Slider>().CurrentValue
 
                 if (unit != null)
                 {
-                    Smite.Cast(unit);
+                    AkaActivator.Smite.Cast(unit);
                 }
             }
             if (SmiteMenu["useSlowSmite"].Cast<CheckBox>().CurrentValue &&
-                Smite.Handle.Name == "s5_summonersmiteplayerganker")
+                AkaActivator.Smite.Name.Equals("s5_summonersmiteplayerganker"))
             {
                 foreach (
                     var target in
                         EntityManager.Heroes.Enemies
-                            .Where(h => h.IsValidTarget(Smite.Range) && h.Health <= 20 + 8 * Player.Instance.Level))
+                            .Where(h => h.IsValidTarget(AkaActivator.Smite.Range) && h.Health <= 20 + 8 * Program._player.Level))
                 {
-                    Smite.Cast(target);
+                    AkaActivator.Smite.Cast(target);
                 }
             }
             if (SmiteMenu["comboWithDuelSmite"].Cast<CheckBox>().CurrentValue &&
-                Smite.Handle.Name == "s5_summonersmiteduel" &&
+                AkaActivator.Smite.Name.Equals("s5_summonersmiteduel") &&
                 Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
                 foreach (
                     var target in
                         EntityManager.Heroes.Enemies
-                            .Where(h => h.IsValidTarget(Smite.Range)).OrderByDescending(TargetSelector.GetPriority))
+                            .Where(h => h.IsValidTarget(AkaActivator.Smite.Range)).OrderByDescending(TargetSelector.GetPriority))
                 {
                     AkaActivator.Smite.Cast(target);
                 }

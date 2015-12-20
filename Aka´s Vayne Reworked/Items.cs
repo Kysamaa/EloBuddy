@@ -93,6 +93,10 @@ namespace Aka_s_Vayne_reworked
 
         public static int GetSmiteDamage()
         {
+            if (Smite == null || !Smite.IsReady())
+            {
+                return 0;
+            }
             int level = ObjectManager.Player.Level;
             int[] smitedamage =
             {
