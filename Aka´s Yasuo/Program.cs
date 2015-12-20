@@ -164,7 +164,7 @@ namespace AkaYasuo
             MiscMenu.Add("noEturret", new CheckBox("Dont Jump Turret", true));
             MiscMenu.AddSeparator();
             MiscMenu.Add("LevelUp", new CheckBox("Enable AutoLevel", true));
-            var skin = MiscMenu.Add("sID", new Slider("Skin", 1, 0, 2));
+            var skin = MiscMenu.Add("sID", new Slider("Skin", 0, 0, 2));
             var sID = new[] { "Classic", "High-Noon Yasuo", "Project Yasuo" };
             skin.DisplayName = sID[skin.CurrentValue];
 
@@ -187,10 +187,8 @@ namespace AkaYasuo
             DogeMenu.Add("smartW", new CheckBox("Smart WindWall", true));
             DogeMenu.Add("smartWD", new Slider("Smart WindWall Delay(cast when SPELL is about to hit in x milliseconds)", 3000, 0, 3000));
             DogeMenu.Add("smartEDogue", new CheckBox("E use Doge", true));
-            //DogeMenu.Add("WW", new CheckBox("Use WindWall", true));
+            DogeMenu.Add("smartEDogue", new CheckBox("E use Doge", true));
             DogeMenu.Add("wwDanger", new CheckBox("WindWall only dangerous", true));
-            //DogeMenu.Add("wwDmg", new Slider("WW if does proc HP", 0, 100, 1));
-            //Create the skillshots submenus.
             var skillShots = MainMenu.AddMenu("Enemy Skillshots", "aShotsSkills");
 
             foreach (var hero in ObjectManager.Get<AIHeroClient>())
