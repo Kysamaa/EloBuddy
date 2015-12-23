@@ -124,7 +124,7 @@ namespace Aka_s_Vayne_reworked
             MiscMenu.Add("AntiPanth", new CheckBox("Anti Pantheon"));
             MiscMenu.Add("InterruptE", new CheckBox("Interrupt Spells using E?"));
             MiscMenu.Add("autobuy", new CheckBox("Autobuy Starters/Trinkets"));
-            MiscMenu.Add("skinId", new Slider("Skin Hack", 7, 1, 9));
+            MiscMenu.Add("skinId", new Slider("Skin Hack", 0, 0, 9));
             var dangerSlider = MiscMenu.Add("dangerLevel", new Slider("Set Your Danger Level: ", 3, 1, 3));
             var dangerSliderDisplay = MiscMenu.Add("dangerLevelDisplay",
                 new Label("Danger Level: " + DangerSliderValues[dangerSlider.Cast<Slider>().CurrentValue - 1]));
