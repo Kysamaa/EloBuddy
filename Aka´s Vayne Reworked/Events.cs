@@ -331,7 +331,11 @@ namespace Aka_s_Vayne_reworked
             {
                 heal();
                 autoBuy();
-                LevelUpSpells();
+
+                if (Program.MechanicMenu["autolvl"].Cast<CheckBox>().CurrentValue)
+                {
+                    LevelUpSpells();
+                }
 
                 if (Program.MechanicMenu["skinhack"].Cast<CheckBox>().CurrentValue)
                 {
