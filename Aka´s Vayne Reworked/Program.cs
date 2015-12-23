@@ -152,7 +152,8 @@ namespace Aka_s_Vayne_reworked
             MechanicMenu.AddLabel("1: To Allys 2: To Tower 3: To Mouse");
             MechanicMenu.Add("insecmodes", new Slider("Insec Mode", 1, 1, 3));
             MechanicMenu.AddGroupLabel("Utility");
-            MechanicMenu.Add("skinId", new Slider("Skin Hack", 0, 0, 9));
+            MechanicMenu.Add("skinhack", new CheckBox("Activate Skin hack", false));
+            MechanicMenu.Add("skinId", new Slider("Skin Hack", 1, 1, 9));
             MechanicMenu.Add("autobuy", new CheckBox("Autobuy Starters/Trinkets"));
             MechanicMenu.AddLabel("1: Max W 2: Max Q(my style :3)");
             MechanicMenu.Add("autolvl", new CheckBox("Activate Auto level"));
@@ -219,6 +220,7 @@ namespace Aka_s_Vayne_reworked
             Player.OnIssueOrder += Events.Player_OnIssueOrder;
             Game.OnUpdate += Events.Game_OnTick;
             Obj_AI_Base.OnSpellCast += Events.Obj_AI_Base_OnSpellCast;
+            Orbwalker.OnPostAttack += Events.Orbwalker_OnPostAttack;
 
             ELogic.LoadFlash();
             Drawing.OnDraw += OnDraw;
@@ -333,18 +335,6 @@ namespace Aka_s_Vayne_reworked
 
             var target = TargetSelector.GetTarget(E.Range, DamageType.Physical);
             usetrinket(target);
-            if (Program.CondemnMenu["condemnmethod1"].Cast<CheckBox>().CurrentValue && E.IsReady())
-            {
-                ELogic.Condemn1();
-            }
-            if (Program.CondemnMenu["condemnmethod2"].Cast<CheckBox>().CurrentValue && E.IsReady())
-            {
-                ELogic.Condemn2();
-            }
-            if (Program.CondemnMenu["condemnmethod3"].Cast<CheckBox>().CurrentValue && E.IsReady())
-            {
-                ELogic.Condemn3();
-            }
             if (Program.ComboMenu["comboUseR"].Cast<CheckBox>().CurrentValue && R.IsReady())
             {
                 ComboUltimateLogic();

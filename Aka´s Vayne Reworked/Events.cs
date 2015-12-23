@@ -256,6 +256,22 @@ namespace Aka_s_Vayne_reworked
 
         }
 
+        public static void Orbwalker_OnPostAttack(AttackableUnit target, EventArgs args)
+        {
+            if (Program.CondemnMenu["condemnmethod1"].Cast<CheckBox>().CurrentValue && Program.E.IsReady())
+            {
+                ELogic.Condemn1();
+            }
+            if (Program.CondemnMenu["condemnmethod2"].Cast<CheckBox>().CurrentValue && Program.E.IsReady())
+            {
+                ELogic.Condemn2();
+            }
+            if (Program.CondemnMenu["condemnmethod3"].Cast<CheckBox>().CurrentValue && Program.E.IsReady())
+            {
+                ELogic.Condemn3();
+            }
+        }
+
         public static bool AfterAttack
         {
             get
@@ -314,9 +330,13 @@ namespace Aka_s_Vayne_reworked
         {
             {
                 heal();
-                skinChanger();
                 autoBuy();
                 LevelUpSpells();
+
+                if (Program.MechanicMenu["skinhack"].Cast<CheckBox>().CurrentValue)
+                {
+                    skinChanger();
+                }
 
                 if (Program.MechanicMenu["insece"].Cast<KeyBind>().CurrentValue)
                 {
