@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -87,10 +88,12 @@ namespace Aka_s_Vayne_reworked
 
         public static void Obj_AI_Base_OnBuffGain(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
         {
-            if (Program.ComboMenu["orbwalk"].Cast<CheckBox>().CurrentValue && sender.IsMe && args.Buff.Name == "vaynetumblebonus")
+            if (sender.IsMe && args.Buff.Name == "vaynetumblebonus")
             {
                 lastaa = 0;
             }
+
+            if (!sender.IsMe) return;
 
             if (args.Buff.Type == BuffType.Taunt && Program.ItemMenu["Taunt"].Cast<CheckBox>().CurrentValue)
             {
@@ -153,16 +156,17 @@ namespace Aka_s_Vayne_reworked
 
         private static void DoQSS()
         {
-            if (Program.Qss.IsOwned() && Program.Qss.IsReady())
+            if (Program.Qss.IsOwned() && Program.Qss.IsReady() && _Player.CountEnemiesInRange(1800) > 0)
             {
                 Core.DelayAction(() => Program.Qss.Cast(), Program.ItemMenu["delay"].Cast<Slider>().CurrentValue);
             }
 
-            if (Program.Mercurial.IsOwned() && Program.Mercurial.IsReady())
+            if (Program.Mercurial.IsOwned() && Program.Mercurial.IsReady() && _Player.CountEnemiesInRange(1800) > 0)
             {
                 Core.DelayAction(() => Program.Mercurial.Cast(), Program.ItemMenu["delay"].Cast<Slider>().CurrentValue);
             }
         }
+
         private static void UltQSS()
         {
             if (Program.Qss.IsOwned() && Program.Qss.IsReady())
@@ -203,14 +207,14 @@ namespace Aka_s_Vayne_reworked
             if (!sender.IsMe) return;
             if (args.SData.Name.ToLower().Contains("vaynetumble"))
             {
-                Core.DelayAction(Orbwalking.ResetAutoAttackTimer, 250);
+                Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
             }
 
             if (!sender.IsMe) return;
             var mousePos = myHero.Position.Extend2(Game.CursorPos, Program.Q.Range);
             if (args.SData.Name.ToLower().Contains("attack"))
             {
-                Core.DelayAction(Orbwalking.ResetAutoAttackTimer, 250);
+                Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
             }
 
             if (sender is AIHeroClient)
@@ -312,6 +316,12 @@ namespace Aka_s_Vayne_reworked
                 heal();
                 skinChanger();
                 autoBuy();
+                LevelUpSpells();
+
+                if (Program.MechanicMenu["insece"].Cast<KeyBind>().CurrentValue)
+                {
+                    Insec();
+                }
 
                 var target = TargetSelector.GetTarget((int) ObjectManager.Player.GetAutoAttackRange(),
                     DamageType.Physical);
@@ -360,11 +370,16 @@ namespace Aka_s_Vayne_reworked
                         stopmove = true;
                         Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                     }
-                    if (Program.ItemMenu["items"].Cast<CheckBox>().CurrentValue && Target != null &&
+                    if (Program.ItemMenu["botrk"].Cast<CheckBox>().CurrentValue && Target != null &&
                         (Target.Distance(ObjectManager.Player) > 500f ||
                          (ObjectManager.Player.Health/ObjectManager.Player.MaxHealth)*100 <= 95))
                     {
                         Botrk(Target);
+                    }
+                    if (Program.ItemMenu["you"].Cast<CheckBox>().CurrentValue && Target != null &&
+                        (Target.Distance(ObjectManager.Player) > Program.ItemMenu["yous"].Cast<Slider>().CurrentValue))
+                    {
+                        You();
                     }
 
                 }
@@ -373,7 +388,7 @@ namespace Aka_s_Vayne_reworked
                 foreach (var p in positions)
                 {
                     var condemnUnit = ELogic.CondemnCheck(p);
-                    if (condemnUnit != null && Program.CondemnMenu["flashe"].Cast<KeyBind>().CurrentValue)
+                    if (condemnUnit != null && Program.MechanicMenu["flashe"].Cast<KeyBind>().CurrentValue)
                     {
                         Program.E.Cast(condemnUnit);
 
@@ -381,8 +396,6 @@ namespace Aka_s_Vayne_reworked
 
                     }
                 }
-
-
 
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
                 {
@@ -446,6 +459,8 @@ namespace Aka_s_Vayne_reworked
                             TargetSelector2.GetTarget(myHero.AttackRange, TargetSelector2.DamageType.Physical));
                     }
                 }
+
+
             }
         }
 
@@ -640,9 +655,15 @@ namespace Aka_s_Vayne_reworked
                 Item.UseItem(3153, unit);
         }
 
+        private static void You()
+        {
+            if (Item.HasItem(ItemId.Youmuus_Ghostblade) && Item.CanUseItem(ItemId.Youmuus_Ghostblade))
+                Item.UseItem(ItemId.Youmuus_Ghostblade);
+        }
+
         private static void skinChanger()
         {
-            if (Program.MiscMenu["skinId"].Cast<Slider>().CurrentValue != currentSkin)
+            if (Program.MechanicMenu["skinId"].Cast<Slider>().CurrentValue != currentSkin)
             {
                 Player.Instance.SetSkinId(Program.MiscMenu["skinId"].Cast<Slider>().CurrentValue);
                 currentSkin = Program.MiscMenu["skinId"].Cast<Slider>().CurrentValue;
@@ -659,7 +680,7 @@ namespace Aka_s_Vayne_reworked
             }
 
             bought = true;
-            if (Program.MiscMenu["autobuy"].Cast<CheckBox>().CurrentValue)
+            if (Program.MechanicMenu["autobuy"].Cast<CheckBox>().CurrentValue)
             {
                 if (Game.MapId == GameMapId.SummonersRift)
                 {
@@ -689,6 +710,103 @@ namespace Aka_s_Vayne_reworked
             }
 
         }
+
+        private static void Insec()
+        {
+            var mode = (Program.MechanicMenu["insecmodes"].Cast<Slider>().CurrentValue);
+            var target = TargetSelector.GetTarget(1000, DamageType.Magical);
+            if (target != null)
+            {
+                //var targetfuturepos = Prediction.GetPrediction(target, 0.1f).UnitPosition;
+                bool caninsec = Player.Instance.Distance(target) <= 400;
+                switch (mode)
+                {
+                    case 1:
+                        var hero =
+                            HeroManager.Allies.Where(x => !x.IsMe && !x.IsDead)
+                                .OrderByDescending(x => x.Distance(Player.Instance.Position))
+                                .LastOrDefault();
+                        if (hero != null && caninsec &&
+                            Player.Instance.ServerPosition.Distance(hero.Position) + 100 >=
+                            target.Distance(hero.Position))
+                        {
+                            var ePred = Program.E2.GetPrediction(target);
+                            int pushDist = 550;
+                            for (int i = 0; i < pushDist; i += (int)target.BoundingRadius)
+                            {
+                                Vector3 loc3 = ePred.UnitPosition.To2D().Extend(ELogic.GetFlashPos(target, true).To2D(), -i).To3D();
+                                if (loc3.Distance(hero) < hero.Position.Distance(target))
+                                {
+                                    ObjectManager.Player.Spellbook.CastSpell(FlashSlot, ELogic.GetFlashPos(target, true));
+                                    Program.E.Cast(target);
+                                }
+                            }
+                        }
+                        break;
+                    case 2:
+                        var turret =
+                            ObjectManager.Get<Obj_AI_Turret>()
+                                .Where(x => x.IsAlly && !x.IsDead)
+                                .OrderByDescending(x => x.Distance(Player.Instance.Position))
+                                .LastOrDefault();
+                        if (turret != null && caninsec &&
+                            Player.Instance.ServerPosition.Distance(turret.Position) + 100 >=
+                            target.Distance(turret.Position))
+                        {
+                            var ePred = Program.E2.GetPrediction(target);
+                            int pushDist = 550;
+                            for (int i = 0; i < pushDist; i += (int)target.BoundingRadius)
+                            {
+                                Vector3 loc3 = ePred.UnitPosition.To2D().Extend(ELogic.GetFlashPos(target, true).To2D(), -i).To3D();
+                                if (loc3.Distance(turret) < turret.Position.Distance(target))
+                                {
+                                    ObjectManager.Player.Spellbook.CastSpell(FlashSlot, ELogic.GetFlashPos(target, true));
+                                    Program.E.Cast(target);
+                                }
+                            }
+                        }
+                        break;
+                    case 3:
+                        if (caninsec &&
+                            Player.Instance.ServerPosition.Distance(Game.CursorPos) + 100 >=
+                            target.Distance(Game.CursorPos))
+                        {
+                            var ePred = Program.E2.GetPrediction(target);
+                            int pushDist = 550;
+                            for (int i = 0; i < pushDist; i += (int)target.BoundingRadius)
+                            {
+                                Vector3 loc3 = ePred.UnitPosition.To2D().Extend(ELogic.GetFlashPos(target, true).To2D(), -i).To3D();
+                                if (loc3.Distance(Game.CursorPos) < Game.CursorPos.Distance(target))
+                                {
+                                    ObjectManager.Player.Spellbook.CastSpell(FlashSlot, ELogic.GetFlashPos(target, true));
+                                    Program.E.Cast(target);
+                                }
+                            }
+                        }
+                        break;
+
+                }
+            }
+        }
+        // iRaxe <3
+        private static void LevelUpSpells()
+        {
+            var qL = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level + Program.QOff;
+            var wL = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level + Program.WOff;
+            var eL = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level + Program.EOff;
+            var rL = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level + Program.ROff;
+            if (qL + wL + eL + rL >= ObjectManager.Player.Level) return;
+            int[] level = { 0, 0, 0, 0 };
+            for (var i = 0; i < ObjectManager.Player.Level; i++)
+            {
+                level[Program.AbilitySequence[i] - 1] = level[Program.AbilitySequence[i] - 1] + 1;
+            }
+            if (qL < level[0]) ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.Q);
+            if (wL < level[1]) ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.W);
+            if (eL < level[2]) ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.E);
+            if (rL < level[3]) ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.R);
+        }
+
     }
 }
 

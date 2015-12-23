@@ -36,7 +36,8 @@ namespace Aka_s_Vayne_reworked
         public static Spell.Active Heal;
         public static List<Vector2> Points = new List<Vector2>();
         public static Item totem, Qss, Mercurial;
-        public static Activator activator;
+        public static int[] AbilitySequence;
+        public static int QOff = 0, WOff = 0, EOff = 0, ROff = 0;
 
         public static Menu VMenu,
             ComboMenu,
@@ -47,6 +48,7 @@ namespace Aka_s_Vayne_reworked
             JungleClearMenu,
             MiscMenu,
             ItemMenu,
+            MechanicMenu,
             DrawingMenu;
 
         static void Main(string[] args1)
@@ -115,7 +117,7 @@ namespace Aka_s_Vayne_reworked
             LaneClearMenu.Add("LCQ", new CheckBox("Use Q"));
             LaneClearMenu.Add("LCQMana", new Slider("Maximum mana usage in percent ({0}%)", 40));
 
-            MiscMenu = VMenu.AddSubMenu("MiscMenu", "MiscMenu");
+            MiscMenu = VMenu.AddSubMenu("Misc", "Misc");
             MiscMenu.AddGroupLabel("Misc");
             MiscMenu.AddLabel("Credits to Fluxy:");
             MiscMenu.Add("GapcloseE", new CheckBox("Gapclose E"));
@@ -123,8 +125,6 @@ namespace Aka_s_Vayne_reworked
             MiscMenu.Add("AntiKalista", new CheckBox("Anti Kalista"));
             MiscMenu.Add("AntiPanth", new CheckBox("Anti Pantheon"));
             MiscMenu.Add("InterruptE", new CheckBox("Interrupt Spells using E?"));
-            MiscMenu.Add("autobuy", new CheckBox("Autobuy Starters/Trinkets"));
-            MiscMenu.Add("skinId", new Slider("Skin Hack", 0, 0, 9));
             var dangerSlider = MiscMenu.Add("dangerLevel", new Slider("Set Your Danger Level: ", 3, 1, 3));
             var dangerSliderDisplay = MiscMenu.Add("dangerLevelDisplay",
                 new Label("Danger Level: " + DangerSliderValues[dangerSlider.Cast<Slider>().CurrentValue - 1]));
@@ -142,12 +142,24 @@ namespace Aka_s_Vayne_reworked
             CondemnMenu.Add("condemnmethod2", new CheckBox("Condemn 2(VHR)", false));
             CondemnMenu.Add("condemnmethod3", new CheckBox("Condemn 3(Fluxy)"));
             CondemnMenu.Add("condemnPercent", new Slider("Condemn 3(Fluxy) Hitchance %", 33, 1));
-            CondemnMenu.Add("flashe", new KeyBind("Flash E!", false, KeyBind.BindTypes.HoldActive, 'Y'));
             CondemnMenu.Add("trinket", new CheckBox("Use trinket bush?"));
             CondemnMenu.Add("pushDistance", new Slider("Condemn Push Distance", 410, 350, 420));
 
+            MechanicMenu = VMenu.AddSubMenu("Extras", "Extras");
+            MechanicMenu.AddGroupLabel("Mechanics");
+            MechanicMenu.Add("flashe", new KeyBind("Flash Condemn!", false, KeyBind.BindTypes.HoldActive, 'Y'));
+            MechanicMenu.Add("insece", new KeyBind("Flash Insec!", false, KeyBind.BindTypes.HoldActive, 'Z'));
+            MechanicMenu.AddLabel("1: To Allys 2: To Tower 3: To Mouse");
+            MechanicMenu.Add("insecmodes", new Slider("Insec Mode", 1, 1, 3));
+            MechanicMenu.AddGroupLabel("Utility");
+            MechanicMenu.Add("skinId", new Slider("Skin Hack", 0, 0, 9));
+            MechanicMenu.Add("autobuy", new CheckBox("Autobuy Starters/Trinkets"));
+            MechanicMenu.AddLabel("1: Max W 2: Max Q(my style :3)");
+            MechanicMenu.Add("autolvl", new CheckBox("Activate Auto level"));
+            MechanicMenu.Add("autolvls", new Slider("Level Mode", 1, 1, 2));
+
             DrawingMenu = VMenu.AddSubMenu("Drawings", "Drawings");
-            DrawingMenu.AddGroupLabel("Drawings?");
+            DrawingMenu.AddGroupLabel("Drawings");
             DrawingMenu.Add("DrawQ", new CheckBox("Draw Q", false));
             DrawingMenu.Add("DrawE", new CheckBox("Draw E", false));
             DrawingMenu.Add("DrawOnlyReady", new CheckBox("Draw Only if Spells are ready"));
@@ -155,7 +167,9 @@ namespace Aka_s_Vayne_reworked
             ItemMenu = VMenu.AddSubMenu("Activator", "Activator");
             ItemMenu.AddGroupLabel("Items");
             ItemMenu.AddLabel("Ask me if you need more Items.");
-            ItemMenu.Add("items", new CheckBox("Use Botrk & Bilge"));
+            ItemMenu.Add("botrk", new CheckBox("Use Botrk & Bilge"));
+            ItemMenu.Add("you", new CheckBox("Use Yoummmus"));
+            ItemMenu.Add("yous", new Slider("if distance >", 1000, 0, 1500));
             ItemMenu.AddGroupLabel("Summoners");
             ItemMenu.AddLabel("Ask me if you need more Summoners.");
             ItemMenu.Add("heal", new CheckBox("Heal"));
@@ -183,6 +197,17 @@ namespace Aka_s_Vayne_reworked
                 new CheckBox("Taunt"));
             ItemMenu.Add("Suppression",
                 new CheckBox("Suppression"));
+
+            switch (MechanicMenu["autolvls"].Cast<Slider>().CurrentValue)
+            {
+                case 1:
+                    AbilitySequence = new[] { 1, 3, 2, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3 };
+                    break;
+                case 2:
+                    AbilitySequence = new[] { 1, 3, 2, 1, 1, 4, 1, 2, 1, 2, 4, 2, 2, 3, 3, 4, 3, 3 };
+                    break;
+            }
+
 
             Gapcloser.OnGapcloser += Events.Gapcloser_OnGapCloser;
             Interrupter.OnInterruptableSpell += Events.Interrupter_OnInterruptableSpell;

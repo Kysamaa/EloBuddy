@@ -227,6 +227,14 @@ namespace AddonTemplate.Logic
             }
         }
 
+        public static Vector3 GetFlashPos(AIHeroClient target, bool serverPos, int distance = 150)
+        {
+            var enemyPos = serverPos ? target.ServerPosition : target.Position;
+            var myPos = serverPos ? ObjectManager.Player.ServerPosition : ObjectManager.Player.Position;
+
+            return enemyPos + Vector3.Normalize(enemyPos - myPos) * distance;
+        }
+
         public static AIHeroClient CondemnCheck(Vector3 fromPosition)
         {
             var HeroList = HeroManager.Enemies.Where(
