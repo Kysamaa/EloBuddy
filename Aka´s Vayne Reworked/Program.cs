@@ -35,7 +35,7 @@ namespace Aka_s_Vayne_reworked
         public static Spell.Active R;
         public static Spell.Active Heal;
         public static List<Vector2> Points = new List<Vector2>();
-        public static Item totem;
+        public static Item totem, Qss, Mercurial;
         public static Activator activator;
 
         public static Menu VMenu,
@@ -46,6 +46,7 @@ namespace Aka_s_Vayne_reworked
             LaneClearMenu,
             JungleClearMenu,
             MiscMenu,
+            ItemMenu,
             DrawingMenu;
 
         static void Main(string[] args1)
@@ -68,6 +69,8 @@ namespace Aka_s_Vayne_reworked
                 Heal = new Spell.Active(slot, 600);
             }
             totem = new Item((int)ItemId.Warding_Totem_Trinket);
+            Qss = new Item((int)ItemId.Quicksilver_Sash);
+            Mercurial = new Item((int)ItemId.Mercurial_Scimitar);
 
             VMenu = MainMenu.AddMenu("Aka´s Vayne", "akavayne");
             VMenu.AddGroupLabel("Welcome to my Vayne Addon have fun! :)");
@@ -149,7 +152,37 @@ namespace Aka_s_Vayne_reworked
             DrawingMenu.Add("DrawE", new CheckBox("Draw E", false));
             DrawingMenu.Add("DrawOnlyReady", new CheckBox("Draw Only if Spells are ready"));
 
-            //activator = new Activator(VMenu);
+            ItemMenu = VMenu.AddSubMenu("Activator", "Activator");
+            ItemMenu.AddGroupLabel("Items");
+            ItemMenu.AddLabel("Ask me if you need more Items.");
+            ItemMenu.Add("items", new CheckBox("Use Botrk & Bilge"));
+            ItemMenu.AddGroupLabel("Summoners");
+            ItemMenu.AddLabel("Ask me if you need more Summoners.");
+            ItemMenu.Add("heal", new CheckBox("Heal"));
+            ItemMenu.Add("hp", new Slider("Heal if my HP <=", 20, 0, 100));
+            ItemMenu.Add("healally", new CheckBox("Heal ally"));
+            ItemMenu.Add("hpally", new Slider("Heal if ally HP <=", 20, 0, 100));
+            ItemMenu.AddGroupLabel("Qss");
+            ItemMenu.Add("qss", new CheckBox("Use Qss"));
+            ItemMenu.Add("delay", new Slider("Delay", 1000, 0, 2000));
+            ItemMenu.Add("Blind",
+                new CheckBox("Blind", false));
+            ItemMenu.Add("Charm",
+                new CheckBox("Charm"));
+            ItemMenu.Add("Fear",
+                new CheckBox("Fear"));
+            ItemMenu.Add("Polymorph",
+                new CheckBox("Polymorph"));
+            ItemMenu.Add("Stun",
+                new CheckBox("Stun"));
+            ItemMenu.Add("Snare",
+                new CheckBox("Snare"));
+            ItemMenu.Add("Silence",
+                new CheckBox("Silence", false));
+            ItemMenu.Add("Taunt",
+                new CheckBox("Taunt"));
+            ItemMenu.Add("Suppression",
+                new CheckBox("Suppression"));
 
             Gapcloser.OnGapcloser += Events.Gapcloser_OnGapCloser;
             Interrupter.OnInterruptableSpell += Events.Interrupter_OnInterruptableSpell;
@@ -223,8 +256,13 @@ namespace Aka_s_Vayne_reworked
 
         public static void Harass()
         {
-            var target = TargetSelector.GetTarget((int)ObjectManager.Player.GetAutoAttackRange(),
-       DamageType.Physical);
+            var target = TargetSelector.GetTarget((int) ObjectManager.Player.GetAutoAttackRange(),
+                DamageType.Physical);
+
+            if (target == null)
+            {
+                return;
+            }
 
             if (ObjectManager.Player.ManaPercent < HarassMenu["ManaHarass"].Cast<Slider>().CurrentValue)
                 return;
@@ -236,7 +274,15 @@ namespace Aka_s_Vayne_reworked
             {
                 SilverStackE();
             }
+            if (Events.AfterAttack && HarassMenu["UseCHarass"].Cast<CheckBox>().CurrentValue && Q.IsReady() && E.IsReady())
+            {
+                Orbwalker.ForcedTarget = target;
+                Player.CastSpell(SpellSlot.Q, QLogic.GetTumblePos(target));
+                E2.Cast(target.Position);
+            }
+
         }
+
         public static void SilverStackQ()
         {
             foreach (AIHeroClient qTarget in HeroManager.Enemies.Where(x => x.IsValidTarget(550)))

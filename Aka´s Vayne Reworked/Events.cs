@@ -17,21 +17,24 @@ using AddonTemplate.Logic;
 
 namespace Aka_s_Vayne_reworked
 {
-    class Events
+    internal class Events
     {
-        static int currentSkin = 0;
-        static bool bought = false;
-        static int ticks = 0;
+        private static int currentSkin = 0;
+        private static bool bought = false;
+        private static int ticks = 0;
 
-        public static AIHeroClient myHero { get { return ObjectManager.Player; } }
+        public static AIHeroClient myHero
+        {
+            get { return ObjectManager.Player; }
+        }
 
         public static bool VayneUltiIsActive { get; set; }
 
         public static SpellSlot FlashSlot;
 
-        static float lastaa, lastaaclick;
+        private static float lastaa, lastaaclick;
 
-        static bool stopmove;
+        private static bool stopmove;
 
         public static AIHeroClient _Player
         {
@@ -46,7 +49,7 @@ namespace Aka_s_Vayne_reworked
             {
                 Program.E.Cast(sender);
             }
-            
+
         }
 
         public static void GameObject_OnCreate(GameObject sender, EventArgs args)
@@ -64,7 +67,8 @@ namespace Aka_s_Vayne_reworked
         {
             if (!(sender is AIHeroClient)) return;
             var target = (AIHeroClient) sender;
-            if (Program.MiscMenu["AntiKalista"].Cast<CheckBox>().CurrentValue && target.IsEnemy && target.Hero == Champion.Kalista && Program.Q.IsReady())
+            if (Program.MiscMenu["AntiKalista"].Cast<CheckBox>().CurrentValue && target.IsEnemy &&
+                target.Hero == Champion.Kalista && Program.Q.IsReady())
             {
                 var pos = (_Player.Position.Extend(Game.CursorPos, 300).Distance(target) <=
                            _Player.GetAutoAttackRange(target) &&
@@ -83,9 +87,92 @@ namespace Aka_s_Vayne_reworked
 
         public static void Obj_AI_Base_OnBuffGain(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
         {
-            if (sender.IsMe && args.Buff.Name == "vaynetumblebonus")
+            if (Program.ComboMenu["orbwalk"].Cast<CheckBox>().CurrentValue && sender.IsMe && args.Buff.Name == "vaynetumblebonus")
             {
                 lastaa = 0;
+            }
+
+            if (args.Buff.Type == BuffType.Taunt && Program.ItemMenu["Taunt"].Cast<CheckBox>().CurrentValue)
+            {
+                DoQSS();
+            }
+            if (args.Buff.Type == BuffType.Stun && Program.ItemMenu["Stun"].Cast<CheckBox>().CurrentValue)
+            {
+                DoQSS();
+            }
+            if (args.Buff.Type == BuffType.Snare && Program.ItemMenu["Snare"].Cast<CheckBox>().CurrentValue)
+            {
+                DoQSS();
+            }
+            if (args.Buff.Type == BuffType.Polymorph && Program.ItemMenu["Polymorph"].Cast<CheckBox>().CurrentValue)
+            {
+                DoQSS();
+            }
+            if (args.Buff.Type == BuffType.Blind && Program.ItemMenu["Blind"].Cast<CheckBox>().CurrentValue)
+            {
+                DoQSS();
+            }
+            if (args.Buff.Type == BuffType.Flee && Program.ItemMenu["Fear"].Cast<CheckBox>().CurrentValue)
+            {
+                DoQSS();
+            }
+            if (args.Buff.Type == BuffType.Charm && Program.ItemMenu["Charm"].Cast<CheckBox>().CurrentValue)
+            {
+                DoQSS();
+            }
+            if (args.Buff.Type == BuffType.Suppression && Program.ItemMenu["Suppression"].Cast<CheckBox>().CurrentValue)
+            {
+                DoQSS();
+            }
+            if (args.Buff.Type == BuffType.Silence && Program.ItemMenu["Silence"].Cast<CheckBox>().CurrentValue)
+            {
+                DoQSS();
+            }
+            if (args.Buff.Name == "zedulttargetmark")
+            {
+                UltQSS();
+            }
+            if (args.Buff.Name == "VladimirHemoplague")
+            {
+                UltQSS();
+            }
+            if (args.Buff.Name == "FizzMarinerDoom")
+            {
+                UltQSS();
+            }
+            if (args.Buff.Name == "MordekaiserChildrenOfTheGrave")
+            {
+                UltQSS();
+            }
+            if (args.Buff.Name == "PoppyDiplomaticImmunity")
+            {
+                UltQSS();
+            }
+
+        }
+
+        private static void DoQSS()
+        {
+            if (Program.Qss.IsOwned() && Program.Qss.IsReady())
+            {
+                Core.DelayAction(() => Program.Qss.Cast(), Program.ItemMenu["delay"].Cast<Slider>().CurrentValue);
+            }
+
+            if (Program.Mercurial.IsOwned() && Program.Mercurial.IsReady())
+            {
+                Core.DelayAction(() => Program.Mercurial.Cast(), Program.ItemMenu["delay"].Cast<Slider>().CurrentValue);
+            }
+        }
+        private static void UltQSS()
+        {
+            if (Program.Qss.IsOwned() && Program.Qss.IsReady())
+            {
+                Core.DelayAction(() => Program.Qss.Cast(), Program.ItemMenu["delay"].Cast<Slider>().CurrentValue);
+            }
+
+            if (Program.Mercurial.IsOwned() && Program.Mercurial.IsReady())
+            {
+                Core.DelayAction(() => Program.Mercurial.Cast(), Program.ItemMenu["delay"].Cast<Slider>().CurrentValue);
             }
         }
 
@@ -128,8 +215,9 @@ namespace Aka_s_Vayne_reworked
 
             if (sender is AIHeroClient)
             {
-                var pant = (AIHeroClient)sender;
-                if (pant.IsValidTarget(myHero.GetAutoAttackRange()) && pant.ChampionName == "Pantheon" && pant.GetSpellSlotFromName(args.SData.Name) == SpellSlot.W)
+                var pant = (AIHeroClient) sender;
+                if (pant.IsValidTarget(myHero.GetAutoAttackRange()) && pant.ChampionName == "Pantheon" &&
+                    pant.GetSpellSlotFromName(args.SData.Name) == SpellSlot.W)
                 {
                     if (Program.MiscMenu["AntiPanth"].Cast<CheckBox>().CurrentValue && args.Target.IsMe)
                     {
@@ -152,14 +240,14 @@ namespace Aka_s_Vayne_reworked
                 }
             }
         }
-    
+
 
         public static void Obj_AI_Base_OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe)
             {
                 stopmove = false;
-                lastaa = Game.Time * 1000;
+                lastaa = Game.Time*1000;
             }
 
         }
@@ -168,8 +256,9 @@ namespace Aka_s_Vayne_reworked
         {
             get
             {
-                if (Game.Time * 1000 <
-                    lastaa + ObjectManager.Player.AttackDelay * 1000 - ObjectManager.Player.AttackDelay * 1000 / 1.5 && Game.Time * 1000 > lastaa + ObjectManager.Player.AttackCastDelay * 1000)
+                if (Game.Time*1000 <
+                    lastaa + ObjectManager.Player.AttackDelay*1000 - ObjectManager.Player.AttackDelay*1000/1.5 &&
+                    Game.Time*1000 > lastaa + ObjectManager.Player.AttackCastDelay*1000)
                 {
                     return true;
                 }
@@ -181,7 +270,10 @@ namespace Aka_s_Vayne_reworked
         {
             get
             {
-                if (Game.Time * 1000 > lastaa + ObjectManager.Player.AttackDelay * 1000 - ObjectManager.Player.AttackDelay * 1000 / 2 && Game.Time * 1000 < lastaa + ObjectManager.Player.AttackDelay * 1000 - ObjectManager.Player.AttackDelay * 1000 / 4)
+                if (Game.Time*1000 >
+                    lastaa + ObjectManager.Player.AttackDelay*1000 - ObjectManager.Player.AttackDelay*1000/2 &&
+                    Game.Time*1000 <
+                    lastaa + ObjectManager.Player.AttackDelay*1000 - ObjectManager.Player.AttackDelay*1000/4)
                 {
                     return true;
                 }
@@ -193,14 +285,17 @@ namespace Aka_s_Vayne_reworked
         {
             if (sender.IsMe && args.Order.HasFlag(GameObjectOrder.AttackUnit))
             {
-                lastaaclick = Game.Time * 1000;
+                lastaaclick = Game.Time*1000;
             }
 
             if (sender.IsMe
-     && (args.Order == GameObjectOrder.AttackUnit || args.Order == GameObjectOrder.AttackTo)
-     && (Program.ComboMenu["RnoAA"].Cast<CheckBox>().CurrentValue && ObjectManager.Player.CountEnemiesInRange(1000f) > Program.ComboMenu["RnoAAs"].Cast<Slider>().CurrentValue)
-     && UltActive() || ObjectManager.Player.HasBuffOfType(BuffType.Invisibility)
-     && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                && (args.Order == GameObjectOrder.AttackUnit || args.Order == GameObjectOrder.AttackTo)
+                &&
+                (Program.ComboMenu["RnoAA"].Cast<CheckBox>().CurrentValue &&
+                 ObjectManager.Player.CountEnemiesInRange(1000f) >
+                 Program.ComboMenu["RnoAAs"].Cast<Slider>().CurrentValue)
+                && UltActive() || ObjectManager.Player.HasBuffOfType(BuffType.Invisibility)
+                && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
                 args.Process = false;
             }
@@ -214,6 +309,7 @@ namespace Aka_s_Vayne_reworked
         public static void Game_OnTick(EventArgs args)
         {
             {
+                heal();
                 skinChanger();
                 autoBuy();
 
@@ -245,14 +341,6 @@ namespace Aka_s_Vayne_reworked
                             Player.CastSpell(SpellSlot.Q, Game.CursorPos);
                         }
                     }
-                    if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
-                    {
-                        if (Events.AfterAttack && Program.HarassMenu["UseCHarass"].Cast<CheckBox>().CurrentValue)
-                        {
-                            Player.CastSpell(SpellSlot.Q, QLogic.GetTumblePos(target));
-                            Program.E.Cast(target);
-                        }
-                    }
                     if (stopmove && Game.Time*1000 > lastaaclick + ObjectManager.Player.AttackCastDelay*1000)
                     {
                         stopmove = false;
@@ -272,6 +360,12 @@ namespace Aka_s_Vayne_reworked
                         stopmove = true;
                         Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                     }
+                    if (Program.ItemMenu["items"].Cast<CheckBox>().CurrentValue && Target != null &&
+                        (Target.Distance(ObjectManager.Player) > 500f ||
+                         (ObjectManager.Player.Health/ObjectManager.Player.MaxHealth)*100 <= 95))
+                    {
+                        Botrk(Target);
+                    }
 
                 }
                 var positions = ELogic.GetRotatedFlashPositions();
@@ -288,9 +382,9 @@ namespace Aka_s_Vayne_reworked
                     }
                 }
 
-          
 
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
                 {
                     Program.Harass();
                 }
@@ -355,12 +449,31 @@ namespace Aka_s_Vayne_reworked
             }
         }
 
-
-
-        static
-                void EloBuddyOrbDisabler()
+        private static bool CanUseBotrk
         {
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
+            get
+            {
+                if (Game.Time*1000 >=
+                    lastaa + ObjectManager.Player.AttackDelay*1000 - ObjectManager.Player.AttackDelay*1000/1.5 &&
+                    Game.Time*1000 <
+                    lastaa + ObjectManager.Player.AttackDelay*1000 - ObjectManager.Player.AttackDelay*1000/1.7 &&
+                    Game.Time*1000 > lastaa + ObjectManager.Player.AttackCastDelay*1000)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        private static
+            void EloBuddyOrbDisabler()
+
+        {
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass) ||
+                Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) ||
+                Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit) ||
+                Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear) ||
+                Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
             {
                 if (Orbwalker.DisableAttacking)
                 {
@@ -388,30 +501,37 @@ namespace Aka_s_Vayne_reworked
         {
             get
             {
-                return ObjectManager.Get<AIHeroClient>().Where(enemy => !enemy.IsDead && enemy.IsValidTarget((Program.Q.IsReady() ? Program.Q.Range : 0) + myHero.AttackRange + 300))
-                       .FirstOrDefault(
-                           enemy => enemy.Buffs.Any(buff => buff.Name == "vaynesilvereddebuff" && buff.Count > 0));
+                return ObjectManager.Get<AIHeroClient>()
+                    .Where(
+                        enemy =>
+                            !enemy.IsDead &&
+                            enemy.IsValidTarget((Program.Q.IsReady() ? Program.Q.Range : 0) + myHero.AttackRange + 300))
+                    .FirstOrDefault(
+                        enemy => enemy.Buffs.Any(buff => buff.Name == "vaynesilvereddebuff" && buff.Count > 0));
             }
         }
 
         public static void Obj_AI_Base_OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe) return;
-            var target = (Obj_AI_Base)args.Target;
+            var target = (Obj_AI_Base) args.Target;
 
-            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && Program.LaneClearMenu["LCQ"].Cast<CheckBox>().CurrentValue) &&
-                    Program.Q.IsReady())
-                {
+            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) &&
+                 Program.LaneClearMenu["LCQ"].Cast<CheckBox>().CurrentValue) &&
+                Program.Q.IsReady())
+            {
                 if (Orbwalker.CanAutoAttack)
                 {
                     return;
                 }
                 foreach (var minion in EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy,
-                                Player.Instance.ServerPosition, ObjectManager.Player.GetAutoAttackRange()))
+                    Player.Instance.ServerPosition, ObjectManager.Player.GetAutoAttackRange()))
                 {
                     if (minion == null) return;
-                    var dmg = Player.Instance.GetSpellDamage(minion, SpellSlot.Q) + Player.Instance.GetAutoAttackDamage(minion);
-                    if (Prediction.Health.GetPrediction(minion, (int)(Player.Instance.AttackDelay * 1000)) <= dmg / 2 && (Orbwalker.LastTarget == null || Orbwalker.LastTarget.NetworkId != minion.NetworkId))
+                    var dmg = Player.Instance.GetSpellDamage(minion, SpellSlot.Q) +
+                              Player.Instance.GetAutoAttackDamage(minion);
+                    if (Prediction.Health.GetPrediction(minion, (int) (Player.Instance.AttackDelay*1000)) <= dmg/2 &&
+                        (Orbwalker.LastTarget == null || Orbwalker.LastTarget.NetworkId != minion.NetworkId))
                     {
 
                         Player.CastSpell(SpellSlot.Q, Game.CursorPos);
@@ -420,12 +540,17 @@ namespace Aka_s_Vayne_reworked
             }
             var LastHitE = myHero;
 
-            foreach (var Etarget in EntityManager.Heroes.Enemies.Where(Etarget => Etarget.IsValidTarget(Program.E.Range) && Etarget.Path.Count() < 2))
+            foreach (
+                var Etarget in
+                    EntityManager.Heroes.Enemies.Where(
+                        Etarget => Etarget.IsValidTarget(Program.E.Range) && Etarget.Path.Count() < 2))
             {
-                if (Program.ComboMenu["Ekill"].Cast<CheckBox>().CurrentValue && Program.E.IsReady() && myHero.CountEnemiesInRange2(600) <= 1)
+                if (Program.ComboMenu["Ekill"].Cast<CheckBox>().CurrentValue && Program.E.IsReady() &&
+                    myHero.CountEnemiesInRange2(600) <= 1)
                 {
                     var dmgE = myHero.GetSpellDamage2(Etarget, SpellSlot.E);
-                    if (dmgE > Etarget.Health || (Damages.WTarget(Etarget) == 2 && dmgE + Damages.Wdmg(Etarget) > Etarget.Health))
+                    if (dmgE > Etarget.Health ||
+                        (Damages.WTarget(Etarget) == 2 && dmgE + Damages.Wdmg(Etarget) > Etarget.Health))
                     {
                         LastHitE = Etarget;
 
@@ -459,17 +584,18 @@ namespace Aka_s_Vayne_reworked
 
         }
 
-        static AIHeroClient Target
+        private static AIHeroClient Target
         {
             get
             {
                 foreach (var unit in EntityManager.Heroes.Enemies.
                     OrderBy(
                         x =>
-                            x.Health * (x.Armor / (x.Armor + 100)) - x.TotalAttackDamage * x.AttackSpeedMod -
+                            x.Health*(x.Armor/(x.Armor + 100)) - x.TotalAttackDamage*x.AttackSpeedMod -
                             x.TotalMagicalDamage).Where(x =>
-                                Extensions.IsValidTarget(x, ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius +
-                                                x.BoundingRadius)
+                                Extensions.IsValidTarget(x,
+                                    ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius +
+                                    x.BoundingRadius)
                                 && x.Health > 0
                                 && !x.IsDead
                                 && x.IsVisible
@@ -506,6 +632,14 @@ namespace Aka_s_Vayne_reworked
 
         }
 
+        private static void Botrk(Obj_AI_Base unit)
+        {
+            if (Item.HasItem(3144) && Item.CanUseItem(3144) && CanUseBotrk)
+                Item.UseItem(3144, unit);
+            if (Item.HasItem(3153) && Item.CanUseItem(3153) && CanUseBotrk)
+                Item.UseItem(3153, unit);
+        }
+
         private static void skinChanger()
         {
             if (Program.MiscMenu["skinId"].Cast<Slider>().CurrentValue != currentSkin)
@@ -518,7 +652,7 @@ namespace Aka_s_Vayne_reworked
         private static void autoBuy()
         {
 
-            if (bought || ticks / Game.TicksPerSecond < 3)
+            if (bought || ticks/Game.TicksPerSecond < 3)
             {
                 ticks++;
                 return;
@@ -536,7 +670,25 @@ namespace Aka_s_Vayne_reworked
             }
         }
 
-    }
+        private static void heal()
+        {
 
+            if (Program.ItemMenu["heal"].Cast<CheckBox>().CurrentValue &&
+                _Player.HealthPercent <= Program.ItemMenu["hp"].Cast<Slider>().CurrentValue)
+            {
+                Program.Heal.Cast();
+            }
+            foreach (
+                var ally in EntityManager.Heroes.Allies.Where(a => !a.IsDead))
+            {
+                if (Program.ItemMenu["healally"].Cast<CheckBox>().CurrentValue && _Player.Position.Distance(ally) < 600 &&
+                    ally.HealthPercent <= Program.ItemMenu["hpally"].Cast<Slider>().CurrentValue)
+                {
+                    Program.Heal.Cast();
+                }
+            }
+
+        }
     }
+}
 
