@@ -152,7 +152,7 @@ namespace Aka_s_Vayne_reworked
             MechanicMenu.AddLabel("1: To Allys 2: To Tower 3: To Mouse");
             MechanicMenu.Add("insecmodes", new Slider("Insec Mode", 1, 1, 3));
             MechanicMenu.AddGroupLabel("Utility");
-            MechanicMenu.Add("skinhack", new CheckBox("Activate Skin hack", false));
+            MechanicMenu.Add("skinhack", new CheckBox("Activate Skin hack(disabled atm)", false));
             MechanicMenu.Add("skinId", new Slider("Skin Hack", 1, 1, 9));
             MechanicMenu.Add("autobuy", new CheckBox("Autobuy Starters/Trinkets"));
             MechanicMenu.AddLabel("1: Max W 2: Max Q(my style :3)");
