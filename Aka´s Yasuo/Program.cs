@@ -99,7 +99,6 @@ namespace AkaYasuo
             Mercurial = new Item((int)ItemId.Mercurial_Scimitar);
 
             //Fluxy's TargetSelector2
-            TargetSelector2.init();
 
             menu = MainMenu.AddMenu("Aka´s Yasuo", "akasyasuo");
             menu.AddGroupLabel("Welcome to my Yasuo Addon have fun! :)");
@@ -126,12 +125,12 @@ namespace AkaYasuo
             ComboMenu.Add("AutoR2HP", new Slider("and my HP is >=", 101, 0, 101));
             ComboMenu.Add("AutoR2Enemies", new Slider("and Enemies in range <=", 2, 0, 5));
 
-           HarassMenu = menu.AddSubMenu("Harass", "Harass");
-           HarassMenu.Add("AutoQ", new KeyBind("Auto Q Toggle", true, KeyBind.BindTypes.PressToggle, 'G'));
-           HarassMenu.Add("Q", new CheckBox("Use Q", true));
-           HarassMenu.Add("Q3", new CheckBox("Use Q3", true));
-           HarassMenu.Add("E", new CheckBox("Use E", true));
-           HarassMenu.Add("QunderTower", new CheckBox("Auto Q UnderTower", true));
+            HarassMenu = menu.AddSubMenu("Harass", "Harass");
+            HarassMenu.Add("AutoQ", new KeyBind("Auto Q Toggle", true, KeyBind.BindTypes.PressToggle, 'G'));
+            HarassMenu.Add("Q", new CheckBox("Use Q", true));
+            HarassMenu.Add("Q3", new CheckBox("Use Q3", true));
+            HarassMenu.Add("E", new CheckBox("Use E", true));
+            HarassMenu.Add("QunderTower", new CheckBox("Auto Q UnderTower", true));
 
             LastHitMenu = menu.AddSubMenu("LastHit", "LastHit");
             LastHitMenu.Add("Q", new CheckBox("Use Q", true));
@@ -183,10 +182,8 @@ namespace AkaYasuo
             DrawingMenu.Add("DrawSpots", new CheckBox("Draw Walljump spots", true));
 
             DogeMenu = menu.AddSubMenu("Doge", "Doge");
-            //SmartW
             DogeMenu.Add("smartW", new CheckBox("Smart WindWall", true));
             DogeMenu.Add("smartWD", new Slider("Smart WindWall Delay(cast when SPELL is about to hit in x milliseconds)", 3000, 0, 3000));
-            DogeMenu.Add("smartEDogue", new CheckBox("E use Doge", true));
             DogeMenu.Add("smartEDogue", new CheckBox("E use Doge", true));
             DogeMenu.Add("wwDanger", new CheckBox("WindWall only dangerous", true));
             var skillShots = MainMenu.AddMenu("Enemy Skillshots", "aShotsSkills");

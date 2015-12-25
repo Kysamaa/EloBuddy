@@ -1,3 +1,0 @@
-C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Vayne\bin\Debug\Akas Jarvan.exe.config
-C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Vayne\obj\Debug\Akas Jarvan.exe
-C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Vayne\obj\Debug\Akas Jarvan.pdb
