@@ -65,7 +65,7 @@ namespace AddonTemplate.Logic
 
             if (!cursorPos.IsDangerousPosition()) return cursorPos;
             //if the target is not a melee and he's alone he's not really a danger to us, proceed to 1v1 him :^ )
-            if (!target.IsMelee && ObjectManager.Player.CountEnemiesInRange2(800) == 1) return cursorPos;
+            if (!target.IsMelee && ObjectManager.Player.CountEnemiesInRange(800) == 1) return cursorPos;
 
             var aRC = new QGeometry.Circle(ObjectManager.Player.ServerPosition.To2D2(), 300).ToPolygon().ToClipperPath();
             var targetPosition = target.ServerPosition;
@@ -86,7 +86,7 @@ namespace AddonTemplate.Logic
                     if (!v3.IsDangerousPosition() && v3.Distance6(targetPosition) < 550 - additionalDistance) pList.Add(v3);
                 }
             }
-            if (ObjectManager.Player.UnderTurret() || ObjectManager.Player.CountEnemiesInRange2(800) == 1)
+            if (ObjectManager.Player.UnderTurret() || ObjectManager.Player.CountEnemiesInRange(800) == 1)
             {
                 return pList.Count > 1 ? pList.OrderBy(el => el.Distance6(cursorPos)).FirstOrDefault() : Vector3.Zero;
             }
@@ -103,7 +103,7 @@ namespace AddonTemplate.Logic
             {
                 if (Program.JungleClearMenu["JCQ"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.Q.Range))             
                 {
-                    Player.CastSpell(SpellSlot.Q, ObjectManager.Player.GetTumblePos());
+                    QLogic.Cast(Player.Instance.GetTumblePos());
                 }
             }
         }

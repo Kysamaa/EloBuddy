@@ -330,7 +330,11 @@ namespace Aka_s_Vayne_reworked
         {
             {
                 heal();
-                autoBuy();
+
+                if (Program.MechanicMenu["autobuy"].Cast<CheckBox>().CurrentValue)
+                {
+                    autoBuy();
+                }
 
                 if (Program.MechanicMenu["autolvl"].Cast<CheckBox>().CurrentValue)
                 {
@@ -347,7 +351,7 @@ namespace Aka_s_Vayne_reworked
                     Insec();
                 }
 
-                var target = TargetSelector.GetTarget((int) ObjectManager.Player.GetAutoAttackRange(),
+                var target = TargetSelector.GetTarget((int) ObjectManager.Player.GetAutoAttackRange() + 300,
                     DamageType.Physical);
                 EloBuddyOrbDisabler();
 
@@ -355,25 +359,35 @@ namespace Aka_s_Vayne_reworked
                 {
                     if (AfterAttack && Program.ComboMenu["UseQa"].Cast<CheckBox>().CurrentValue)
                     {
-                        if (Program.ComboMenu["UseQp"].Cast<CheckBox>().CurrentValue)
+                        if (target == null) return;
+                        var mode = Program.ComboMenu["Qmode"].Cast<Slider>().CurrentValue;
+                        var tumblePosition = Game.CursorPos;
+                        switch (mode)
                         {
-                            Player.CastSpell(SpellSlot.Q, QLogic.GetTumblePos(target));
+                            case 2:
+                                tumblePosition = target.GetTumblePos();
+                                break;
+                            case 1:
+                                tumblePosition = Game.CursorPos;
+                                break;
                         }
-                        if (Program.ComboMenu["UseQc"].Cast<CheckBox>().CurrentValue)
-                        {
-                            Player.CastSpell(SpellSlot.Q, Game.CursorPos);
-                        }
+                        QLogic.Cast(tumblePosition);
                     }
                     if (BeforeAttack && Program.ComboMenu["UseQb"].Cast<CheckBox>().CurrentValue)
                     {
-                        if (Program.ComboMenu["UseQp"].Cast<CheckBox>().CurrentValue)
+                        if (target == null) return;
+                        var mode = Program.ComboMenu["Qmode"].Cast<Slider>().CurrentValue;
+                        var tumblePosition = Game.CursorPos;
+                        switch (mode)
                         {
-                            Player.CastSpell(SpellSlot.Q, QLogic.GetTumblePos(target));
+                            case 2:
+                                tumblePosition = target.GetTumblePos();
+                                break;
+                            case 1:
+                                tumblePosition = Game.CursorPos;
+                                break;
                         }
-                        if (Program.ComboMenu["UseQc"].Cast<CheckBox>().CurrentValue)
-                        {
-                            Player.CastSpell(SpellSlot.Q, Game.CursorPos);
-                        }
+                        QLogic.Cast(tumblePosition);
                     }
                     if (stopmove && Game.Time*1000 > lastaaclick + ObjectManager.Player.AttackCastDelay*1000)
                     {
@@ -681,8 +695,8 @@ namespace Aka_s_Vayne_reworked
 
         private static void You()
         {
-            if (Item.HasItem(ItemId.Youmuus_Ghostblade) && Item.CanUseItem(ItemId.Youmuus_Ghostblade))
-                Item.UseItem(ItemId.Youmuus_Ghostblade);
+            if (Item.HasItem(3142) && Item.CanUseItem(3142))
+                Item.UseItem(3142);
         }
 
         private static void skinChanger()

@@ -79,9 +79,8 @@ namespace Aka_s_Vayne_reworked
 
             ComboMenu = VMenu.AddSubMenu("Combo", "Combo");
             ComboMenu.AddGroupLabel("Combo");
-            ComboMenu.AddLabel("Only tick one Q mouse/Q prada");
-            ComboMenu.Add("UseQc", new CheckBox("Use Q Mouse", false));
-            ComboMenu.Add("UseQp", new CheckBox("Use Q Prada"));
+            ComboMenu.AddLabel("1: Mouse 2: Prada");
+            ComboMenu.Add("Qmode", new Slider("Q Mode", 2, 1, 2));
             ComboMenu.Add("UseQb", new CheckBox("Use Q before AA?", false));
             ComboMenu.Add("UseQa", new CheckBox("Use Q after AA?"));
             ComboMenu.Add("focusw", new CheckBox("Focus W", false));
