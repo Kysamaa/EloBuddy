@@ -154,6 +154,7 @@ namespace Aka_s_Vayne_reworked
 
         }
 
+
         private static void DoQSS()
         {
             if (Program.Qss.IsOwned() && Program.Qss.IsReady() && _Player.CountEnemiesInRange(1800) > 0)
@@ -177,6 +178,15 @@ namespace Aka_s_Vayne_reworked
             if (Program.Mercurial.IsOwned() && Program.Mercurial.IsReady())
             {
                 Core.DelayAction(() => Program.Mercurial.Cast(), Program.ItemMenu["delay"].Cast<Slider>().CurrentValue);
+            }
+        }
+
+        public static void OnGameUpdate(EventArgs args)
+        {
+            heal();
+            if (Program.MechanicMenu["skinhack"].Cast<CheckBox>().CurrentValue)
+            {
+                Player.SetSkinId(Program.MechanicMenu["skinId"].Cast<Slider>().CurrentValue);
             }
         }
 
@@ -328,179 +338,172 @@ namespace Aka_s_Vayne_reworked
 
         public static void Game_OnTick(EventArgs args)
         {
+
+            AutoPotions();
+
+            if (Program.MechanicMenu["autobuy"].Cast<CheckBox>().CurrentValue)
             {
-                heal();
+                autoBuy();
+            }
 
-                if (Program.MechanicMenu["autobuy"].Cast<CheckBox>().CurrentValue)
+            if (Program.MechanicMenu["autolvl"].Cast<CheckBox>().CurrentValue)
+            {
+                LevelUpSpells();
+            }
+
+            if (Program.MechanicMenu["insece"].Cast<KeyBind>().CurrentValue)
+            {
+                Insec();
+            }
+            var mode = Program.ComboMenu["Qmode"].Cast<Slider>().CurrentValue;
+            var target = TargetSelector.GetTarget((int) ObjectManager.Player.GetAutoAttackRange() + 300,
+                DamageType.Physical);
+            EloBuddyOrbDisabler();
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            {
+                if (AfterAttack && Program.ComboMenu["UseQa"].Cast<CheckBox>().CurrentValue)
                 {
-                    autoBuy();
+                    if (target == null) return;
+                    var tumblePosition = Game.CursorPos;
+                    switch (mode)
+                    {
+                        case 2:
+                            tumblePosition = target.GetTumblePos();
+                            break;
+                        case 1:
+                            tumblePosition = Game.CursorPos;
+                            break;
+                    }
+                    QLogic.Cast(tumblePosition);
                 }
-
-                if (Program.MechanicMenu["autolvl"].Cast<CheckBox>().CurrentValue)
+                if (BeforeAttack && Program.ComboMenu["UseQb"].Cast<CheckBox>().CurrentValue)
                 {
-                    LevelUpSpells();
+                    if (target == null) return;
+                    var tumblePosition = Game.CursorPos;
+                    switch (mode)
+                    {
+                        case 2:
+                            tumblePosition = target.GetTumblePos();
+                            break;
+                        case 1:
+                            tumblePosition = Game.CursorPos;
+                            break;
+                    }
+                    QLogic.Cast(tumblePosition);
                 }
-
-                if (Program.MechanicMenu["skinhack"].Cast<CheckBox>().CurrentValue)
+                if (stopmove && Game.Time*1000 > lastaaclick + ObjectManager.Player.AttackCastDelay*1000)
                 {
-                    //skinChanger();
+                    stopmove = false;
                 }
-
-                if (Program.MechanicMenu["insece"].Cast<KeyBind>().CurrentValue)
+                if (!stopmove)
                 {
-                    Insec();
-                }
-
-                var target = TargetSelector.GetTarget((int) ObjectManager.Player.GetAutoAttackRange() + 300,
-                    DamageType.Physical);
-                EloBuddyOrbDisabler();
-
-                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
-                {
-                    if (AfterAttack && Program.ComboMenu["UseQa"].Cast<CheckBox>().CurrentValue)
+                    if (Game.Time*1000 >
+                        lastaa + ObjectManager.Player.AttackCastDelay*1000 - Game.Ping/2 +
+                        Program.ComboMenu["AACancel"].Cast<Slider>().CurrentValue)
                     {
-                        if (target == null) return;
-                        var mode = Program.ComboMenu["Qmode"].Cast<Slider>().CurrentValue;
-                        var tumblePosition = Game.CursorPos;
-                        switch (mode)
-                        {
-                            case 2:
-                                tumblePosition = target.GetTumblePos();
-                                break;
-                            case 1:
-                                tumblePosition = Game.CursorPos;
-                                break;
-                        }
-                        QLogic.Cast(tumblePosition);
-                    }
-                    if (BeforeAttack && Program.ComboMenu["UseQb"].Cast<CheckBox>().CurrentValue)
-                    {
-                        if (target == null) return;
-                        var mode = Program.ComboMenu["Qmode"].Cast<Slider>().CurrentValue;
-                        var tumblePosition = Game.CursorPos;
-                        switch (mode)
-                        {
-                            case 2:
-                                tumblePosition = target.GetTumblePos();
-                                break;
-                            case 1:
-                                tumblePosition = Game.CursorPos;
-                                break;
-                        }
-                        QLogic.Cast(tumblePosition);
-                    }
-                    if (stopmove && Game.Time*1000 > lastaaclick + ObjectManager.Player.AttackCastDelay*1000)
-                    {
-                        stopmove = false;
-                    }
-                    if (!stopmove)
-                    {
-                        if (Game.Time*1000 >
-                            lastaa + ObjectManager.Player.AttackCastDelay*1000 - Game.Ping/2 +
-                            Program.ComboMenu["AACancel"].Cast<Slider>().CurrentValue)
-                        {
-                            Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-                        }
-                    }
-                    if (Target != null &&
-                        Game.Time*1000 > lastaa + ObjectManager.Player.AttackDelay*1000 - Game.Ping/2*4.3)
-                    {
-                        stopmove = true;
-                        Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
-                    }
-                    if (Program.ItemMenu["botrk"].Cast<CheckBox>().CurrentValue && Target != null &&
-                        (Target.Distance(ObjectManager.Player) > 500f ||
-                         (ObjectManager.Player.Health/ObjectManager.Player.MaxHealth)*100 <= 95))
-                    {
-                        Botrk(Target);
-                    }
-                    if (Program.ItemMenu["you"].Cast<CheckBox>().CurrentValue && Target != null &&
-                        (Target.Distance(ObjectManager.Player) > Program.ItemMenu["yous"].Cast<Slider>().CurrentValue))
-                    {
-                        You();
-                    }
-
-                }
-                var positions = ELogic.GetRotatedFlashPositions();
-
-                foreach (var p in positions)
-                {
-                    var condemnUnit = ELogic.CondemnCheck(p);
-                    if (condemnUnit != null && Program.MechanicMenu["flashe"].Cast<KeyBind>().CurrentValue)
-                    {
-                        Program.E.Cast(condemnUnit);
-
-                        ObjectManager.Player.Spellbook.CastSpell(FlashSlot, p);
-
+                        Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                     }
                 }
-
-                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+                if (Target != null &&
+                    Game.Time*1000 > lastaa + ObjectManager.Player.AttackDelay*1000 - Game.Ping/2*4.3)
                 {
-                    Program.Harass();
+                    stopmove = true;
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
-
-                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+                if (Program.ItemMenu["botrk"].Cast<CheckBox>().CurrentValue && Target != null &&
+                    (Target.Distance(ObjectManager.Player) > 500f ||
+                     (ObjectManager.Player.Health/ObjectManager.Player.MaxHealth)*100 <= 95))
                 {
-                    Program.JungleClear();
+                    Botrk(Target);
                 }
-
-                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
+                if (Program.ItemMenu["you"].Cast<CheckBox>().CurrentValue && Target != null &&
+                    (Target.Distance(ObjectManager.Player) > Program.ItemMenu["yous"].Cast<Slider>().CurrentValue))
                 {
-                    Program.Flee();
+                    You();
                 }
-                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
-                {
-                    Program.Combo();
-                }
-
-
-                if (Game.MapId == GameMapId.SummonersRift)
-                {
-                    if (myHero.IsInShopRange() && Program.MiscMenu["autobuy"].Cast<CheckBox>().CurrentValue &&
-                        myHero.Level > 6 && Item.HasItem((int) ItemId.Warding_Totem_Trinket))
-                    {
-                        Shop.BuyItem(ItemId.Scrying_Orb_Trinket);
-                    }
-                    if (myHero.IsInShopRange() && Program.MiscMenu["autobuy"].Cast<CheckBox>().CurrentValue &&
-                        !Item.HasItem((int) ItemId.Oracles_Lens_Trinket, myHero) && myHero.Level > 6 &&
-                        EntityManager.Heroes.Enemies.Any(
-                            h =>
-                                h.BaseSkinName == "Rengar" || h.BaseSkinName == "Talon" ||
-                                h.BaseSkinName == "Vayne"))
-                    {
-                        Shop.BuyItem(ItemId.Sweeping_Lens_Trinket);
-                    }
-                    if (myHero.IsInShopRange() && Program.MiscMenu["autobuy"].Cast<CheckBox>().CurrentValue &&
-                        myHero.Level >= 9 && Item.HasItem((int) ItemId.Sweeping_Lens_Trinket))
-                    {
-                        Shop.BuyItem(ItemId.Oracles_Lens_Trinket);
-                    }
-                }
-
-                if (Program.ComboMenu["focusw"].Cast<CheckBox>().CurrentValue)
-                {
-                    if (FocusWTarget == null && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) ||
-                        Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
-                    {
-                        return;
-                    }
-                    if (FocusWTarget.IsValidTarget(myHero.GetAutoAttackRange()) && !FocusWTarget.IsDead &&
-                        Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) ||
-                        Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
-                    {
-                        TargetSelector2.GetPriority(FocusWTarget);
-                    }
-                    else
-                    {
-                        TargetSelector2.GetPriority(
-                            TargetSelector2.GetTarget(myHero.AttackRange, TargetSelector2.DamageType.Physical));
-                    }
-                }
-
 
             }
+            var positions = ELogic.GetRotatedFlashPositions();
+
+            foreach (var p in positions)
+            {
+                var condemnUnit = ELogic.CondemnCheck(p);
+                if (condemnUnit != null && Program.MechanicMenu["flashe"].Cast<KeyBind>().CurrentValue)
+                {
+                    Program.E.Cast(condemnUnit);
+
+                    ObjectManager.Player.Spellbook.CastSpell(FlashSlot, p);
+
+                }
+            }
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+            {
+                Program.Harass();
+            }
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+            {
+                Program.JungleClear();
+            }
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
+            {
+                Program.Flee();
+            }
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            {
+                Program.Combo();
+            }
+
+
+            if (Game.MapId == GameMapId.SummonersRift)
+            {
+                if (myHero.IsInShopRange() && Program.MiscMenu["autobuy"].Cast<CheckBox>().CurrentValue &&
+                    myHero.Level > 6 && Item.HasItem((int) ItemId.Warding_Totem_Trinket))
+                {
+                    Shop.BuyItem(ItemId.Scrying_Orb_Trinket);
+                }
+                if (myHero.IsInShopRange() && Program.MiscMenu["autobuy"].Cast<CheckBox>().CurrentValue &&
+                    !Item.HasItem((int) ItemId.Oracles_Lens_Trinket, myHero) && myHero.Level > 6 &&
+                    EntityManager.Heroes.Enemies.Any(
+                        h =>
+                            h.BaseSkinName == "Rengar" || h.BaseSkinName == "Talon" ||
+                            h.BaseSkinName == "Vayne"))
+                {
+                    Shop.BuyItem(ItemId.Sweeping_Lens_Trinket);
+                }
+                if (myHero.IsInShopRange() && Program.MiscMenu["autobuy"].Cast<CheckBox>().CurrentValue &&
+                    myHero.Level >= 9 && Item.HasItem((int) ItemId.Sweeping_Lens_Trinket))
+                {
+                    Shop.BuyItem(ItemId.Oracles_Lens_Trinket);
+                }
+            }
+
+            if (Program.ComboMenu["focusw"].Cast<CheckBox>().CurrentValue)
+            {
+                if (FocusWTarget == null && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) ||
+                    Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+                {
+                    return;
+                }
+                if (FocusWTarget.IsValidTarget(myHero.GetAutoAttackRange()) && !FocusWTarget.IsDead &&
+                    Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) ||
+                    Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+                {
+                    TargetSelector2.GetPriority(FocusWTarget);
+                }
+                else
+                {
+                    TargetSelector2.GetPriority(
+                        TargetSelector2.GetTarget(myHero.AttackRange, TargetSelector2.DamageType.Physical));
+                }
+            }
+
+
         }
+
 
         private static bool CanUseBotrk
         {
@@ -515,6 +518,19 @@ namespace Aka_s_Vayne_reworked
                     return true;
                 }
                 return false;
+            }
+        }
+
+        private static void AutoPotions()
+        {
+            if (Program.ItemMenu["autopotion"].Cast<CheckBox>().CurrentValue && !_Player.IsInShopRange() &&
+                _Player.HealthPercent <= Program.ItemMenu["autopotionhp"].Cast<Slider>().CurrentValue &&
+                !(Player.HasBuff("RegenerationPotion")))
+            {
+                if (Program.HPPot.IsReady() && Program.HPPot.IsOwned())
+                {
+                    Program.HPPot.Cast();
+                }
             }
         }
 
@@ -699,15 +715,6 @@ namespace Aka_s_Vayne_reworked
                 Item.UseItem(3142);
         }
 
-        private static void skinChanger()
-        {
-            if (Program.MechanicMenu["skinId"].Cast<Slider>().CurrentValue != currentSkin)
-            {
-                Player.Instance.SetSkinId(Program.MiscMenu["skinId"].Cast<Slider>().CurrentValue);
-                currentSkin = Program.MiscMenu["skinId"].Cast<Slider>().CurrentValue;
-            }
-        }
-
         private static void autoBuy()
         {
 
@@ -718,14 +725,12 @@ namespace Aka_s_Vayne_reworked
             }
 
             bought = true;
-            if (Program.MechanicMenu["autobuy"].Cast<CheckBox>().CurrentValue)
+            if (Game.MapId == GameMapId.SummonersRift)
             {
-                if (Game.MapId == GameMapId.SummonersRift)
-                {
-                    Shop.BuyItem(ItemId.Dorans_Blade);
-                    Shop.BuyItem(ItemId.Health_Potion);
-                    Shop.BuyItem(ItemId.Warding_Totem_Trinket);
-                }
+                Shop.BuyItem(ItemId.Dorans_Blade);
+                Shop.BuyItem(ItemId.Health_Potion);
+                Shop.BuyItem(ItemId.Warding_Totem_Trinket);
+
             }
         }
 
@@ -752,7 +757,7 @@ namespace Aka_s_Vayne_reworked
         private static void Insec()
         {
             var mode = (Program.MechanicMenu["insecmodes"].Cast<Slider>().CurrentValue);
-            var target = TargetSelector.GetTarget(1000, DamageType.Magical);
+            var target = TargetSelector.GetTarget(1000, DamageType.Physical);
             if (target != null)
             {
                 //var targetfuturepos = Prediction.GetPrediction(target, 0.1f).UnitPosition;

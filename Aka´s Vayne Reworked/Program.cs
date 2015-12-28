@@ -35,7 +35,7 @@ namespace Aka_s_Vayne_reworked
         public static Spell.Active R;
         public static Spell.Active Heal;
         public static List<Vector2> Points = new List<Vector2>();
-        public static Item totem, Qss, Mercurial;
+        public static Item totem, Qss, Mercurial, HPPot;
         public static int[] AbilitySequence;
         public static int QOff = 0, WOff = 0, EOff = 0, ROff = 0;
 
@@ -73,6 +73,7 @@ namespace Aka_s_Vayne_reworked
             totem = new Item((int)ItemId.Warding_Totem_Trinket);
             Qss = new Item((int)ItemId.Quicksilver_Sash);
             Mercurial = new Item((int)ItemId.Mercurial_Scimitar);
+            HPPot = new Item(2003);
 
             VMenu = MainMenu.AddMenu("Aka´s Vayne", "akavayne");
             VMenu.AddGroupLabel("Welcome to my Vayne Addon have fun! :)");
@@ -151,8 +152,8 @@ namespace Aka_s_Vayne_reworked
             MechanicMenu.AddLabel("1: To Allys 2: To Tower 3: To Mouse");
             MechanicMenu.Add("insecmodes", new Slider("Insec Mode", 1, 1, 3));
             MechanicMenu.AddGroupLabel("Utility");
-            MechanicMenu.Add("skinhack", new CheckBox("Activate Skin hack(disabled atm)", false));
-            MechanicMenu.Add("skinId", new Slider("Skin Hack", 1, 1, 9));
+            MechanicMenu.Add("skinhack", new CheckBox("Activate Skin hack"));
+            MechanicMenu.Add("skinId", new Slider("Skin Hack", 0, 0, 9));
             MechanicMenu.Add("autobuy", new CheckBox("Autobuy Starters/Trinkets"));
             MechanicMenu.AddLabel("1: Max W 2: Max Q(my style :3)");
             MechanicMenu.Add("autolvl", new CheckBox("Activate Auto level"));
@@ -170,6 +171,8 @@ namespace Aka_s_Vayne_reworked
             ItemMenu.Add("botrk", new CheckBox("Use Botrk & Bilge"));
             ItemMenu.Add("you", new CheckBox("Use Yoummmus"));
             ItemMenu.Add("yous", new Slider("if distance >", 1000, 0, 1500));
+            ItemMenu.Add("autopotion", new CheckBox("Auto Healpotion"));
+            ItemMenu.Add("autopotionhp", new Slider("HpPot if hp =>", 60));
             ItemMenu.AddGroupLabel("Summoners");
             ItemMenu.AddLabel("Ask me if you need more Summoners.");
             ItemMenu.Add("heal", new CheckBox("Heal"));
@@ -217,7 +220,8 @@ namespace Aka_s_Vayne_reworked
             Obj_AI_Base.OnBuffGain += Events.Obj_AI_Base_OnBuffGain;
             Obj_AI_Base.OnBasicAttack += Events.Obj_AI_Base_OnBasicAttack;
             Player.OnIssueOrder += Events.Player_OnIssueOrder;
-            Game.OnUpdate += Events.Game_OnTick;
+            Game.OnTick += Events.Game_OnTick;
+            Game.OnUpdate += Events.OnGameUpdate;
             Obj_AI_Base.OnSpellCast += Events.Obj_AI_Base_OnSpellCast;
             Orbwalker.OnPostAttack += Events.Orbwalker_OnPostAttack;
 
