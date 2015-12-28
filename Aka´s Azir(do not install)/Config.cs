@@ -139,7 +139,7 @@ namespace AddonTemplate
                     Menu.AddLabel("1: To Allys 2: To Tower 3: To Mouse");
                     _useIm = Menu.Add("Insecmode", new Slider("Insec Mode", 1, 1, 3));
                     Menu.AddSeparator();
-                    _useM = Menu.Add("Mechanic", new KeyBind("Mechanic", false, KeyBind.BindTypes.HoldActive, 'Y'));
+                    _useM = Menu.Add("Mechanic", new KeyBind("Mechanic(broken)", false, KeyBind.BindTypes.HoldActive, 'Y'));
                     Menu.AddLabel("1: To Allys 2: To Tower 3: To Mouse");
                     _useMm = Menu.Add("Mechanicmode", new Slider("Mechanic Mode", 1, 1, 3));
                 }
@@ -345,7 +345,7 @@ namespace AddonTemplate
                     _KSQ = Menu.Add("KSQ", new CheckBox("Ks Q"));
                     _KSE = Menu.Add("KSE", new CheckBox("Ks E"));
                     _KSI = Menu.Add("KSI", new CheckBox("Ks Ignite"));
-                    _InterruptE = Menu.Add("InterruptEQ", new CheckBox("Interrupt Spells using E?"));
+                    _InterruptE = Menu.Add("InterruptEQ", new CheckBox("Interrupt Spells using EQ?"));
                 }
 
                 public static void Initialize()

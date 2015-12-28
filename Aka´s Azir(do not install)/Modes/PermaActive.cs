@@ -121,11 +121,11 @@ namespace AddonTemplate.Modes
         private static void buildTower()
         {
             var turret =
-                ObjectManager.Get<Obj_AI_Turret>()
-                    .Where(x => x.IsDead)
+                EntityManager.Turrets.AllTurrets
+                    .Where(x => x.IsDead && x.HasBuff("AzirPassive") && x.IsInRange(Player.Instance.Position, SpellManager.Shurimaaa.Range))
                     .OrderByDescending(x => x.Distance(Player.Instance.Position))
                     .LastOrDefault();
-            if (turret != null && SpellManager.Shurimaaa.IsReady() && turret.HasBuff("AzirPassive"))
+            if (turret != null && SpellManager.Shurimaaa.IsReady())
             {
                 Console.Write("Check");
                 SpellManager.Shurimaaa.Cast(turret);
@@ -143,6 +143,7 @@ namespace AddonTemplate.Modes
                 switch (mode)
                 {
                     case 1:
+                       
                         var hero = HeroManager.Allies.Where(x => !x.IsMe && !x.IsDead).OrderByDescending(x => x.Distance(Player.Instance.Position)).LastOrDefault();
                         if (hero != null && caninsec && Player.Instance.ServerPosition.Distance(hero.Position) + 100 >= target.Distance(hero.Position))
                         {
@@ -171,11 +172,8 @@ namespace AddonTemplate.Modes
 
         private static void Rmechanic()
         {
-        var wiscasted = false;
-        var eiscasted = false;
-        var riscasted = false;
-
-        var mode = Config.Modes.Combo.UseMechanicMode;
+            var oldpos = Player.Instance.ServerPosition;
+            var mode = Config.Modes.Combo.UseMechanicMode;
             var target = TargetSelector.GetTarget(1000, DamageType.Magical);
             if (target != null)
             {
@@ -190,57 +188,50 @@ namespace AddonTemplate.Modes
                             var pos = Player.Instance.ServerPosition.Extend(hero.Position, 1200);
 
 
-                            if ((Player.Instance.ServerPosition.Distance(pos) < SpellManager.Q.Range))
+                            Vector3 wVec = ObjectManager.Player.ServerPosition +
+                               Vector3.Normalize(target.Position - ObjectManager.Player.ServerPosition) * SpellManager.W.Range;
+
+                            if ((SpellManager.E.IsReady()) && Player.Instance.ServerPosition.Distance(pos) < SpellManager.Q.Range)
                             {
                                 if (SpellManager.W.IsReady())
                                 {
-                                    SpellManager.W.Cast(target.Position);
-                                    wiscasted = true;
+                                    SpellManager.W.Cast(wVec);
+                                    return;
                                 }
-                                if (SpellManager.E.IsReady() && wiscasted)
+                                SpellManager.E2.Cast();
+                                SpellManager.R.Cast(oldpos);
+                                if (SpellManager.Q.IsReady() && Modes.Flee.GetNearestSoldierToMouse(oldpos).Position.Distance(oldpos) > 300)
                                 {
-                                    SpellManager.E2.Cast();
-                                    eiscasted = true;
-                                }
-                                if (SpellManager.R.IsReady() && eiscasted)
-                                {
-                                    SpellManager.R.Cast((Vector3)pos);
-                                    riscasted = true;
-                                }
-                                if (SpellManager.Q.IsReady() && riscasted)
-                                {
-                                    SpellManager.Q.Cast((Vector3)pos);
+                                    SpellManager.Q.Cast(oldpos);
+                                    return;
                                 }
                             }
-                        }
+                        
+                }
                         break;
                     case 2:
                         var turret = ObjectManager.Get<Obj_AI_Turret>().Where(x => x.IsAlly && !x.IsDead).OrderByDescending(x => x.Distance(Player.Instance.Position)).LastOrDefault();
                         if (turret != null && caninsec && Player.Instance.ServerPosition.Distance(turret.Position) + 100 >= target.Distance(turret.Position))
                         {
-                            var pos = Player.Instance.Position.Extend(turret.Position, 250);
+                            var pos = Player.Instance.ServerPosition.Extend(turret.Position, 1200);
+
+
                             Vector3 wVec = ObjectManager.Player.ServerPosition +
-   Vector3.Normalize(target.Position - ObjectManager.Player.ServerPosition) * SpellManager.W.Range;
-                            if ((Player.Instance.ServerPosition.Distance(pos) < SpellManager.Q.Range))
+                               Vector3.Normalize(target.Position - ObjectManager.Player.ServerPosition) * SpellManager.W.Range;
+
+                            if ((SpellManager.E.IsReady()) && Player.Instance.ServerPosition.Distance(pos) < SpellManager.Q.Range)
                             {
                                 if (SpellManager.W.IsReady())
                                 {
-                                    SpellManager.W.Cast(target.Position);
-                                    wiscasted = true;
+                                    SpellManager.W.Cast(wVec);
+                                    return;
                                 }
-                                if (SpellManager.E.IsReady() && wiscasted)
+                                SpellManager.E2.Cast();
+                                SpellManager.R.Cast(oldpos);
+                                if (SpellManager.Q.IsReady() && Modes.Flee.GetNearestSoldierToMouse(oldpos).Position.Distance(oldpos) > 300)
                                 {
-                                    SpellManager.E2.Cast();
-                                    eiscasted = true;
-                                }
-                                if (SpellManager.R.IsReady() && eiscasted)
-                                {
-                                    SpellManager.R.Cast((Vector3)pos);
-                                    riscasted = true;
-                                }
-                                if (SpellManager.Q.IsReady() && riscasted)
-                                {
-                                    SpellManager.Q.Cast((Vector3)pos);
+                                    SpellManager.Q.Cast(oldpos);
+                                    return;
                                 }
                             }
                         }
@@ -248,33 +239,29 @@ namespace AddonTemplate.Modes
                     case 3:
                         if (caninsec && Player.Instance.ServerPosition.Distance(Game.CursorPos) + 100 >= target.Distance(Game.CursorPos))
                         {
-                            var pos = Player.Instance.Position.Extend(Game.CursorPos, 250);
-                            Vector3 wVec = ObjectManager.Player.ServerPosition +
-   Vector3.Normalize(target.Position - ObjectManager.Player.ServerPosition) * SpellManager.W.Range;
+                            var pos = Player.Instance.ServerPosition.Extend(Game.CursorPos, 1200);
 
-                            if ((Player.Instance.ServerPosition.Distance(pos) < SpellManager.Q.Range))
+
+                            Vector3 wVec = ObjectManager.Player.ServerPosition +
+                               Vector3.Normalize(target.Position - ObjectManager.Player.ServerPosition) * SpellManager.W.Range;
+
+                            if ((SpellManager.E.IsReady()) && Player.Instance.ServerPosition.Distance(pos) < SpellManager.Q.Range)
                             {
                                 if (SpellManager.W.IsReady())
                                 {
-                                    SpellManager.W.Cast(target.Position);
-                                    wiscasted = true;
+                                    SpellManager.W.Cast(wVec);
+                                    return;
                                 }
-                                if (SpellManager.E.IsReady() && wiscasted)
+                                SpellManager.E2.Cast();
+                                SpellManager.R.Cast(oldpos);
+                                if (SpellManager.Q.IsReady() && Modes.Flee.GetNearestSoldierToMouse(oldpos).Position.Distance(oldpos) > 300)
                                 {
-                                    SpellManager.E2.Cast();
-                                    eiscasted = true;
-                                }
-                                if (SpellManager.R.IsReady() && eiscasted)
-                                {
-                                    SpellManager.R.Cast((Vector3)pos);
-                                    riscasted = true;
-                                }
-                                if (SpellManager.Q.IsReady() && riscasted)
-                                {
-                                    SpellManager.Q.Cast((Vector3)pos);
+                                    SpellManager.Q.Cast(oldpos);
+                                    return;
                                 }
                             }
                         }
+                        
                         break;
                 }
             }

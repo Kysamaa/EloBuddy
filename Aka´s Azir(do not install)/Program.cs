@@ -76,18 +76,6 @@ namespace AddonTemplate
             }
         }
 
-        private static void InterrupterOnOnInterruptableSpell(Obj_AI_Base sender,
-            Interrupter.InterruptableSpellEventArgs interruptableSpellEventArgs)
-        {
-            if (!sender.IsEnemy || !(sender is AIHeroClient) || Extensions.IsRecalling(Player.Instance))
-            {
-                return;
-            }
-            if (SettingsMisc.InterruptE && SpellManager.E.IsReady() && SpellManager.E.IsInRange(sender))
-            {
-                SpellManager.E.Cast(sender);
-            }
-        }
 
 
         public static void Game_OnTick(EventArgs args)

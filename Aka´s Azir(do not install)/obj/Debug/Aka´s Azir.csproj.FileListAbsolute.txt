@@ -1,3 +1,11 @@
 C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Azir(do not install)\bin\Debug\Akas Jarvan.exe.config
 C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Azir(do not install)\obj\Debug\Akas Jarvan.exe
 C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Azir(do not install)\obj\Debug\Akas Jarvan.pdb
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Azir(do not install)\bin\Debug\Akas Jarvan.exe
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Azir(do not install)\bin\Debug\Akas Jarvan.pdb
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Azir(do not install)\bin\Debug\EloBuddy.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Azir(do not install)\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Azir(do not install)\bin\Debug\SharpDX.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Azir(do not install)\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Azir(do not install)\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Azir(do not install)\obj\Debug\Aka´s Azir.csprojResolveAssemblyReference.cache
