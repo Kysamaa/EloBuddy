@@ -52,7 +52,7 @@ namespace Aka_s_Vayne_reworked.Modes
                 Program.E.IsReady())
             {
                 Orbwalker.ForcedTarget = target;
-                Player.CastSpell(SpellSlot.Q, target.GetTumblePos());
+                QLogic.Cast(QLogic.GetSafeTumblePos(target));
                 Program.E2.Cast(target.Position);
             }
         }

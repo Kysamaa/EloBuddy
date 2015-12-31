@@ -16,8 +16,6 @@ namespace AddonTemplate.Logic
         {
             foreach (var target in EntityManager.Heroes.Enemies.Where(h => h.IsValidTarget(Program.E.Range)))
             {
-                if (MenuManager.CondemnMenu["condemnmethod1"].Cast<CheckBox>().CurrentValue)
-                {
                     var pushDistance = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
                     var targetPosition = Program.E2.GetPrediction(target).UnitPosition;
                     var pushDirection = (targetPosition - Variables._Player.ServerPosition).Normalized();
@@ -31,7 +29,7 @@ namespace AddonTemplate.Logic
                     }
                 }
             }
-        }
+        
 
         public static
             bool AsunasAllyFountain(Vector3 position)
@@ -57,8 +55,6 @@ namespace AddonTemplate.Logic
                             hero.IsValidTarget(Program.E.Range) && !hero.HasBuffOfType(BuffType.SpellShield) &&
                             !hero.HasBuffOfType(BuffType.SpellImmunity)))
             {
-                if (MenuManager.CondemnMenu["condemnmethod2"].Cast<CheckBox>().CurrentValue)
-                {
                     var EPred = Program.E2.GetPrediction(En);
                     int pushDist = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
                     var FinalPosition =
@@ -76,7 +72,7 @@ namespace AddonTemplate.Logic
                     }
                 }
             }
-        }
+        
 
         public static
             void Condemn3()
@@ -237,7 +233,7 @@ namespace AddonTemplate.Logic
 
         public static AIHeroClient CondemnCheck(Vector3 fromPosition)
         {
-            var HeroList = HeroManager.Enemies.Where(
+            var HeroList = EntityManager.Heroes.Enemies.Where(
                 h =>
                     h.IsValidTarget(Program.E.Range) &&
                     !h.HasBuffOfType(BuffType.SpellShield) &&
@@ -259,5 +255,343 @@ namespace AddonTemplate.Logic
             return null;
         }
 
+        public static void Smart()
+        {
+            var HeroList = EntityManager.Heroes.Enemies.Where(
+                h =>
+                    h.IsValidTarget(Program.E.Range) &&
+                    !h.HasBuffOfType(BuffType.SpellShield) &&
+                    !h.HasBuffOfType(BuffType.SpellImmunity));
+
+            foreach (var hero in HeroList)
+            {
+                //values for pred calc pP = player position; p = enemy position; pD = push distance
+                var pP = ObjectManager.Player.ServerPosition;
+                var p = hero.ServerPosition;
+                var pD = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
+
+
+                if ((IsCollisionable((Vector3) p.Extend(pP, -pD)) || IsCollisionable((Vector3) p.Extend(pP, -pD/2f)) ||
+                     IsCollisionable((Vector3) p.Extend(pP, -pD/3f))))
+                {
+                    if (!hero.CanMove)
+                        return;
+
+                    var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
+                    if (enemiesCount > 1 && enemiesCount <= 3)
+                    {
+                        var prediction = Program.E2.GetPrediction(hero);
+                        for (var i = 15; i < pD; i += 75)
+                        {
+                            var posFlags = NavMesh.GetCollisionFlags(
+                                prediction.UnitPosition.To2D()
+                                    .Extend(
+                                        pP.To2D(),
+                                        -i)
+                                    .To3D());
+                            if (posFlags.HasFlag(CollisionFlags.Wall) || posFlags.HasFlag(CollisionFlags.Building))
+                            {
+                                Program.E.Cast(hero);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var hitchance = MenuManager.CondemnMenu["condemnPercent"].Cast<Slider>().CurrentValue;
+                        var angle = 0.20*hitchance;
+                        const float travelDistance = 0.5f;
+                        var alpha = new Vector2((float) (p.X + travelDistance*Math.Cos(Math.PI/180*angle)),
+                            (float) (p.X + travelDistance*Math.Sin(Math.PI/180*angle)));
+                        var beta = new Vector2((float) (p.X - travelDistance*Math.Cos(Math.PI/180*angle)),
+                            (float) (p.X - travelDistance*Math.Sin(Math.PI/180*angle)));
+
+                        for (var i = 15; i < pD; i += 100)
+                        {
+                            if (IsCollisionable(pP.To2D().Extend(alpha,
+                                i)
+                                .To3D()) && IsCollisionable(pP.To2D().Extend(beta, i).To3D()))
+                                Program.E.Cast(hero);
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void Perfect()
+        {
+            var HeroList = EntityManager.Heroes.Enemies.Where(
+                h =>
+                    h.IsValidTarget(Program.E.Range) &&
+                    !h.HasBuffOfType(BuffType.SpellShield) &&
+                    !h.HasBuffOfType(BuffType.SpellImmunity));
+
+            foreach (var hero in HeroList)
+            {
+
+                //values for pred calc pP = player position; p = enemy position; pD = push distance
+                var pP = ObjectManager.Player.ServerPosition;
+                var p = hero.ServerPosition;
+                var pD = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
+
+                if ((IsCollisionable((Vector3) p.Extend(pP, -pD)) || IsCollisionable((Vector3) p.Extend(pP, -pD/2f)) ||
+                     IsCollisionable((Vector3) p.Extend(pP, -pD/3f))))
+                {
+                    if (!hero.CanMove)
+                        return;
+
+                    var hitchance = MenuManager.CondemnMenu["condemnPercent"].Cast<Slider>().CurrentValue;
+                    var angle = 0.20*hitchance;
+                    const float travelDistance = 0.5f;
+                    var alpha = new Vector2((float) (p.X + travelDistance*Math.Cos(Math.PI/180*angle)),
+                        (float) (p.X + travelDistance*Math.Sin(Math.PI/180*angle)));
+                    var beta = new Vector2((float) (p.X - travelDistance*Math.Cos(Math.PI/180*angle)),
+                        (float) (p.X - travelDistance*Math.Sin(Math.PI/180*angle)));
+
+                    for (var i = 15; i < pD; i += 100)
+                    {
+                        if (IsCollisionable(pP.To2D().Extend(alpha,
+                            i)
+                            .To3D()) && IsCollisionable(pP.To2D().Extend(beta, i).To3D()))
+                            Program.E.Cast(hero);
+                    }
+                }
+            }
+        }
+
+        public static void Old()
+        {
+            var HeroList = EntityManager.Heroes.Enemies.Where(
+                h =>
+                    h.IsValidTarget(Program.E.Range) &&
+                    !h.HasBuffOfType(BuffType.SpellShield) &&
+                    !h.HasBuffOfType(BuffType.SpellImmunity));
+
+            foreach (var hero in HeroList)
+            {
+
+                //values for pred calc pP = player position; p = enemy position; pD = push distance
+                var pP = ObjectManager.Player.ServerPosition;
+                var p = hero.ServerPosition;
+                var pD = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
+
+                if (!hero.CanMove)
+                    return;
+
+                var hitchance = MenuManager.CondemnMenu["condemnPercent"].Cast<Slider>().CurrentValue;
+                var angle = 0.20*hitchance;
+                const float travelDistance = 0.5f;
+                var alpha = new Vector2((float) (p.X + travelDistance*Math.Cos(Math.PI/180*angle)),
+                    (float) (p.X + travelDistance*Math.Sin(Math.PI/180*angle)));
+                var beta = new Vector2((float) (p.X - travelDistance*Math.Cos(Math.PI/180*angle)),
+                    (float) (p.X - travelDistance*Math.Sin(Math.PI/180*angle)));
+
+                for (var i = 15; i < pD; i += 100)
+                {
+                    if (IsCollisionable(pP.To2D().Extend(alpha,
+                        i)
+                        .To3D()) || IsCollisionable(pP.To2D().Extend(beta, i).To3D()))
+                        Program.E.Cast(hero);
+
+                }
+            }
+        }
+
+        public static void Marksman()
+        {
+            var HeroList = EntityManager.Heroes.Enemies.Where(
+                h =>
+                    h.IsValidTarget(Program.E.Range) &&
+                    !h.HasBuffOfType(BuffType.SpellShield) &&
+                    !h.HasBuffOfType(BuffType.SpellImmunity));
+
+            foreach (var hero in HeroList)
+            {
+                //values for pred calc pP = player position; p = enemy position; pD = push distance
+                var pP = ObjectManager.Player.ServerPosition;
+                var p = hero.ServerPosition;
+                var pD = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
+
+                var prediction = Program.E2.GetPrediction(hero);
+                if (NavMesh.GetCollisionFlags(
+                    prediction.UnitPosition.To2D()
+                        .Extend(
+                            pP.To2D(),
+                            -pD)
+                        .To3D()).HasFlag(CollisionFlags.Wall) ||
+                    NavMesh.GetCollisionFlags(
+                        prediction.UnitPosition.To2D()
+                            .Extend(
+                                pP.To2D(),
+                                -pD/2f)
+                            .To3D()).HasFlag(CollisionFlags.Wall))
+                    Program.E.Cast(hero);
+            }
+        }
+
+        public static void Sharpshooter()
+        {
+            var HeroList = EntityManager.Heroes.Enemies.Where(
+                h =>
+                    h.IsValidTarget(Program.E.Range) &&
+                    !h.HasBuffOfType(BuffType.SpellShield) &&
+                    !h.HasBuffOfType(BuffType.SpellImmunity));
+
+            foreach (var hero in HeroList)
+            {
+
+                //values for pred calc pP = player position; p = enemy position; pD = push distance
+                var pP = ObjectManager.Player.ServerPosition;
+                var p = hero.ServerPosition;
+                var pD = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
+
+                var prediction = Program.E2.GetPrediction(hero);
+                for (var i = 15; i < pD; i += 100)
+                {
+                    var posCF = NavMesh.GetCollisionFlags(
+                        prediction.UnitPosition.To2D()
+                            .Extend(
+                                pP.To2D(),
+                                -i)
+                            .To3D());
+                    if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
+                    {
+                        Program.E.Cast(hero);
+                    }
+                }
+            }
+        }
+
+        public static void Gosu()
+        {
+            var HeroList = EntityManager.Heroes.Enemies.Where(
+                h =>
+                    h.IsValidTarget(Program.E.Range) &&
+                    !h.HasBuffOfType(BuffType.SpellShield) &&
+                    !h.HasBuffOfType(BuffType.SpellImmunity));
+
+            foreach (var hero in HeroList)
+            {
+
+                //values for pred calc pP = player position; p = enemy position; pD = push distance
+                var pP = ObjectManager.Player.ServerPosition;
+                var p = hero.ServerPosition;
+                var pD = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
+
+                var prediction = Program.E2.GetPrediction(hero);
+                for (var i = 15; i < pD; i += 75)
+                {
+                    var posCF = NavMesh.GetCollisionFlags(
+                        prediction.UnitPosition.To2D()
+                            .Extend(
+                                pP.To2D(),
+                                -i)
+                            .To3D());
+                    if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
+                    {
+                        Program.E.Cast(hero);
+                    }
+                }
+            }
+        }
+
+        public static void VHR()
+        {
+            var HeroList = EntityManager.Heroes.Enemies.Where(
+                h =>
+                    h.IsValidTarget(Program.E.Range) &&
+                    !h.HasBuffOfType(BuffType.SpellShield) &&
+                    !h.HasBuffOfType(BuffType.SpellImmunity));
+
+            foreach (var hero in HeroList)
+            {
+
+                //values for pred calc pP = player position; p = enemy position; pD = push distance
+                var pP = ObjectManager.Player.ServerPosition;
+                var p = hero.ServerPosition;
+                var pD = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
+
+                var prediction = Program.E2.GetPrediction(hero);
+                for (var i = 15; i < pD; i += (int) hero.BoundingRadius) //:frosty:
+                {
+                    var posCF = NavMesh.GetCollisionFlags(
+                        prediction.UnitPosition.To2D()
+                            .Extend(
+                                pP.To2D(),
+                                -i)
+                            .To3D());
+                    if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
+                    {
+                        Program.E.Cast(hero);
+                    }
+                }
+            }
+        }
+
+        public static void Legacy()
+        {
+            var HeroList = EntityManager.Heroes.Enemies.Where(
+                h =>
+                    h.IsValidTarget(Program.E.Range) &&
+                    !h.HasBuffOfType(BuffType.SpellShield) &&
+                    !h.HasBuffOfType(BuffType.SpellImmunity));
+
+            foreach (var hero in HeroList)
+            {
+
+                //values for pred calc pP = player position; p = enemy position; pD = push distance
+                var pP = ObjectManager.Player.ServerPosition;
+                var p = hero.ServerPosition;
+                var pD = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
+
+                var prediction = Program.E2.GetPrediction(hero);
+                for (var i = 15; i < pD; i += 75)
+                {
+                    var posCF = NavMesh.GetCollisionFlags(
+                        prediction.UnitPosition.To2D()
+                            .Extend(
+                                pP.To2D(),
+                                -i)
+                            .To3D());
+                    if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
+                    {
+                        Program.E.Cast(hero);
+                    }
+                }
+            }
+        }
+
+        public static void Fastest()
+        {
+            var HeroList = EntityManager.Heroes.Enemies.Where(
+                h =>
+                    h.IsValidTarget(Program.E.Range) &&
+                    !h.HasBuffOfType(BuffType.SpellShield) &&
+                    !h.HasBuffOfType(BuffType.SpellImmunity));
+
+            foreach (var hero in HeroList)
+            {
+
+                //values for pred calc pP = player position; p = enemy position; pD = push distance
+                var pP = ObjectManager.Player.ServerPosition;
+                var p = hero.ServerPosition;
+                var pD = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
+
+                if (IsCollisionable((Vector3) p.Extend(pP, -pD)) || IsCollisionable((Vector3) p.Extend(pP, -pD/2f)) ||
+                    IsCollisionable((Vector3) p.Extend(pP, -pD/3f)))
+                {
+                    Program.E.Cast(hero);
+                }
+            }
+        }
+
+        private static bool IsCollisionable(Vector3 pos)
+        {
+
+            return NavMesh.GetCollisionFlags(pos).HasFlag(CollisionFlags.Wall) ||
+                (NavMesh.GetCollisionFlags(pos).HasFlag(CollisionFlags.Building));
+        }
     }
 }
+
+
+    

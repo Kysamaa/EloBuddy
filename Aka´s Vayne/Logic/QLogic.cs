@@ -33,69 +33,50 @@ namespace AddonTemplate.Logic
                 (Aka_s_Vayne_reworked.Functions.other.UnderEnemyTower((Vector2) pos) && Aka_s_Vayne_reworked.Functions.other.UnderEnemyTower((Vector2) Variables._Player.Position)) || collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building);
         }
 
-        public static Vector3 GetAggressiveTumblePos(this Obj_AI_Base target)
+        public static Vector3 GetJungleSafeTumblePos(Obj_AI_Base target)
         {
             var cursorPos = Game.CursorPos;
+            if (IsSafeTumblePos(cursorPos)) return cursorPos;
 
-            if (!cursorPos.IsDangerousPosition()) return cursorPos;
-            //if the target is not a melee and he's alone he's not really a danger to us, proceed to 1v1 him :^ )
-            if (!target.IsMelee && Variables._Player.CountEnemiesInRange(800) == 1) return cursorPos;
+            if (!target.IsValidTarget()) return Vector3.Zero;
 
-            var aRC = new QGeometry.Circle(Variables._Player.ServerPosition.To2D(), 300).ToPolygon().ToClipperPath();
             var targetPosition = target.ServerPosition;
 
+            var myTumbleRangeCircle =
+                new QGeometry.Circle(ObjectManager.Player.ServerPosition.To2D(), 300).ToPolygon().ToClipperPath();
 
-            foreach (var p in aRC)
-            {
-                var v3 = new Vector2(p.X, p.Y).To3D();
-                var dist = v3.Distance(targetPosition);
-                if (dist > 325 && dist < 450)
-                {
-                    return v3;
-                }
-            }
-            return Vector3.Zero;
+            var goodCandidates = from p in myTumbleRangeCircle
+                                 select new Vector2(p.X, p.Y).To3D() into v3
+                                 let dist = v3.Distance(targetPosition)
+                                 where dist > MenuManager.ComboMenu["QDistance"].Cast<Slider>().CurrentValue && dist < 500
+                                 select v3;
+
+            return goodCandidates.OrderByDescending(candidate => candidate.Distance(cursorPos)).FirstOrDefault();
         }
 
-        public static Vector3 GetTumblePos(this Obj_AI_Base target)
+        public static Vector3 GetSafeTumblePos(AIHeroClient target)
         {
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
-            return GetAggressiveTumblePos(target);
+            if (!target.IsValidTarget()) return Vector3.Zero;
 
-            var cursorPos = Game.CursorPos;
-
-            if (!cursorPos.IsDangerousPosition()) return cursorPos;
-            //if the target is not a melee and he's alone he's not really a danger to us, proceed to 1v1 him :^ )
-            if (!target.IsMelee && Variables._Player.CountEnemiesInRange(800) == 1) return cursorPos;
-
-            var aRC = new QGeometry.Circle(Variables._Player.ServerPosition.To2D(), 300).ToPolygon().ToClipperPath();
             var targetPosition = target.ServerPosition;
-            var pList = new List<Vector3>();
-            var additionalDistance = (0.106 + Game.Ping / 2000f) * target.MoveSpeed;
 
+            var myTumbleRangeCircle =
+                new QGeometry.Circle(ObjectManager.Player.ServerPosition.To2D(), 300).ToPolygon().ToClipperPath();
 
-            foreach (var p in aRC)
-            {
-                var v3 = Extensions.To3D(new Vector2(p.X, p.Y));
+            var goodCandidates = from p in myTumbleRangeCircle
+                                 select new Vector2(p.X, p.Y).To3D() into v3
+                                 let dist = v3.Distance(targetPosition)
+                                 where dist > MenuManager.ComboMenu["QDistance"].Cast<Slider>().CurrentValue && dist < 500
+                                 select v3;
 
-                if (target.IsFacing(Variables._Player))
-                {
-                    if (!v3.IsDangerousPosition() && v3.Distance(targetPosition) < 550) pList.Add(v3);
-                }
-                else
-                {
-                    if (!v3.IsDangerousPosition() && v3.Distance(targetPosition) < 550 - additionalDistance) pList.Add(v3);
-                }
-            }
-            if (Aka_s_Vayne_reworked.Functions.other.UnderEnemyTower((Vector2) Variables._Player.Position) || Variables._Player.CountEnemiesInRange(800) == 1)
-            {
-                return pList.Count > 1 ? pList.OrderBy(el => el.Distance(cursorPos)).FirstOrDefault() : Vector3.Zero;
-            }
-            if (!cursorPos.IsDangerousPosition())
-            {
-                return pList.Count > 1 ? pList.OrderBy(el => el.Distance(cursorPos)).FirstOrDefault() : Vector3.Zero;
-            }
-            return pList.Count > 1 ? pList.OrderByDescending(el => el.Distance(cursorPos)).FirstOrDefault() : Vector3.Zero;
+            return goodCandidates.OrderBy(candidate => candidate.Distance(Game.CursorPos)).FirstOrDefault();
+        }
+
+        public static bool IsSafeTumblePos(Vector3 position)
+        {
+            return
+                !ObjectManager.Get<AIHeroClient>()
+                    .Any(e => e.IsEnemy && e.Distance(position) < MenuManager.ComboMenu["QDistance"].Cast<Slider>().CurrentValue);
         }
 
         public static void JungleClear()
@@ -104,7 +85,7 @@ namespace AddonTemplate.Logic
             {
                 if (MenuManager.JungleClearMenu["JCQ"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.Q.Range))             
                 {
-                    QLogic.Cast(Variables._Player.GetTumblePos());
+                    QLogic.Cast(GetJungleSafeTumblePos(jungleMobs));
                 }
             }
         }

@@ -14,7 +14,7 @@ namespace Aka_s_Vayne_reworked.Modes
                 DamageType.Physical);
 
             UseQ();
-            UseE();
+            UseE2();
             UseR();
             UseTrinket(target);
             Events._game.FastBotrk();
@@ -34,7 +34,7 @@ namespace Aka_s_Vayne_reworked.Modes
                 switch (mode)
                 {
                     case 2:
-                        tumblePosition = target.GetTumblePos();
+                        tumblePosition = QLogic.GetSafeTumblePos(target);
                         break;
                     case 1:
                         tumblePosition = Game.CursorPos;
@@ -50,7 +50,7 @@ namespace Aka_s_Vayne_reworked.Modes
                 switch (mode)
                 {
                     case 2:
-                        tumblePosition = target.GetTumblePos();
+                        tumblePosition = QLogic.GetSafeTumblePos(target);
                         break;
                     case 1:
                         tumblePosition = Game.CursorPos;
@@ -97,10 +97,100 @@ namespace Aka_s_Vayne_reworked.Modes
                         break;
                 }
             }
-
-
         }
 
+        public static void UseE2()
+        {
+            var mode = MenuManager.CondemnMenu["Condemnmode"].Cast<Slider>().CurrentValue;
+            var target = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange() + 300,
+                DamageType.Physical);
+
+            if (target == null || !Program.E.IsReady()) return;
+            if (Functions.Modes.Combo.AfterAttack && MenuManager.CondemnMenu["UseEa"].Cast<CheckBox>().CurrentValue)
+            {
+                switch (mode)
+                {
+                    case 1:
+                        ELogic.Perfect();
+                        break;
+                    case 2:
+                        ELogic.Smart();
+                        break;
+                    case 3:
+                        ELogic.Sharpshooter();
+                        break;
+                    case 4:
+                        ELogic.Gosu();
+                        break;
+                    case 5:
+                        ELogic.VHR();
+                        break;
+                    case 6:
+                        ELogic.Fastest();
+                        break;
+                    case 7:
+                        ELogic.Legacy();
+                        break;
+                    case 8:
+                        ELogic.Marksman();
+                        break;
+                    case 9:
+                        ELogic.Old();
+                        break;
+                    case 10:
+                        ELogic.Condemn1();
+                        break;
+                    case 11:
+                        ELogic.Condemn2();
+                        break;
+                    case 12:
+                        ELogic.Condemn3();
+                        break;
+                }
+            }
+            if (Functions.Modes.Combo.BeforeAttack && MenuManager.CondemnMenu["UseEb"].Cast<CheckBox>().CurrentValue)
+            {
+                switch (mode)
+                {
+                    case 1:
+                        ELogic.Perfect();
+                        break;
+                    case 2:
+                        ELogic.Smart();
+                        break;
+                    case 3:
+                        ELogic.Sharpshooter();
+                        break;
+                    case 4:
+                        ELogic.Gosu();
+                        break;
+                    case 5:
+                        ELogic.VHR();
+                        break;
+                    case 6:
+                        ELogic.Fastest();
+                        break;
+                    case 7:
+                        ELogic.Legacy();
+                        break;
+                    case 8:
+                        ELogic.Marksman();
+                        break;
+                    case 9:
+                        ELogic.Old();
+                        break;
+                    case 10:
+                        ELogic.Condemn1();
+                        break;
+                    case 11:
+                        ELogic.Condemn2();
+                        break;
+                    case 12:
+                        ELogic.Condemn3();
+                        break;
+                }
+            }
+        }
 
         public static void UseR()
         {

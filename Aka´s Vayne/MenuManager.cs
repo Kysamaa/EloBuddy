@@ -53,6 +53,7 @@ namespace Aka_s_Vayne_reworked
             ComboMenu.AddGroupLabel("Q Settings");
             ComboMenu.AddLabel("1: Mouse 2: Prada");
             ComboMenu.Add("Qmode", new Slider("Q Mode", 2, 1, 2));
+            ComboMenu.Add("QDistance", new Slider("min Q Distance from target", 375, 325, 525));
             ComboMenu.Add("UseQb", new CheckBox("Use Q before AA?", false));
             ComboMenu.Add("UseQa", new CheckBox("Use Q after AA?"));
             ComboMenu.AddLabel("Once you untick´d the AA Reset you have to reload[F5]");
@@ -75,15 +76,16 @@ namespace Aka_s_Vayne_reworked
         {
             CondemnMenu = VMenu.AddSubMenu("Condemn", "Condemn");
             CondemnMenu.AddGroupLabel("Condemn");
-            CondemnMenu.AddLabel(
-                "1: Hiki Condemn 2: VHR Condemn 3: Fluxy Condemn, Fluxy is 360° condemn => the best, the others are less obvious");
-            CondemnMenu.Add("Condemnmode", new Slider("Condemn Mode", 3, 1, 3));
+            CondemnMenu.AddLabel("1: Perfect 2: Smart 3: Sharpshooter 4: Gosu 5: VHR");
+            CondemnMenu.AddLabel("6: Fastest 7: Legacy 8: Marksman 9: Old 10: Hiki 11: VHR2 12: Fluxys");
+            //CondemnMenu.Add("Condemnmode", new Slider("Condemn Mode", 3, 1, 3));
+            CondemnMenu.Add("Condemnmode", new Slider("Condemn Mode", 4, 1, 12));
             //CondemnMenu.Add("condemnmethod1", new CheckBox("Condemn 1(Hiki)", false));
             //CondemnMenu.Add("condemnmethod2", new CheckBox("Condemn 2(VHR)", false));
             //CondemnMenu.Add("condemnmethod3", new CheckBox("Condemn 3(Fluxy)"));
             CondemnMenu.Add("UseEb", new CheckBox("Use Condemn before AA?", false));
             CondemnMenu.Add("UseEa", new CheckBox("Use Condemn after AA?"));
-            CondemnMenu.Add("condemnPercent", new Slider("Condemn 3(Fluxy) Hitchance %", 33, 1));
+            CondemnMenu.Add("condemnPercent", new Slider("Condemn Hitchance %", 33, 1));
             CondemnMenu.Add("trinket", new CheckBox("Use trinket bush?"));
             CondemnMenu.Add("pushDistance", new Slider("Condemn Push Distance", 410, 350, 420));
         }
