@@ -10,7 +10,7 @@ namespace Aka_s_Vayne_reworked.Modes
 
         public static void Load()
         {
-            var target = TargetSelector.GetTarget((int) Variables._Player.GetAutoAttackRange() + 300,
+            var target = TargetSelector.GetTarget((int) Variables._Player.GetAutoAttackRange(),
                 DamageType.Physical);
 
             UseQ();
@@ -24,7 +24,7 @@ namespace Aka_s_Vayne_reworked.Modes
         public static void UseQ()
         {
             var mode = MenuManager.ComboMenu["Qmode"].Cast<Slider>().CurrentValue;
-            var target = TargetSelector.GetTarget((int) Variables._Player.GetAutoAttackRange() + 300,
+            var target = TargetSelector.GetTarget((int) Variables._Player.GetAutoAttackRange(),
                 DamageType.Physical);
 
             if (Functions.Modes.Combo.AfterAttack && MenuManager.ComboMenu["UseQa"].Cast<CheckBox>().CurrentValue)
@@ -63,7 +63,7 @@ namespace Aka_s_Vayne_reworked.Modes
         public static void UseE()
         {
             var mode = MenuManager.CondemnMenu["Condemnmode"].Cast<Slider>().CurrentValue;
-            var target = TargetSelector.GetTarget((int) Variables._Player.GetAutoAttackRange() + 300,
+            var target = TargetSelector.GetTarget((int) Variables._Player.GetAutoAttackRange(),
                 DamageType.Physical);
 
             if (target == null) return;
@@ -102,7 +102,7 @@ namespace Aka_s_Vayne_reworked.Modes
         public static void UseE2()
         {
             var mode = MenuManager.CondemnMenu["Condemnmode"].Cast<Slider>().CurrentValue;
-            var target = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange() + 300,
+            var target = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),
                 DamageType.Physical);
 
             if (target == null || !Program.E.IsReady()) return;
