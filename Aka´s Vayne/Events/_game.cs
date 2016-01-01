@@ -19,7 +19,7 @@ namespace Aka_s_Vayne_reworked.Events
 
         public static void AAReset()
         {
-            var target = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange() + 300,
+            var target = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),
     DamageType.Physical);
 
             if (Variables.stopmove && Game.Time * 1000 > Variables.lastaaclick + Variables._Player.AttackCastDelay * 1000)
@@ -98,7 +98,7 @@ namespace Aka_s_Vayne_reworked.Events
         
         public static void FastBotrk()
         {
-            var target = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange() + 300,
+            var target = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),
     DamageType.Physical);
 
             if (MenuManager.ItemMenu["botrk"].Cast<CheckBox>().CurrentValue && target != null &&
