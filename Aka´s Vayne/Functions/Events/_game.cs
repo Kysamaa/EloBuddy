@@ -15,7 +15,7 @@ namespace Aka_s_Vayne_reworked.Functions.Events
                     .Where(
                         enemy =>
                             !enemy.IsDead &&
-                            enemy.IsValidTarget((Program.Q.IsReady() ? Program.Q.Range : 0) + Variables._Player.AttackRange + 300))
+                            enemy.IsValidTarget((Program.Q.IsReady() ? Program.Q.Range : 0) + Variables._Player.AttackRange))
                     .FirstOrDefault(
                         enemy => enemy.Buffs.Any(buff => buff.Name == "vaynesilvereddebuff" && buff.Count > 0));
             }
