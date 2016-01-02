@@ -9,9 +9,9 @@ namespace AkaYasuo.Events
     {
         public static void AutoQ()
         {
-            if (MenuManager.HarassMenu["AutoQ"].Cast<KeyBind>().CurrentValue ||
-               (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)) &&
-               (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) && (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee)))
+            if (MenuManager.HarassMenu["AutoQ"].Cast<KeyBind>().CurrentValue &&
+               (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)) ||
+               (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) || (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee)))
             {
                 var TsTarget = TargetSelector.GetTarget(Program.Q.Range, DamageType.Physical);
                 Orbwalker.ForcedTarget = TsTarget;
