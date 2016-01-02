@@ -7,7 +7,7 @@
     <ProjectGuid>{C7EE2755-7C6F-43C0-89D4-CA4D61733E87}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GosuMechanics_Yasuo</RootNamespace>
+    <RootNamespace>AkaYasuo</RootNamespace>
     <AssemblyName>GosuMechanics_Yasuo</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -73,30 +73,51 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utility\Collision.cs" />
-    <Compile Include="Utility\EvadeSpellData.cs" />
-    <Compile Include="Utility\EvadeSpellDatabase.cs" />
-    <Compile Include="Utility\Geometry.cs" />
-    <Compile Include="Utility\HealthPrediction.cs" />
-    <Compile Include="Utility\Interrupter2.cs" />
-    <Compile Include="Utility\LastCastedSpell.cs" />
-    <Compile Include="Utility\MEC.cs" />
-    <Compile Include="Utility\MinionManager.cs" />
-    <Compile Include="StateManager.cs" />
-    <Compile Include="Utility\Orbwalking.cs" />
+    <Compile Include="EventManager.cs" />
+    <Compile Include="Events\_drawing.cs" />
+    <Compile Include="Events\_game.cs" />
+    <Compile Include="Events\_objaibase.cs" />
+    <Compile Include="Events\_skillshotdetector.cs" />
+    <Compile Include="Events\_spellbook.cs" />
+    <Compile Include="Functions\Events\_drawing.cs" />
+    <Compile Include="Functions\Events\_game.cs" />
+    <Compile Include="Functions\Events\_objaibase.cs" />
+    <Compile Include="Functions\Events\_skillshotdetector.cs" />
+    <Compile Include="Functions\Events\_spellbook.cs" />
+    <Compile Include="Functions\Modes\Combo.cs" />
+    <Compile Include="Functions\Modes\Flee.cs" />
+    <Compile Include="Functions\Modes\Harass.cs" />
+    <Compile Include="Functions\Modes\JungleClear.cs" />
+    <Compile Include="Functions\Modes\LaneClear.cs" />
+    <Compile Include="Functions\Modes\LastHit.cs" />
+    <Compile Include="Functions\Modes\PermaActive.cs" />
+    <Compile Include="MenuManager.cs" />
+    <Compile Include="Modes\Combo.cs" />
+    <Compile Include="Modes\Flee.cs" />
+    <Compile Include="Modes\Harass.cs" />
+    <Compile Include="Modes\Items.cs" />
+    <Compile Include="Modes\JungleClear.cs" />
+    <Compile Include="Modes\LaneClear.cs" />
+    <Compile Include="Modes\PermaActive.cs" />
+    <Compile Include="Skillshotdetector\Collision.cs" />
+    <Compile Include="Skillshotdetector\EvadeSpellData.cs" />
+    <Compile Include="Skillshotdetector\EvadeSpellDatabase.cs" />
+    <Compile Include="Modes\LastHit.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utility\Skillshot.cs" />
-    <Compile Include="Utility\SkillshotDetector.cs" />
-    <Compile Include="Utility\SpellData.cs" />
-    <Compile Include="Utility\SpellDatabase.cs" />
-    <Compile Include="Utility\TargetSelector2.cs" />
-    <Compile Include="Utility\Utils.cs" />
-    <Compile Include="Utility\Walljump.cs" />
+    <Compile Include="Skillshotdetector\Geometry.cs" />
+    <Compile Include="Skillshotdetector\Skillshot.cs" />
+    <Compile Include="Skillshotdetector\SkillshotDetector.cs" />
+    <Compile Include="Skillshotdetector\SpellData.cs" />
+    <Compile Include="Skillshotdetector\SpellDatabase.cs" />
+    <Compile Include="Skillshotdetector\Utils.cs" />
+    <Compile Include="Walljump.cs" />
+    <Compile Include="Variables.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -38,13 +38,13 @@ namespace AkaYasuo
                 return;
             }
 
-            for (var i = Program.DetectedSkillShots.Count - 1; i >= 0; i--)
+            for (var i = Variables.DetectedSkillShots.Count - 1; i >= 0; i--)
             {
-                var skillshot = Program.DetectedSkillShots[i];
+                var skillshot = Variables.DetectedSkillShots[i];
                 if (skillshot.SpellData.ToggleParticleName != "" &&
                     sender.Name.Contains(skillshot.SpellData.ToggleParticleName))
                 {
-                    Program.DetectedSkillShots.RemoveAt(i);
+                    Variables.DetectedSkillShots.RemoveAt(i);
                 }
             }
         }
@@ -120,7 +120,7 @@ namespace AkaYasuo
 
             if (OnDeleteMissile != null)
             {
-                foreach (var skillshot in Program.DetectedSkillShots)
+                foreach (var skillshot in Variables.DetectedSkillShots)
                 {
                     if (skillshot.SpellData.MissileSpellName == spellName &&
                         (skillshot.Unit.NetworkId == unit.NetworkId &&
@@ -133,7 +133,7 @@ namespace AkaYasuo
                 }
             }
 
-            Program.DetectedSkillShots.RemoveAll(
+            Variables.DetectedSkillShots.RemoveAll(
                 skillshot =>
                     (skillshot.SpellData.MissileSpellName == spellName ||
                      skillshot.SpellData.ExtraMissileNames.Contains(spellName)) &&
@@ -175,7 +175,7 @@ namespace AkaYasuo
         {
             if (args.SData.Name == "dravenrdoublecast")
             {
-                Program.DetectedSkillShots.RemoveAll(
+                Variables.DetectedSkillShots.RemoveAll(
                     s => s.Unit.NetworkId == sender.NetworkId && s.SpellData.SpellName == "DravenRCast");
             }
 

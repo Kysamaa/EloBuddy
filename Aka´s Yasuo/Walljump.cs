@@ -32,18 +32,18 @@ namespace AkaYasuo
         public static float LastMoveC;
         public static void WallJump()
         {
-            if (Program.myHero.Distance(spot1) <= 150)
+            if (Variables._Player.Distance(spot1) <= 150)
             {
                 MoveToLimited(spot1.To3D());
-                //foreach (Obj_AI_Base minion in EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true))
-                var jminions = EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, 1000, true);
+                //foreach (Obj_AI_Base minion in EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true))
+                var jminions = EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, 1000, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Player.Instance.Distance(spot1.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Player.Instance.Distance(spot1.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -53,18 +53,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(7110, 5612).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot2) <= 150)
+            if (Variables._Player.Distance(spot2) <= 150)
             {
                 MoveToLimited(spot2.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Player.Instance.Distance(spot2.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Player.Instance.Distance(spot2.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -74,18 +74,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(8372, 2908).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot3) <= 150)
+            if (Variables._Player.Distance(spot3) <= 150)
             {
                 MoveToLimited(spot3.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Player.Instance.Distance(spot3.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Player.Instance.Distance(spot3.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -95,18 +95,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(3674, 6708).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot4) <= 150)
+            if (Variables._Player.Distance(spot4) <= 150)
             {
                 MoveToLimited(spot4.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Player.Instance.Distance(spot4.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Player.Instance.Distance(spot4.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -116,18 +116,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(3774, 7706).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot5) <= 150)
+            if (Variables._Player.Distance(spot5) <= 150)
             {
                 MoveToLimited(spot5.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Player.Instance.Distance(spot5.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Player.Instance.Distance(spot5.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -137,21 +137,21 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(7923, 9351).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot6) <= 150)
+            if (Variables._Player.Distance(spot6) <= 150)
             {
                 MoveToLimited(spot6.To3D());
                 if (Player.Instance.Distance(spot6.To3D()) == 0 && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(6426, 12138).To3D());
                 }
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Player.Instance.Distance(spot6.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Player.Instance.Distance(spot6.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -161,18 +161,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(6426, 12138).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot7) <= 150)
+            if (Variables._Player.Distance(spot7) <= 150)
             {
                 MoveToLimited(spot7.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Player.Instance.Distance(spot7.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Player.Instance.Distance(spot7.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -182,18 +182,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(2050, 8416).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot8) <= 150)
+            if (Variables._Player.Distance(spot8) <= 150)
             {
                 MoveToLimited(spot8.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Player.Instance.Distance(spot8.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Player.Instance.Distance(spot8.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -203,18 +203,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(10894, 7192).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot9) <= 150)
+            if (Variables._Player.Distance(spot9) <= 150)
             {
                 MoveToLimited(spot9.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Player.Instance.Distance(spot9.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Player.Instance.Distance(spot9.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -224,18 +224,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(11172, 7208).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot10) <= 150)
+            if (Variables._Player.Distance(spot10) <= 150)
             {
                 MoveToLimited(spot10.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Player.Instance.Distance(spot10.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Player.Instance.Distance(spot10.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -245,18 +245,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(6824, 5308).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot11) <= 150)
+            if (Variables._Player.Distance(spot11) <= 150)
             {
                 MoveToLimited(spot11.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Player.Instance.Distance(spot11.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Player.Instance.Distance(spot11.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -266,18 +266,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(12772, 6458).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot12) <= 150)
+            if (Variables._Player.Distance(spot12) <= 150)
             {
                 MoveToLimited(spot12.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Player.Instance.Distance(spot12.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Player.Instance.Distance(spot12.To3D()) == 0 && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -287,18 +287,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(11072, 8156).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot13) <= 150)
+            if (Variables._Player.Distance(spot13) <= 150)
             {
                 MoveToLimited(spot13.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if ((Player.Instance.Distance(spot13.To3D()) == 0) && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if ((Player.Instance.Distance(spot13.To3D()) == 0) && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -308,18 +308,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(10772, 8456).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot14) <= 150)
+            if (Variables._Player.Distance(spot14) <= 150)
             {
                 MoveToLimited(spot14.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if ((Player.Instance.Distance(spot14.To3D()) == 0) && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if ((Player.Instance.Distance(spot14.To3D()) == 0) && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -329,18 +329,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(4024, 6358).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot15) <= 150)
+            if (Variables._Player.Distance(spot15) <= 150)
             {
                 MoveToLimited(spot15.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if ((Player.Instance.Distance(spot15.To3D()) == 0) && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if ((Player.Instance.Distance(spot15.To3D()) == 0) && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
@@ -350,18 +350,18 @@ namespace AkaYasuo
                     Program.W.Cast(new Vector2(66986, 10910).To3D());
                 }
             }
-            if (Program.myHero.Distance(spot16) <= 150)
+            if (Variables._Player.Distance(spot16) <= 150)
             {
                 MoveToLimited(spot16.To3D());
                 
-                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Program.myHero.ServerPosition, Program.E.Range, true);
+                var jminions =  EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.ServerPosition, Program.E.Range, true);
                 foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if ((Player.Instance.Distance(spot16.To3D()) == 0) && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if ((Player.Instance.Distance(spot16.To3D()) == 0) && jungleMobs.IsVisible && Program.E.IsReady()  && jungleMobs.IsValidTarget(Program.E.Range) && Variables.CanCastE(jungleMobs))
                     {
                         Program.E.Cast(jungleMobs);
                     }
