@@ -32,7 +32,7 @@ namespace Aka_s_Vayne_reworked.Logic
             if (!MenuManager.MechanicMenu["insece"].Cast<KeyBind>().CurrentValue) return;
 
             var mode = (MenuManager.MechanicMenu["insecmodes"].Cast<Slider>().CurrentValue);
-            var target = TargetSelector.GetTarget(1000, DamageType.Physical);
+            var target = Orbwalker.GetTarget() as AIHeroClient;
             if (target != null)
             {
                 //var targetfuturepos = Prediction.GetPrediction(target, 0.1f).UnitPosition;

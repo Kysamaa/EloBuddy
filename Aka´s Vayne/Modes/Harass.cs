@@ -40,20 +40,9 @@ namespace Aka_s_Vayne_reworked.Modes
 
         public static void UseC()
         {
-            var target = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),
-    DamageType.Physical);
-
-            if (target == null || Variables._Player.ManaPercent < MenuManager.HarassMenu["ManaHarass"].Cast<Slider>().CurrentValue)
+            if (MenuManager.HarassMenu["UseCHarass"].Cast<CheckBox>().CurrentValue && Program.E.IsReady() && Program.Q.IsReady())
             {
-                return;
-            }
-
-            if (Functions.Modes.Combo.AfterAttack && MenuManager.HarassMenu["UseCHarass"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady() &&
-                Program.E.IsReady())
-            {
-                Orbwalker.ForcedTarget = target;
-                QLogic.Cast(QLogic.GetSafeTumblePos(target));
-                Program.E2.Cast(target.Position);
+                Functions.Modes.Harass.SilverStackC();
             }
         }
     }

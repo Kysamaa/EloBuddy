@@ -1,21 +1,42 @@
-﻿using System;
+﻿// Copyright 2014 - 2014 Esk0r
+// Geometry.cs is part of Evade.
+// 
+// Evade is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// Evade is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with Evade. If not, see <http://www.gnu.org/licenses/>.
+
+#region
+
+using System;
 using System.Collections.Generic;
+using ClipperLib;
 using SharpDX;
 using EloBuddy;
-using ClipperLib;
 using EloBuddy.SDK;
 using Color = System.Drawing.Color;
 using Path = System.Collections.Generic.List<ClipperLib.IntPoint>;
 using Paths = System.Collections.Generic.List<System.Collections.Generic.List<ClipperLib.IntPoint>>;
 using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 
+#endregion
 
 namespace AddonTemplate.Logic
 {
+    ///From Evade's Geometry Library. All credits to: https://github.com/Esk0r/LeagueSharp/blob/master/Evade/Geometry.cs
+    /// 
     /// <summary>
     /// Class that contains the geometry related methods.
     /// </summary>
-    public static class QGeometry
+    public static class VHRGeometry
     {
         private const int CircleLineSegmentN = 22;
 
@@ -23,15 +44,32 @@ namespace AddonTemplate.Logic
         {
             return new Vector3(v.X, v.Z, v.Y);
         }
+        public static bool IsOverWall(Vector3 start, Vector3 end)
+        {
+            double distance = Vector3.Distance(start, end);
+            for (uint i = 0; i < distance; i += 10)
+            {
+
+                var tempPosition = start.Extend(end, i).To3D();
+                var collFlags = NavMesh.GetCollisionFlags(tempPosition);
+                if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         //Clipper
         public static List<Polygon> ToPolygons(this Paths v)
         {
             var result = new List<Polygon>();
+
             foreach (var path in v)
             {
-                result.Add(path.topolygon());
+                result.Add(path.ToPolygon());
             }
+
             return result;
         }
 
@@ -55,18 +93,7 @@ namespace AddonTemplate.Logic
             return self[self.Count - 1];
         }
 
-
-        public static class Util
-        {
-            public static void DrawLineInWorld(Vector3 start, Vector3 end, int width, Color color)
-            {
-                var from = Drawing.WorldToScreen(start);
-                var to = Drawing.WorldToScreen(end);
-                Drawing.DrawLine(from[0], from[1], to[0], to[1], width, color);
-            }
-        }
-
-        public static Polygon topolygon(this Path v)
+        public static Polygon ToPolygon(this Path v)
         {
             var polygon = new Polygon();
             foreach (var point in v)
@@ -76,22 +103,27 @@ namespace AddonTemplate.Logic
             return polygon;
         }
 
+
         public static Paths ClipPolygons(List<Polygon> polygons)
         {
             var subj = new Paths(polygons.Count);
             var clip = new Paths(polygons.Count);
+
             foreach (var polygon in polygons)
             {
                 subj.Add(polygon.ToClipperPath());
                 clip.Add(polygon.ToClipperPath());
             }
+
             var solution = new Paths();
             var c = new Clipper();
             c.AddPaths(subj, PolyType.ptSubject, true);
             c.AddPaths(clip, PolyType.ptClip, true);
             c.Execute(ClipType.ctUnion, solution, PolyFillType.pftPositive, PolyFillType.pftEvenOdd);
+
             return solution;
         }
+
 
         public class Circle
         {
@@ -104,12 +136,13 @@ namespace AddonTemplate.Logic
                 Radius = radius;
             }
 
-            public Polygon topolygon(int offset = 0, float overrideWidth = -1)
+            public Polygon ToPolygon(int offset = 0, float overrideWidth = -1)
             {
                 var result = new Polygon();
                 var outRadius = (overrideWidth > 0
                     ? overrideWidth
                     : (offset + Radius) / (float)Math.Cos(2 * Math.PI / CircleLineSegmentN));
+
                 for (var i = 1; i <= CircleLineSegmentN; i++)
                 {
                     var angle = i * 2 * Math.PI / CircleLineSegmentN;
@@ -117,6 +150,7 @@ namespace AddonTemplate.Logic
                         Center.X + outRadius * (float)Math.Cos(angle), Center.Y + outRadius * (float)Math.Sin(angle));
                     result.Add(point);
                 }
+
                 return result;
             }
         }
@@ -133,10 +167,12 @@ namespace AddonTemplate.Logic
             public Path ToClipperPath()
             {
                 var result = new Path(Points.Count);
+
                 foreach (var point in Points)
                 {
                     result.Add(new IntPoint(point.X, point.Y));
                 }
+
                 return result;
             }
 
@@ -151,8 +187,14 @@ namespace AddonTemplate.Logic
                 for (var i = 0; i <= Points.Count - 1; i++)
                 {
                     var nextIndex = (Points.Count - 1 == i) ? 0 : (i + 1);
-                    Util.DrawLineInWorld(Points[i].To3D(), Points[nextIndex].To3D(), width, color);
+                    DrawLineInWorld(Points[i].To3D(), Points[nextIndex].To3D(), width, color);
                 }
+            }
+            public static void DrawLineInWorld(Vector3 start, Vector3 end, int width, Color color)
+            {
+                var from = Drawing.WorldToScreen(start);
+                var to = Drawing.WorldToScreen(end);
+                Drawing.DrawLine(from[0], from[1], to[0], to[1], width, color);
             }
         }
 
@@ -170,12 +212,13 @@ namespace AddonTemplate.Logic
                 REnd = end;
                 Width = width;
                 Direction = (end - start).Normalized();
-                Perpendicular = Direction.Perpendicular2();
+                Perpendicular = Direction.Perpendicular();
             }
 
-            public Polygon topolygon(int offset = 0, float overrideWidth = -1)
+            public Polygon ToPolygon(int offset = 0, float overrideWidth = -1)
             {
                 var result = new Polygon();
+
                 result.Add(
                     RStart + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
                 result.Add(
@@ -184,9 +227,11 @@ namespace AddonTemplate.Logic
                     REnd - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
                 result.Add(
                     REnd + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
+
                 return result;
             }
         }
+
 
         public class Ring
         {
@@ -201,11 +246,13 @@ namespace AddonTemplate.Logic
                 RingRadius = ringRadius;
             }
 
-            public Polygon topolygon(int offset = 0)
+            public Polygon ToPolygon(int offset = 0)
             {
                 var result = new Polygon();
+
                 var outRadius = (offset + Radius + RingRadius) / (float)Math.Cos(2 * Math.PI / CircleLineSegmentN);
                 var innerRadius = Radius - RingRadius - offset;
+
                 for (var i = 0; i <= CircleLineSegmentN; i++)
                 {
                     var angle = i * 2 * Math.PI / CircleLineSegmentN;
@@ -213,6 +260,7 @@ namespace AddonTemplate.Logic
                         Center.X - outRadius * (float)Math.Cos(angle), Center.Y - outRadius * (float)Math.Sin(angle));
                     result.Add(point);
                 }
+
                 for (var i = 0; i <= CircleLineSegmentN; i++)
                 {
                     var angle = i * 2 * Math.PI / CircleLineSegmentN;
@@ -221,6 +269,8 @@ namespace AddonTemplate.Logic
                         Center.Y - innerRadius * (float)Math.Sin(angle));
                     result.Add(point);
                 }
+
+
                 return result;
             }
         }
@@ -240,17 +290,20 @@ namespace AddonTemplate.Logic
                 Radius = radius;
             }
 
-            public Polygon topolygon(int offset = 0)
+            public Polygon ToPolygon(int offset = 0)
             {
                 var result = new Polygon();
                 var outRadius = (Radius + offset) / (float)Math.Cos(2 * Math.PI / CircleLineSegmentN);
+
                 result.Add(Center);
                 var Side1 = Direction.Rotated(-Angle * 0.5f);
+
                 for (var i = 0; i <= CircleLineSegmentN; i++)
                 {
                     var cDirection = Side1.Rotated(i * Angle / CircleLineSegmentN).Normalized();
                     result.Add(new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
                 }
+
                 return result;
             }
         }

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Linq;
 using AddonTemplate;
 using AddonTemplate.Logic;
@@ -11,6 +12,8 @@ namespace Aka_s_Vayne_reworked.Events
 {
     internal class _objaibase
     {
+        private static float LastCondemnTick = 0f;
+
         public static void AutoAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!(sender is AIHeroClient)) return;
@@ -146,8 +149,6 @@ namespace Aka_s_Vayne_reworked.Events
         public static void SpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe) return;
-            var target = (Obj_AI_Base) args.Target;
-
             if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) &&
                  MenuManager.LaneClearMenu["LCQ"].Cast<CheckBox>().CurrentValue) &&
                 Program.Q.IsReady())

@@ -36,6 +36,9 @@
     <Reference Include="EloBuddy">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\EloBuddy.dll</HintPath>
     </Reference>
+    <Reference Include="EloBuddy.Sandbox">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\EloBuddy.Sandbox.dll</HintPath>
+    </Reference>
     <Reference Include="EloBuddy.SDK">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\EloBuddy.SDK.dll</HintPath>
     </Reference>
@@ -57,7 +60,17 @@
     <Compile Include="Activator\Itemlist.cs" />
     <Compile Include="Activator\PermaActive.cs" />
     <Compile Include="Damages.cs" />
+    <Compile Include="Evade\EvadeHelper.cs" />
+    <Compile Include="Evade\Utility\Collision.cs" />
+    <Compile Include="Evade\Utility\EvadeSpellData.cs" />
+    <Compile Include="Evade\Utility\EvadeSpellDatabase.cs" />
+    <Compile Include="Evade\Utility\Geometry.cs" />
+    <Compile Include="Evade\Utility\Skillshot.cs" />
+    <Compile Include="Evade\Utility\SkillshotDetector.cs" />
+    <Compile Include="Evade\Utility\SpellData.cs" />
+    <Compile Include="Evade\Utility\SpellDatabase.cs" />
     <Compile Include="EventManager.cs" />
+    <Compile Include="Events\_client.cs" />
     <Compile Include="Events\_drawing.cs" />
     <Compile Include="Events\_game.cs" />
     <Compile Include="Events\_gameObject.cs" />
@@ -67,8 +80,14 @@
     <Compile Include="Events\_orbwalker.cs" />
     <Compile Include="Events\_player.cs" />
     <Compile Include="Functions\other.cs" />
+    <Compile Include="Logic\AutoE.cs" />
     <Compile Include="Logic\Mechanics.cs" />
+    <Compile Include="Logic\NewELogic.cs" />
+    <Compile Include="Logic\QProvider.cs" />
+    <Compile Include="Logic\VHRGeometry.cs" />
+    <Compile Include="Logic\VHRPolygon.cs" />
     <Compile Include="MenuManager.cs" />
+    <Compile Include="Modes\LCLH.cs" />
     <Compile Include="Variables.cs" />
     <Compile Include="Functions\Events\_game.cs" />
     <Compile Include="Functions\Events\_gameObject.cs" />

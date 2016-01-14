@@ -1,7 +1,9 @@
 ﻿using EloBuddy;
 using AddonTemplate.Logic;
+using Aka_s_Vayne_reworked.Logic;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Menu.Values;
+using SharpDX;
 
 namespace Aka_s_Vayne_reworked.Modes
 {
@@ -10,22 +12,21 @@ namespace Aka_s_Vayne_reworked.Modes
 
         public static void Load()
         {
-            var target = TargetSelector.GetTarget((int) Variables._Player.GetAutoAttackRange(),
-                DamageType.Physical);
+            var target = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),
+    DamageType.Physical);
 
-            UseQ();
-            UseE2();
+            UseQ2();
+            //UseE3();
             UseR();
-            UseTrinket(target);
             Events._game.FastBotrk();
-            if (MenuManager.ComboMenu["AAReset"].Cast<CheckBox>().CurrentValue) Events._game.AAReset();
+            UseTrinket(target);
+            //if (MenuManager.ComboMenu["AAReset"].Cast<CheckBox>().CurrentValue) Events._game.AAReset();
         }
 
         public static void UseQ()
         {
             var mode = MenuManager.ComboMenu["Qmode"].Cast<Slider>().CurrentValue;
-            var target = TargetSelector.GetTarget((int) Variables._Player.GetAutoAttackRange(),
-                DamageType.Physical);
+            var target = Orbwalker.GetTarget() as AIHeroClient;
 
             if (Functions.Modes.Combo.AfterAttack && MenuManager.ComboMenu["UseQa"].Cast<CheckBox>().CurrentValue)
             {
@@ -60,11 +61,43 @@ namespace Aka_s_Vayne_reworked.Modes
             }
         }
 
+        public static void UseQ2()
+        {
+            var target = Orbwalker.GetTarget() as Obj_AI_Base;
+
+            if (Functions.Modes.Combo.AfterAttack && MenuManager.ComboMenu["UseQa"].Cast<CheckBox>().CurrentValue)
+            {
+                if (target == null) return;
+                QLogic.PreCastTumble(target);
+
+            }
+
+            if (Functions.Modes.Combo.BeforeAttack && MenuManager.ComboMenu["UseQb"].Cast<CheckBox>().CurrentValue)
+            {
+                if (target == null) return;
+                QLogic.PreCastTumble(target);
+            }
+        }
+
+        public static void UseE3()
+        {
+
+            if (Functions.Modes.Combo.AfterAttack && MenuManager.ComboMenu["UseEa"].Cast<CheckBox>().CurrentValue)
+            {
+                NewELogic.Execute();
+
+            }
+
+            if (Functions.Modes.Combo.BeforeAttack && MenuManager.ComboMenu["UseEb"].Cast<CheckBox>().CurrentValue)
+            {
+                NewELogic.Execute();
+            }
+        }
+
         public static void UseE()
         {
             var mode = MenuManager.CondemnMenu["Condemnmode"].Cast<Slider>().CurrentValue;
-            var target = TargetSelector.GetTarget((int) Variables._Player.GetAutoAttackRange(),
-                DamageType.Physical);
+            var target = Orbwalker.GetTarget() as Obj_AI_Base;
 
             if (target == null) return;
             if (Functions.Modes.Combo.AfterAttack && MenuManager.CondemnMenu["UseEa"].Cast<CheckBox>().CurrentValue)
@@ -102,8 +135,7 @@ namespace Aka_s_Vayne_reworked.Modes
         public static void UseE2()
         {
             var mode = MenuManager.CondemnMenu["Condemnmode"].Cast<Slider>().CurrentValue;
-            var target = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),
-                DamageType.Physical);
+            var target = Orbwalker.GetTarget() as Obj_AI_Base;
 
             if (target == null || !Program.E.IsReady()) return;
             if (Functions.Modes.Combo.AfterAttack && MenuManager.CondemnMenu["UseEa"].Cast<CheckBox>().CurrentValue)
