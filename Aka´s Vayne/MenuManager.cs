@@ -58,9 +58,9 @@ namespace Aka_s_Vayne_reworked
             ComboMenu.Add("UseQb", new CheckBox("Use Q before AA?", false));
             ComboMenu.Add("UseQa", new CheckBox("Use Q after AA?"));
             ComboMenu.AddGroupLabel("Q Settings");
-            ComboMenu.Add("UseSafeQ", new CheckBox("Dynamic Q Safety?"));
-            ComboMenu.Add("UseQE", new CheckBox("Dont Q into enemies?"));
-            ComboMenu.Add("QE", new CheckBox("Try to QE?"));
+            ComboMenu.Add("UseSafeQ", new CheckBox("Dynamic Q Safety?", false));
+            ComboMenu.Add("UseQE", new CheckBox("Dont Q into enemies?", false));
+            ComboMenu.Add("QE", new CheckBox("Try to QE?", false));
             ComboMenu.Add("UseQspam", new CheckBox("Ignore checks", false));
             ComboMenu.AddLabel("In Burstmode Vayne will Tumble in Walls for a faster Reset.");
             ComboMenu.Add("Mirin", new CheckBox("Burstmode"));
@@ -73,7 +73,7 @@ namespace Aka_s_Vayne_reworked
             ComboMenu.Add("focusw", new CheckBox("Focus W", false));
             ComboMenu.AddGroupLabel("E Settings");
             ComboMenu.Add("Ekill", new CheckBox("Use E if killable?"));
-            ComboMenu.Add("comboUseE", new CheckBox("Use E"));
+            ComboMenu.Add("comboUseE", new CheckBox("Use E", false));
             ComboMenu.AddGroupLabel("R Settings");
             ComboMenu.Add("comboUseR", new CheckBox("Use R", false));
             ComboMenu.Add("RnoAA", new CheckBox("No AA while stealth", false));
@@ -109,7 +109,7 @@ namespace Aka_s_Vayne_reworked
             HarassMenu.AddLabel("I would prefer to tick only 1 of the Options, I prefer the Q one.");
             HarassMenu.Add("UseQHarass", new CheckBox("Use Q(if 2 W stacks)"));
             HarassMenu.Add("UseEHarass", new CheckBox("Use E(if 2 W stacks)", false));
-            HarassMenu.Add("UseCHarass", new CheckBox("Use Combo: AA -> Q+AA -> E(broken)", false));
+            HarassMenu.Add("UseCHarass", new CheckBox("Use Combo: AA -> Q+AA -> E(working propably)", false));
             HarassMenu.Add("ManaHarass", new Slider("Maximum mana usage in percent ({0}%)", 40));
         }
 
@@ -148,7 +148,7 @@ namespace Aka_s_Vayne_reworked
             MiscMenu.Add("AntiPanth", new CheckBox("Anti Pantheon"));
             MiscMenu.Add("fpsdrop", new CheckBox("Anti Fps Drop", false));
             MiscMenu.Add("InterruptE", new CheckBox("Interrupt Spells using E?"));
-            MiscMenu.Add("LowLifeE", new CheckBox("Low Life E"));
+            MiscMenu.Add("LowLifeE", new CheckBox("Low Life E", false));
             var dangerSlider = MiscMenu.Add("dangerLevel", new Slider("Set Your Danger Level: ", 3, 1, 3));
             var dangerSliderDisplay = MiscMenu.Add("dangerLevelDisplay",
                 new Label("Danger Level: " + Variables.DangerSliderValues[dangerSlider.Cast<Slider>().CurrentValue - 1]));

@@ -96,7 +96,7 @@ namespace AddonTemplate.Logic
 
         public static Vector3 NewQPrediction()
         {
-            if (!MenuManager.ComboMenu["QE"].Cast<CheckBox>().CurrentValue ||
+            if (!MenuManager.ComboMenu["QE"].Cast<CheckBox>().CurrentValue &&
     !Program.E.IsReady())
             {
                 return Vector3.Zero;

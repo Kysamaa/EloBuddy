@@ -31,7 +31,7 @@ namespace Aka_s_Vayne_reworked.Logic
                 //     return;
                 // }
 
-                Program.E3.Cast(CondemnTarget);
+                Program.E.Cast(CondemnTarget);
             }
         }
 
@@ -274,7 +274,7 @@ namespace Aka_s_Vayne_reworked.Logic
     {
         public static Obj_AI_Base GetTarget(Vector3 fromPosition)
         {
-            var HeroList = HeroManager.Enemies.Where(
+            var HeroList = EntityManager.Heroes.Enemies.Where(
                                     h =>
                                         h.IsValidTarget(Program.E.Range) &&
                                         !h.HasBuffOfType(BuffType.SpellShield) &&
