@@ -244,7 +244,11 @@ namespace AddonTemplate.Logic
                         break;
                     case 1:
                         //To mouse
-                        DefaultQCast(position, target);
+                        var Position = (Vector3)ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f);
+                        if (position.IsSafe())
+                        {
+                            DefaultQCast(Position, target);
+                        }
                         break;
                     case 3:
                         //Away from melee enemies
