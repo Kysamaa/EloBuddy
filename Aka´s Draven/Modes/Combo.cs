@@ -62,7 +62,7 @@ namespace AkaDraven.Modes
 
             // Patented Advanced Algorithms D321987
             var killableTarget =
-                HeroManager.Enemies.Where(x => x.IsValidTarget(2000))
+                EntityManager.Heroes.Enemies.Where(x => x.IsValidTarget(2000))
                     .FirstOrDefault(
                         x =>
                         Variables._Player.GetSpellDamage(x, SpellSlot.R) * 2 > x.Health

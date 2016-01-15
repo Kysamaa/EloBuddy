@@ -85,7 +85,6 @@ namespace AkaDraven
             LaneClearMenu = YMenu.AddSubMenu("LaneClear", "LaneClear");
             LaneClearMenu.Add("Q", new CheckBox("Use Q"));
             LaneClearMenu.Add("W", new CheckBox("Use W"));
-            LaneClearMenu.Add("E", new CheckBox("Use E"));
             LaneClearMenu.Add("Mana", new Slider("Mana Manager", 50));
         }
 

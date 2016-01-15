@@ -17,9 +17,9 @@ namespace AkaDraven.Modes
         {
             var catchOption = MenuManager.AxeMenu["Qmode"].Cast<Slider>().CurrentValue;
 
-            if (((catchOption == 0 && (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)))
-                 || (catchOption == 1 && (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))))
-                || catchOption == 2)
+            if (((catchOption == 1 && (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)))
+                 || (catchOption == 2 && (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))))
+                || catchOption == 3)
             {
                 var bestReticle =
                     Variables.QReticles.Where(
@@ -48,7 +48,7 @@ namespace AkaDraven.Modes
                         {
                             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
                             {
-                                Player.IssueOrder(GameObjectOrder.MoveTo, bestReticle.Position);
+                                Orbwalker.OrbwalkTo(bestReticle.Position);
                             }
                             else
                             {
@@ -59,7 +59,7 @@ namespace AkaDraven.Modes
                         {
                             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
                             {
-                                Player.IssueOrder(GameObjectOrder.MoveTo, bestReticle.Position);
+                                Orbwalker.OrbwalkTo(bestReticle.Position);
                             }
                             else
                             {
@@ -71,7 +71,7 @@ namespace AkaDraven.Modes
                     {
                         if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
                         {
-                            Player.IssueOrder(GameObjectOrder.MoveTo, bestReticle.Position);
+                            Orbwalker.OrbwalkTo(bestReticle.Position);
                         }
                         else
                         {
