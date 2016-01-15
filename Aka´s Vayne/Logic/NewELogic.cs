@@ -61,7 +61,7 @@ namespace Aka_s_Vayne_reworked.Logic
             {
                 case 1:
                     //VH Revolution
-                    return VHRevolution.GetTarget(fromPosition);
+                    return Shine.GetTarget(fromPosition);
                 case 2:
                     //VH Reborn
                     return VHReborn.GetTarget(fromPosition);
@@ -70,7 +70,7 @@ namespace Aka_s_Vayne_reworked.Logic
                     return Marksman.GetTarget(fromPosition);
                 case 4:
                     //Shine#
-                    return Shine.GetTarget(fromPosition);
+                    return VHRevolution.GetTarget(fromPosition);
             }
             return null;
         }

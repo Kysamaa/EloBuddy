@@ -9,7 +9,7 @@ namespace Aka_s_Vayne_reworked.Logic
     {
         public static void OnExecute()
         {
-            if (MenuManager.CondemnMenu["UseEauto"].Cast<CheckBox>().CurrentValue || !Program.E.IsReady())
+            if (MenuManager.CondemnMenu["UseEauto"].Cast<CheckBox>().CurrentValue && !Program.E.IsReady())
             {
                 return;
             }
