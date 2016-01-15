@@ -1,0 +1,3 @@
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Draven\bin\Debug\GosuMechanics_Yasuo.exe.config
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Draven\obj\Debug\GosuMechanics_Yasuo.exe
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Draven\obj\Debug\GosuMechanics_Yasuo.pdb
