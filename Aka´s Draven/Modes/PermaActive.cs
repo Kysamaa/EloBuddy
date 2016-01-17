@@ -46,7 +46,7 @@ namespace AkaDraven.Modes
                         // If we're under the turret as well as the axe, catch the axe
                         if (UnderEnemyTower(Variables._Player.ServerPosition) && UnderEnemyTower(bestReticle.Object.Position))
                         {
-                            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
+                            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)))
                             {
                                 Orbwalker.OrbwalkTo(bestReticle.Position);
                             }
@@ -57,7 +57,7 @@ namespace AkaDraven.Modes
                         }
                         else if (!UnderEnemyTower(bestReticle.Object.Position))
                         {
-                            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
+                            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)))
                             {
                                 Orbwalker.OrbwalkTo(bestReticle.Position);
                             }
@@ -69,7 +69,7 @@ namespace AkaDraven.Modes
                     }
                     else
                     {
-                        if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
+                        if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)))
                         {
                             Orbwalker.OrbwalkTo(bestReticle.Position);
                         }
