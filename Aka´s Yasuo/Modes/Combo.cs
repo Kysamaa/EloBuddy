@@ -88,18 +88,18 @@ namespace AkaYasuo.Modes
             if (Program.Q.IsReady() && MenuManager.ComboMenu["Q"].Cast<CheckBox>().CurrentValue)
             {
                 PredictionResult QPred = Program.Q.GetPrediction(TsTarget);
-                if (!Variables.isDashing && Program.Q.Range == 1000)
+                if (!Variables.isDashing && Program.Q.Range == 1000 && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High)
                 {
                     Program.Q.Cast(QPred.CastPosition);
                     Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                 }
-                else if (Program.Q.Range == 1000 && Variables.Q3READY(Variables._Player) && Variables.isDashing &&
+                else if (Program.Q.Range == 1000 && Variables.Q3READY(Variables._Player) && Variables.isDashing && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High &&
                          Variables._Player.Distance(TsTarget) <= 250*250)
                 {
                     Program.Q.Cast(QPred.CastPosition);
                     Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                 }
-                else if (!Variables.Q3READY(Variables._Player) && Program.Q.Range == 475)
+                else if (!Variables.Q3READY(Variables._Player) && Program.Q.Range == 475 && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium)
                 {
                     Program.Q.Cast(QPred.CastPosition);
                     Core.DelayAction(Orbwalker.ResetAutoAttack, 250);

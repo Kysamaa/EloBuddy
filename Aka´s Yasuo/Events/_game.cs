@@ -25,12 +25,12 @@ namespace AkaYasuo.Events
                 {
                     PredictionResult QPred = Program.Q.GetPrediction(TsTarget);
 
-                    if (Program.Q.IsReady() && Program.Q.Range == 1000 &&
+                    if (Program.Q.IsReady() && Program.Q.Range == 1000 && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High &&
                         MenuManager.HarassMenu["Q3"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
                     {
                         Program.Q.Cast(QPred.CastPosition);
                     }
-                    else if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && Program.Q.Range == 475 &&
+                    else if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && Program.Q.Range == 475 && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium &&
                              MenuManager.HarassMenu["Q"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
                     {
                         Program.Q.Cast(QPred.CastPosition);
@@ -40,12 +40,12 @@ namespace AkaYasuo.Events
                 {
                     PredictionResult QPred = Program.Q.GetPrediction(TsTarget);
 
-                    if (!Variables.UnderTower(Variables._Player.ServerPosition) && Program.Q.IsReady() && Program.Q.Range == 1000 &&
+                    if (!Variables.UnderTower(Variables._Player.ServerPosition) && Program.Q.IsReady() && Program.Q.Range == 1000 && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High &&
                         MenuManager.HarassMenu["Q3"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
                     {
                         Program.Q.Cast(QPred.CastPosition);
                     }
-                    if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && Program.Q.Range == 475 &&
+                    if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && Program.Q.Range == 475 && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium &&
                         MenuManager.HarassMenu["Q"].Cast<CheckBox>().CurrentValue && !Variables.IsDashing &&
                         !Variables.UnderTower(Variables._Player.ServerPosition))
                     {
