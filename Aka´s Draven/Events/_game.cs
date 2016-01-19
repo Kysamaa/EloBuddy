@@ -11,9 +11,26 @@ namespace AkaDraven.Events
         public static void OnUpdate()
         {
             Variables.QReticles.RemoveAll(x => x.Object.IsDead);
-
-            Modes.PermaActive.CatchAxe();
-
+            var canMove = false;
+            var canAttack = false;
+            foreach (var a in Variables.QReticles)
+            {
+                if (!a.CanOrbwalkWithUserDelay)
+                {
+                    canMove = true;
+                }
+                if (!a.CanAttack)
+                {
+                    canAttack = true;
+                }
+            }
+            
+            Orbwalker.DisableAttacking = canAttack;
+            Orbwalker.DisableMovement = canMove;
+            if (canMove)
+            {
+                Modes.PermaActive.CatchAxe();
+            }
             if (Program.W.IsReady() && MenuManager.MiscMenu["UseWSlow"].Cast<CheckBox>().CurrentValue && Variables._Player.HasBuffOfType(BuffType.Slow))
             {
                 Program.W.Cast();

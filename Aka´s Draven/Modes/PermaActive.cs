@@ -40,7 +40,6 @@ namespace AkaDraven.Modes
                     {
                         Program.W.Cast();
                     }
-
                     if (MenuManager.AxeMenu["Qunderturret"].Cast<CheckBox>().CurrentValue)
                     {
                         // If we're under the turret as well as the axe, catch the axe
@@ -48,40 +47,55 @@ namespace AkaDraven.Modes
                         {
                             if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)))
                             {
-                                Orbwalker.OrbwalkTo(bestReticle.Position);
+                                Orbwalker.DisableMovement = false;
+                                Player.IssueOrder(GameObjectOrder.MoveTo, bestReticle.Position);
+                                Orbwalker.DisableMovement = true;
                             }
                             else
                             {
+                                Orbwalker.DisableMovement = false;
                                 Orbwalker.OrbwalkTo(bestReticle.Position);
+                                Orbwalker.DisableMovement = true;
                             }
                         }
+
                         else if (!UnderEnemyTower(bestReticle.Object.Position))
                         {
                             if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)))
                             {
-                                Orbwalker.OrbwalkTo(bestReticle.Position);
+                                Orbwalker.DisableMovement = false;
+                                Player.IssueOrder(GameObjectOrder.MoveTo, bestReticle.Position);
+                                Orbwalker.DisableMovement = true;
                             }
                             else
                             {
+                                Orbwalker.DisableMovement = false;
                                 Orbwalker.OrbwalkTo(bestReticle.Position);
+                                Orbwalker.DisableMovement = true;
                             }
-                        }
-                    }
-                    else
-                    {
-                        if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)))
-                        {
-                            Orbwalker.OrbwalkTo(bestReticle.Position);
                         }
                         else
                         {
-                            Orbwalker.OrbwalkTo(bestReticle.Position);
+                            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee)) || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)))
+                            {
+                                Orbwalker.DisableMovement = false;
+                                Player.IssueOrder(GameObjectOrder.MoveTo, bestReticle.Position);
+                                Orbwalker.DisableMovement = true;
+                            }
+                            else
+                            {
+                                Orbwalker.DisableMovement = false;
+                                Orbwalker.OrbwalkTo(bestReticle.Position);
+                                Orbwalker.DisableMovement = true;
+                            }
                         }
                     }
                 }
             }
         }
-
+            
+        
+                                                             
         public static bool UnderEnemyTower(Vector3 pos)
         {
             return EntityManager.Turrets.Enemies.Where(a => a.Health > 0 && !a.IsDead).Any(a => a.Distance(pos) < 950);
