@@ -44,22 +44,22 @@ namespace AkaYasuo.Events
             }
             if (MenuManager.DrawingMenu["DrawSpots"].Cast<CheckBox>().CurrentValue)
             {
-                Drawing.DrawCircle(Yasuo.spot1.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot2.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot3.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot4.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot5.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot6.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot7.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot8.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot9.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot10.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot11.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot12.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot13.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot14.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot15.To3D(), 150, System.Drawing.Color.Red);
-                Drawing.DrawCircle(Yasuo.spot16.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotA.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotB.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotC.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotD.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotE.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotF.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotG.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotH.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotI.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotJ.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotK.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotL.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotM.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotN.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotK.To3D(), 150, System.Drawing.Color.Red);
+                Drawing.DrawCircle(Yasuo.spotO.To3D(), 150, System.Drawing.Color.Red);
             }
         }
     }

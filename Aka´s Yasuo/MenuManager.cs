@@ -59,8 +59,10 @@ namespace AkaYasuo
             ComboMenu = YMenu.AddSubMenu("Combo", "Combo");
             ComboMenu.AddGroupLabel("Combo");
             ComboMenu.Add("Q", new CheckBox("Use Q"));
-            ComboMenu.Add("E", new CheckBox("Use E"));
-            ComboMenu.Add("EQ", new CheckBox("Use EQ"));
+            ComboMenu.Add("EC", new CheckBox("Use E"));
+            ComboMenu.Add("E1", new Slider("when enemy range >=", 375, 475, 1));
+            ComboMenu.Add("E2", new Slider("Use E-GapCloser when enemy range >=", 230, 1300, 1));
+            ComboMenu.Add("E3", new CheckBox("Mode: On = ToTarget / OFF = ToMouse"));
             ComboMenu.Add("R", new CheckBox("Use R"));
             ComboMenu.Add("Ignite", new CheckBox("Use Ignite"));
             ComboMenu.AddGroupLabel("R Combo Settings");
@@ -82,7 +84,9 @@ namespace AkaYasuo
         public static void Harassmenu()
         {
             HarassMenu = YMenu.AddSubMenu("Harass", "Harass");
-            HarassMenu.Add("AutoQ", new KeyBind("Auto Q Toggle", true, KeyBind.BindTypes.PressToggle, 'G'));
+            HarassMenu.Add("AutoQ", new KeyBind("Auto Q Toggle", true, KeyBind.BindTypes.PressToggle, 'T'));
+            HarassMenu.Add("AutoQMinion", new KeyBind("Auto Q Minion Toggle", true, KeyBind.BindTypes.PressToggle, 'H'));
+            HarassMenu.Add("AutoQ3", new CheckBox("Use Q3 Auto?"));
             HarassMenu.Add("Q", new CheckBox("Use Q"));
             HarassMenu.Add("Q3", new CheckBox("Use Q3"));
             HarassMenu.Add("E", new CheckBox("Use E"));
@@ -94,7 +98,7 @@ namespace AkaYasuo
             FleeMenu = YMenu.AddSubMenu("Flee", "Flee");
             FleeMenu.Add("EscQ", new CheckBox("Use Q"));
             FleeMenu.Add("EscE", new CheckBox("Use E"));
-            FleeMenu.Add("WJ", new CheckBox("Walljump in Flee mode"));
+            FleeMenu.Add("WJ", new KeyBind("Walljump in Flee mode", false, KeyBind.BindTypes.HoldActive, 'G'));
         }
 
         public static void LaneClearmenu()
@@ -133,7 +137,7 @@ namespace AkaYasuo
         public static void Miscmenu()
         {
             MiscMenu = YMenu.AddSubMenu("Misc", "Misc");
-            MiscMenu.Add("UseEInterrupt", new CheckBox("Use E to Interrupt/Antigapcloser"));
+            MiscMenu.Add("InterruptQ", new CheckBox("Use Q3 to Interrupt"));
             MiscMenu.Add("noEturret", new CheckBox("Dont Jump Turret"));
             MiscMenu.AddSeparator();
             MiscMenu.AddLabel("1: Q 2: E");
@@ -149,11 +153,11 @@ namespace AkaYasuo
                     break;
             }
             var skin = MiscMenu.Add("sID", new Slider("Skin", 0, 0, 2));
-            var sID = new[] {"Classic", "High-Noon Yasuo", "Project Yasuo"};
+            var sID = new[] { "Classic", "High-Noon Yasuo", "Project Yasuo" };
             skin.DisplayName = sID[skin.CurrentValue];
 
             skin.OnValueChange +=
-                delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs)
+                delegate (ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs)
                 {
                     sender.DisplayName = sID[changeArgs.NewValue];
                 };
@@ -233,43 +237,6 @@ namespace AkaYasuo
             ItemMenu.Add("Suppression",
                 new CheckBox("Suppression"));
         }
-
-        public static void gapcloseetc()
-        {
-            SubMenu["gap"] = YMenu.AddSubMenu("Gapcloser List", "gap");
-            SubMenu["gap2"] = YMenu.AddSubMenu("Gapcloser List 2", "gap2");
-            SubMenu["int"] = YMenu.AddSubMenu("Interrupt List", "int");
-
-            gapcloser = new[]
-            {
-                "AkaliShadowDance", "Headbutt", "DianaTeleport", "IreliaGatotsu", "JaxLeapStrike", "JayceToTheSkies",
-                "MaokaiUnstableGrowth", "MonkeyKingNimbus", "Pantheon_LeapBash", "PoppyHeroicCharge", "QuinnE",
-                "XenZhaoSweep", "blindmonkqtwo", "FizzPiercingStrike", "RengarLeap"
-            };
-            notarget = new[]
-            {
-                "AatroxQ", "GragasE", "GravesMove", "HecarimUlt", "JarvanIVDragonStrike", "JarvanIVCataclysm", "KhazixE",
-                "khazixelong", "LeblancSlide", "LeblancSlideM", "LeonaZenithBlade", "UFSlash", "RenektonSliceAndDice",
-                "SejuaniArcticAssault", "ShenShadowDash", "RocketJump", "slashCast"
-            };
-            interrupt = new[]
-            {
-                "KatarinaR", "GalioIdolOfDurand", "Crowstorm", "Drain", "AbsoluteZero", "ShenStandUnited", "UrgotSwap2",
-                "AlZaharNetherGrasp", "FallenOne", "Pantheon_GrandSkyfall_Jump", "VarusQ", "CaitlynAceintheHole",
-                "MissFortuneBulletTime", "InfiniteDuress", "LucianR"
-            };
-            for (int i = 0; i < gapcloser.Length; i++)
-            {
-                SubMenu["gap"].Add(gapcloser[i], new CheckBox(gapcloser[i]));
-            }
-            for (int i = 0; i < notarget.Length; i++)
-            {
-                SubMenu["gap2"].Add(notarget[i], new CheckBox(notarget[i]));
-            }
-            for (int i = 0; i < interrupt.Length; i++)
-            {
-                SubMenu["int"].Add(interrupt[i], new CheckBox(interrupt[i]));
-            }
-        }
     }
 }
+

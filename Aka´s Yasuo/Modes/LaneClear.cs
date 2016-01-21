@@ -23,26 +23,28 @@ namespace AkaYasuo.Modes
 
                 if (!minion.IsDead && MenuManager.LaneClearMenu["Q"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady() && minion.IsValidTarget() && !Variables.Q3READY(Variables._Player))
                 {
-                    var predHealth = Prediction.Health.GetPrediction(minion, (int)(Variables._Player.Distance(minion.Position) * 1000 / 2000));
-                    if (predHealth <= Variables._Player.GetSpellDamage(minion, SpellSlot.Q))
+                    if (minion.Health <= DamageManager.GetQDmg(minion))
                     {
                         Program.Q.Cast(minion.ServerPosition);
+                        Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
-                    else if (!Variables.Q3READY(Variables._Player))
+                    else if (!Variables.Q3READY(Variables._Player) && minion.Health + DamageManager.EDamage(minion) >= DamageManager.GetQDmg(minion) && Program.E.IsReady())
                     {
                         Program.Q.Cast(minion.ServerPosition);
+                        Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
                 }
                 if (!minion.IsDead && MenuManager.LaneClearMenu["Q3"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady() && minion.IsValidTarget() && Variables.Q3READY(Variables._Player))
                 {
-                    var predHealth = Prediction.Health.GetPrediction(minion, (int)(Variables._Player.Distance(minion.Position) * 1000 / 2000));
-                    if (predHealth <= Variables._Player.GetSpellDamage(minion, SpellSlot.Q))
+                    if (minion.Health <= DamageManager.GetQDmg(minion))
                     {
                         Program.Q.Cast(minion.ServerPosition);
+                        Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
-                    else if (Variables.Q3READY(Variables._Player))
+                    else if (Variables.Q3READY(Variables._Player) && minion.Health + DamageManager.EDamage(minion) >= DamageManager.GetQDmg(minion) && Program.E.IsReady())
                     {
                         Program.Q.Cast(minion.ServerPosition);
+                        Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
                 }
             }
@@ -53,8 +55,7 @@ namespace AkaYasuo.Modes
                 {
                     if (!Variables.UnderTower((Vector3) Variables.PosAfterE(minion)))
                     {
-                        var predHealth = Prediction.Health.GetPrediction(minion, (int)(Variables._Player.Distance(minion.Position) * 1000 / 2000));
-                        if (predHealth <= Variables._Player.GetSpellDamage(minion, SpellSlot.E))
+                        if (minion.Health <= DamageManager.EDamage(minion))
                         {
                             Program.E.Cast(minion);
                         }

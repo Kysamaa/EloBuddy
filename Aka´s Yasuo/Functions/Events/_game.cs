@@ -26,8 +26,9 @@ namespace AkaYasuo.Functions.Events
             result.casters = new List<Obj_AI_Base>();
 
 
-            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) ||
-                             point.To3D().CountEnemiesInRange(500) > Variables._Player.HealthPercent % 65)
+            bool safe = (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) ||
+                            point.To3D().CountEnemiesInRange(500) > Variables._Player.HealthPercent % 65;
+            if (!safe)
             {
                 result.IsSafe = false;
                 return result;
@@ -117,7 +118,6 @@ namespace AkaYasuo.Functions.Events
             {
                 if (isSafePoint(posAfter).IsSafe)
                 {
-
                     Program.E.Cast(target);
                 }
                 return true;
@@ -131,7 +131,6 @@ namespace AkaYasuo.Functions.Events
                     Console.WriteLine("use gap?");
                     if (isSafePoint(posAfter, true).IsSafe)
                     {
-
                         Program.E.Cast(target);
                     }
                     return true;

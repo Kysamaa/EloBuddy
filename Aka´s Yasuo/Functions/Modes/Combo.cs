@@ -39,11 +39,13 @@ namespace AkaYasuo.Functions.Modes
                 return;
             Vector2 dashPos = getNextPos(target);
 
-            float dist = Variables._Player.Position.Distance(target.Position);
+            var po = Program.W.GetPrediction(target);
+
+            float dist = Variables._Player.Position.Distance(po.UnitPosition);
             if (!target.IsMoving || Variables._Player.Distance(dashPos) <= dist + 40)
                 if (dist < 330 && dist > 100 && Program.W.IsReady())
                 {
-                    Program.W.Cast(target.Position);
+                    Program.W.Cast(po.UnitPosition);
                 }
         }
 
@@ -76,7 +78,7 @@ namespace AkaYasuo.Functions.Modes
                          || target.Distance(posAfterE) < Variables._Player.GetAutoAttackRange(target) + 100)
                         && goesThroughWall(target.Position, posAfterE.To3D()))
                     {
-                        if (Program.E.Cast(target))
+                        if (Events._game.useENormal(target))
                             return;
                     }
                 }

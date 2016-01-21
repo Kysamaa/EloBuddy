@@ -89,69 +89,6 @@ namespace AkaYasuo.Events
             }
         }
 
-        public static void SpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (!sender.IsMe) return;
-            if (args.SData.Name.ToLower().Contains("YasuoQW"))
-            {
-                Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
-            }
-            if (args.SData.Name.ToLower().Contains("yasuoq2w"))
-            {
-                Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
-            }
-            if (args.SData.Name.ToLower().Contains("yasuoq3w"))
-            {
-                Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
-            }
-
-            if (sender.IsMe)
-            {
-                if (args.SData.Name == "YasuoDashWrapper")
-                {
-                    Console.WriteLine("starting dash");
-                   Variables.IsDashing = true;
-                    Variables.castFrom = Variables._Player.Position;
-                    Variables.startDash = Environment.TickCount;
-                }
-            }
-            if (Variables.Q3READY(Variables._Player) && MenuManager.MiscMenu["UseEInterrupt"].Cast<CheckBox>().CurrentValue && MenuManager.interrupt.Any(x => x.Contains(args.SData.Name)) &&
-               MenuManager.SubMenu["int"][args.SData.Name].Cast<CheckBox>().CurrentValue && Variables._Player.Distance(sender) <= 900)
-            {
-                Program.Q.Cast(sender);
-            }
-
-            if (Variables.Q3READY(Variables._Player) && MenuManager.gapcloser.Any(str => str.Contains(args.SData.Name)) && MenuManager.SubMenu["gap"][args.SData.Name].Cast<CheckBox>().CurrentValue && args.Target.IsMe)
-            {
-                Program.Q.Cast(sender);
-            }
-
-            if (Variables.Q3READY(Variables._Player) && MenuManager.notarget.Any(str => str.Contains(args.SData.Name)) &&
-                Vector3.Distance(args.End, Variables._Player.Position) <= 300 && sender.IsValidTarget(900) &&
-                MenuManager.SubMenu["gap2"][args.SData.Name].Cast<CheckBox>().CurrentValue)
-            {
-                if (Variables._Player.Distance(args.End) < Variables._Player.Distance(sender.Position))
-                {
-                    Program.Q.Cast(sender);
-                }
-            }
-
-            if (sender is AIHeroClient)
-            {
-                var pant = (AIHeroClient)sender;
-                if (pant.IsValidTarget() && pant.ChampionName == "Pantheon" && pant.GetSpellSlotFromName(args.SData.Name) == SpellSlot.W)
-                {
-                    if (Variables.Q3READY(Variables._Player) && MenuManager.MiscMenu["UseEInterrupt"].Cast<CheckBox>().CurrentValue && args.Target.IsMe)
-                    {
-                        if (pant.IsValidTarget(Program.E.Range))
-                        {
-                            Program.Q.Cast(pant);
-                        }
-                    }
-                }
-            }
-        }
-
         public static void Delete(GameObject sender, EventArgs args)
         {
             if (sender is MissileClient)

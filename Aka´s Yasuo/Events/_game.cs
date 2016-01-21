@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Menu.Values;
@@ -10,8 +11,7 @@ namespace AkaYasuo.Events
         public static void AutoQ()
         {
             if (MenuManager.HarassMenu["AutoQ"].Cast<KeyBind>().CurrentValue &&
-               (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)) ||
-               (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) || (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee)))
+               (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)))
             {
                 var TsTarget = TargetSelector.GetTarget(Program.Q.Range, DamageType.Physical);
                 Orbwalker.ForcedTarget = TsTarget;
@@ -25,31 +25,59 @@ namespace AkaYasuo.Events
                 {
                     PredictionResult QPred = Program.Q.GetPrediction(TsTarget);
 
-                    if (Program.Q.IsReady() && Program.Q.Range == 1000 && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High &&
-                        MenuManager.HarassMenu["Q3"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
+                    if (Program.Q3.IsReady() && Variables.Q3READY(Variables._Player) && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High &&
+                        MenuManager.HarassMenu["AutoQ3"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
                     {
                         Program.Q.Cast(QPred.CastPosition);
+                        Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
-                    else if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && Program.Q.Range == 475 && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium &&
+                    else if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && !Variables.Q3READY(Variables._Player) && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium &&
                              MenuManager.HarassMenu["Q"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
                     {
                         Program.Q.Cast(QPred.CastPosition);
+                        Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
                 }
                 else if (!MenuManager.HarassMenu["QunderTower"].Cast<CheckBox>().CurrentValue)
                 {
                     PredictionResult QPred = Program.Q.GetPrediction(TsTarget);
 
-                    if (!Variables.UnderTower(Variables._Player.ServerPosition) && Program.Q.IsReady() && Program.Q.Range == 1000 && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High &&
-                        MenuManager.HarassMenu["Q3"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
+                    if (!Variables.UnderTower(Variables._Player.ServerPosition) && Program.Q3.IsReady() && Variables.Q3READY(Variables._Player) && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High &&
+                        MenuManager.HarassMenu["AutoQ3"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
                     {
                         Program.Q.Cast(QPred.CastPosition);
+                        Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
-                    if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && Program.Q.Range == 475 && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium &&
+                    if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && !Variables.Q3READY(Variables._Player) && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium &&
                         MenuManager.HarassMenu["Q"].Cast<CheckBox>().CurrentValue && !Variables.IsDashing &&
                         !Variables.UnderTower(Variables._Player.ServerPosition))
                     {
                         Program.Q.Cast(QPred.CastPosition);
+                        Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
+                    }
+                }
+            }
+        }
+
+        public static void AutoQMinion()
+        {
+            if (MenuManager.HarassMenu["AutoQMinion"].Cast<KeyBind>().CurrentValue &&
+               (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)))
+            {
+                foreach (Obj_AI_Base TsTarget in EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, Variables._Player.Position, Program.Q.Range, true).OrderByDescending(m => m.Health))
+                {
+
+                    if (TsTarget == null)
+                    {
+                        return;
+                    }
+                    PredictionResult QPred = Program.Q.GetPrediction(TsTarget);
+
+                    if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && !Variables.Q3READY(Variables._Player) && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium &&
+                             MenuManager.HarassMenu["Q"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
+                    {
+                        Program.Q.Cast(QPred.CastPosition);
+                        Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
                 }
             }

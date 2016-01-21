@@ -1,6 +1,7 @@
 ﻿using System;
 using EloBuddy;
 using EloBuddy.SDK;
+using EloBuddy.SDK.Menu.Values;
 
 namespace AkaYasuo
 {
@@ -15,7 +16,6 @@ namespace AkaYasuo
             Obj_AI_Base.OnCreate += Obj_AI_Base_OnCreate;
             Obj_AI_Base.OnDelete += Obj_AI_Base_OnDelete;
             Spellbook.OnStopCast += Spellbook_OnStopCast;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Obj_AI_Base.OnBuffGain += Obj_AI_Base_OnBuffGain;
             Obj_AI_Base.OnBuffLose += Obj_AI_Base_OnBuffLose;
         }
@@ -30,7 +30,13 @@ namespace AkaYasuo
             Events._game.Startdash();
             Events._game.Skillshotdetector();
             Events._game.AutoQ();
+            Events._game.AutoQMinion();
             Events._game.LevelUpSpells();
+
+            if (MenuManager.FleeMenu["WJ"].Cast<KeyBind>().CurrentValue)
+            {
+                Yasuo.WallDash();
+            }
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)) Modes.Harass.Harassmode();
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) Modes.JungleClear.JungleClearmode();
@@ -53,11 +59,6 @@ namespace AkaYasuo
         private static void Obj_AI_Base_OnBuffLose(Obj_AI_Base sender, Obj_AI_BaseBuffLoseEventArgs buff)
         {
             Events._objaibase.BuffLose(sender, buff);
-        }
-
-        private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            Events._objaibase.SpellCast(sender, args);
         }
 
         private static void Obj_AI_Base_OnDelete(GameObject sender, EventArgs args)

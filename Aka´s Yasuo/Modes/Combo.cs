@@ -16,12 +16,87 @@ namespace AkaYasuo.Modes
         public static void Load()
         {
             UseQ();
-            UseE();
+            TestE();
             UseItemsaW();
             UseR();
         }
 
         public static bool dashing;
+
+        public static void TestE()
+        {
+            var TsTarget = TargetSelector.GetTarget(1300, DamageType.Physical);
+
+            if (TsTarget == null)
+            {
+                return;
+            }
+            if (MenuManager.ComboMenu["EC"].Cast<CheckBox>().CurrentValue && TsTarget != null)
+            {
+                var dmg = ((float)Variables._Player.GetSpellDamage(TsTarget, SpellSlot.Q) + (float)Variables._Player.GetSpellDamage(TsTarget, SpellSlot.E) + (float)Variables._Player.GetSpellDamage(TsTarget, SpellSlot.R));
+                if (Program.E.IsReady() && TsTarget.Distance(Variables._Player) >= (MenuManager.ComboMenu["E1"].Cast<Slider>().CurrentValue) && dmg >= TsTarget.Health && Variables.UnderTower((Vector3)Variables.PosAfterE(TsTarget)) && Variables.CanCastE(TsTarget) && Variables._Player.IsFacing(TsTarget))
+                {
+                    Program.E.Cast(TsTarget);
+                }
+                else if (TsTarget.Distance(Variables._Player) >= (MenuManager.ComboMenu["E1"].Cast<Slider>().CurrentValue) && dmg <= TsTarget.Health && Variables.CanCastE(TsTarget) && Variables._Player.IsFacing(TsTarget))
+                {
+                    Functions.Events._game.useENormal(TsTarget);
+                }
+                else if (Program.Q.IsReady() && Variables.IsDashing && Variables._Player.Distance(TsTarget) <= 275 * 275)
+                {
+                    Core.DelayAction(() => { Program.Q.Cast(TsTarget); }, 200);
+                    Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
+                }
+                else if (Program.Q3.IsReady() && Variables._Player.Distance(TsTarget) <= Program.E.Range && Variables.Q3READY(Variables._Player) && TsTarget != null && Program.E.IsReady() && Variables.CanCastE(TsTarget))
+                {
+                    Program.E.Cast(TsTarget);
+                }
+                else if (Program.Q3.IsReady() && Variables.IsDashing && Variables._Player.Distance(TsTarget) <= 275 * 275 && Variables.Q3READY(Variables._Player))
+                {
+                    Core.DelayAction(() => { Program.Q.Cast(TsTarget); }, 200);
+                    Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
+                }
+
+                if (MenuManager.ComboMenu["E3"].Cast<CheckBox>().CurrentValue && Program.E.IsReady())
+                {
+                    var bestMinion =
+                    ObjectManager.Get<Obj_AI_Base>()
+                    .Where(x => x.IsValidTarget(Program.E.Range))
+                    .Where(x => x.Distance(TsTarget) < Variables._Player.Distance(TsTarget))
+                    .OrderByDescending(x => x.Distance(Variables._Player))
+                    .FirstOrDefault();
+
+                    var dmg2 = ((float)Variables._Player.GetSpellDamage(TsTarget, SpellSlot.Q) + (float)Variables._Player.GetSpellDamage(TsTarget, SpellSlot.E) + (float)Variables._Player.GetSpellDamage(TsTarget, SpellSlot.R));
+                    if (bestMinion != null && TsTarget != null && dmg2 >= TsTarget.Health && !Variables.UnderTower((Vector3)Variables.PosAfterE(bestMinion)) && Variables._Player.IsFacing(bestMinion) && TsTarget.Distance(Variables._Player) >= (MenuManager.ComboMenu["E2"].Cast<Slider>().CurrentValue) && Variables.CanCastE(bestMinion) && Variables._Player.IsFacing(bestMinion))
+                    {
+                        Functions.Events._game.useENormal(TsTarget);
+                    }
+                    else if (bestMinion != null && TsTarget != null && dmg2 <= TsTarget.Health && Variables._Player.IsFacing(bestMinion) && TsTarget.Distance(Variables._Player) >= (MenuManager.ComboMenu["E2"].Cast<Slider>().CurrentValue) && Variables.CanCastE(bestMinion) && Variables._Player.IsFacing(bestMinion))
+                    {
+                        Program.E.Cast(bestMinion);
+                    }
+                }
+                if (!MenuManager.ComboMenu["E3"].Cast<CheckBox>().CurrentValue && Program.E.IsReady())
+                {
+                    var bestMinion =
+                    ObjectManager.Get<Obj_AI_Base>()
+                    .Where(x => x.IsValidTarget(Program.E.Range))
+                    .Where(x => x.Distance(Game.CursorPos) < Variables._Player.Distance(TsTarget))
+                    .OrderByDescending(x => x.Distance(Variables._Player))
+                    .FirstOrDefault();
+
+                    var dmg3 = ((float)Variables._Player.GetSpellDamage(TsTarget, SpellSlot.Q) + (float)Variables._Player.GetSpellDamage(TsTarget, SpellSlot.E) + (float)Variables._Player.GetSpellDamage(TsTarget, SpellSlot.R));
+                    if (bestMinion != null && TsTarget != null && dmg3 >= TsTarget.Health && !Variables.UnderTower((Vector3)Variables.PosAfterE(bestMinion)) && Variables._Player.IsFacing(bestMinion) && TsTarget.Distance(Variables._Player) >= (MenuManager.ComboMenu["E2"].Cast<Slider>().CurrentValue) && Variables.CanCastE(bestMinion) && Variables._Player.IsFacing(bestMinion))
+                    {
+                        Functions.Events._game.useENormal(TsTarget);
+                    }
+                    else if (bestMinion != null && TsTarget != null && dmg3 <= TsTarget.Health && Variables._Player.IsFacing(bestMinion) && TsTarget.Distance(Variables._Player) >= (MenuManager.ComboMenu["E2"].Cast<Slider>().CurrentValue) && Variables.CanCastE(bestMinion) && Variables._Player.IsFacing(bestMinion))
+                    {
+                        Program.E.Cast(bestMinion);
+                    }
+                }
+            }
+        }
 
         public static void UseE()
         {
@@ -85,21 +160,31 @@ namespace AkaYasuo.Modes
                 return;
             }
 
+            if (MenuManager.DogeMenu["smartW"].Cast<CheckBox>().CurrentValue)
+            {
+                Functions.Modes.Combo.putWallBehind(TsTarget);
+            }
+            if (MenuManager.DogeMenu["smartW"].Cast<CheckBox>().CurrentValue && Variables.wallCasted &&
+                Variables._Player.Distance(TsTarget.Position) < 300)
+            {
+                Functions.Modes.Combo.eBehindWall(TsTarget);
+            }
+
             if (Program.Q.IsReady() && MenuManager.ComboMenu["Q"].Cast<CheckBox>().CurrentValue)
             {
                 PredictionResult QPred = Program.Q.GetPrediction(TsTarget);
-                if (!Variables.isDashing && Program.Q.Range == 1000 && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High)
+                if (!Variables.isDashing && Variables.Q3READY(Variables._Player) && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High)
                 {
                     Program.Q.Cast(QPred.CastPosition);
                     Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                 }
-                else if (Program.Q.Range == 1000 && Variables.Q3READY(Variables._Player) && Variables.isDashing && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High &&
-                         Variables._Player.Distance(TsTarget) <= 250*250)
+                else if (Variables.Q3READY(Variables._Player) && Variables.isDashing && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High &&
+                         Variables._Player.Distance(TsTarget) <= 250)
                 {
                     Program.Q.Cast(QPred.CastPosition);
                     Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                 }
-                else if (!Variables.Q3READY(Variables._Player) && Program.Q.Range == 475 && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium)
+                else if (!Variables.Q3READY(Variables._Player) && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium)
                 {
                     Program.Q.Cast(QPred.CastPosition);
                     Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
@@ -120,29 +205,18 @@ namespace AkaYasuo.Modes
             {
                 Items.UseItems(TsTarget);
             }
-            if (Program.E.IsReady() && MenuManager.ComboMenu["E"].Cast<CheckBox>().CurrentValue)
+            if (Program.Ignite != null && Program.Ignite.IsReady() &&
+                MenuManager.ComboMenu["Ignite"].Cast<CheckBox>().CurrentValue)
             {
-                if (MenuManager.DogeMenu["smartW"].Cast<CheckBox>().CurrentValue)
+                if (TsTarget.Distance(Variables._Player) <= (600) &&
+                    Variables._Player.GetSummonerSpellDamage(TsTarget, DamageLibrary.SummonerSpells.Ignite) >=
+                    TsTarget.Health)
                 {
-                    Functions.Modes.Combo.putWallBehind(TsTarget);
-                }
-                if (MenuManager.DogeMenu["smartW"].Cast<CheckBox>().CurrentValue && Variables.wallCasted &&
-                    Variables._Player.Distance(TsTarget.Position) < 300)
-                {
-                    Functions.Modes.Combo.eBehindWall(TsTarget);
-                }
-                if (Program.Ignite != null && Program.Ignite.IsReady() &&
-                    MenuManager.ComboMenu["Ignite"].Cast<CheckBox>().CurrentValue)
-                {
-                    if (TsTarget.Distance(Variables._Player) <= (600) &&
-                        Variables._Player.GetSummonerSpellDamage(TsTarget, DamageLibrary.SummonerSpells.Ignite) >=
-                        TsTarget.Health)
-                    {
-                        Program.Ignite.Cast(TsTarget);
-                    }
+                    Program.Ignite.Cast(TsTarget);
                 }
             }
         }
+        
 
         public static void UseR()
         {

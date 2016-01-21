@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DamageManager.cs" />
     <Compile Include="EventManager.cs" />
     <Compile Include="Events\_drawing.cs" />
     <Compile Include="Events\_game.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Events\_spellbook.cs" />
     <Compile Include="Functions\Events\_drawing.cs" />
     <Compile Include="Functions\Events\_game.cs" />
+    <Compile Include="Events\_interrupter.cs" />
     <Compile Include="Functions\Events\_objaibase.cs" />
     <Compile Include="Functions\Events\_skillshotdetector.cs" />
     <Compile Include="Functions\Events\_spellbook.cs" />

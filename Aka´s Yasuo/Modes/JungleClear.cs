@@ -22,21 +22,20 @@ namespace AkaYasuo.Modes
 
                 if (MenuManager.JungleClearMenu["Q"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady() && minion.IsValidTarget())
                 {
-
-                    var predHealth = Prediction.Health.GetPrediction(minion, (int)(Variables._Player.Distance(minion.Position) * 1000 / 2000));
-                    if (predHealth <= Variables._Player.GetSpellDamage(minion, SpellSlot.Q))
+                    if (minion.Health <= DamageManager.QDamage(minion))
                     {
                         Program.Q.Cast(minion.ServerPosition);
+                        Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
                     else if (Program.Q.IsReady())
                     {
                         Program.Q.Cast(minion.ServerPosition);
+                        Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
                 }
                 if (MenuManager.JungleClearMenu["E"].Cast<CheckBox>().CurrentValue && Program.E.IsReady() && minion.IsValidTarget(Program.E.Range) && Variables.CanCastE(minion))
                 {
-                    var predHealth = Prediction.Health.GetPrediction(minion, (int)(Variables._Player.Distance(minion.Position) * 1000 / 2000));
-                    if (predHealth <= Variables._Player.GetSpellDamage(minion, SpellSlot.E))
+                    if (minion.Health <= DamageManager.EDamage(minion))
                     {
                         Program.E.Cast(minion);
                     }

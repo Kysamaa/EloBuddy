@@ -34,10 +34,6 @@ namespace AkaYasuo.Modes
                     }
                 }
             }
-            if (MenuManager.FleeMenu["WJ"].Cast<CheckBox>().CurrentValue)
-            {
-                Yasuo.WallJump();
-            }
             foreach (AIHeroClient enemy in EntityManager.Heroes.Enemies)
             {
                 var bestMinion =

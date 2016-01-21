@@ -23,16 +23,14 @@ namespace AkaYasuo.Modes
 
                 if (!minion.IsDead && MenuManager.LastHitMenu["Q"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady() && minion.IsValidTarget() && !Variables.Q3READY(Variables._Player))
                 {
-                    var predHealth = Prediction.Health.GetPrediction(minion, (int)(Variables._Player.Distance(minion.Position) * 1000 / 2000));
-                    if (predHealth <= Variables._Player.GetSpellDamage(minion, SpellSlot.Q))
+                    if (minion.Health <= DamageManager.QDamage(minion))
                     {
                         Program.Q.Cast(minion.ServerPosition);
                     }
                 }
                 if (!minion.IsDead && MenuManager.LastHitMenu["Q3"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady() && minion.IsValidTarget() && Variables.Q3READY(Variables._Player))
                 {
-                    var predHealth = Prediction.Health.GetPrediction(minion, (int)(Variables._Player.Distance(minion.Position) * 1000 / 2000));
-                    if (predHealth <= Variables._Player.GetSpellDamage(minion, SpellSlot.Q))
+                    if (minion.Health <= DamageManager.QDamage(minion))
                     {
                         Program.Q.Cast(minion.ServerPosition);
                     }
@@ -41,8 +39,7 @@ namespace AkaYasuo.Modes
                 {
                     if (!Variables.UnderTower((Vector3) Variables.PosAfterE(minion)))
                     {
-                        var predHealth = Prediction.Health.GetPrediction(minion, (int)(Variables._Player.Distance(minion.Position) * 1000 / 2000));
-                        if (predHealth <= Variables._Player.GetSpellDamage(minion, SpellSlot.E))
+                        if (minion.Health <= DamageManager.EDamage(minion))
                         {
                             Program.E.Cast(minion);
                         }

@@ -50,24 +50,21 @@ namespace AkaYasuo.Modes
                 {
                     if (MenuManager.KillStealMenu["KsQ"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady())
                     {
-                        var predHealth = Prediction.Health.GetPrediction(enemy, (int)(Variables._Player.Distance(enemy.Position) * 1000 / 2000));
-                        if (predHealth <= Variables._Player.GetSpellDamage(enemy, SpellSlot.Q))
+                        if (enemy.Health <= DamageManager.GetQDmg(enemy))
                         {
                             Program.Q.Cast(enemy.ServerPosition);
                         }
                     }
                     if (!Program.Q.IsReady() && Program.E.IsReady() && MenuManager.KillStealMenu["KsE"].Cast<CheckBox>().CurrentValue && (Variables._Player.GetSpellDamage(enemy, SpellSlot.E) >= enemy.Health) && Variables.CanCastE(enemy))
                     {
-                        var predHealth = Prediction.Health.GetPrediction(enemy, (int)(Variables._Player.Distance(enemy.Position) * 1000 / 2000));
-                        if (predHealth <= Variables._Player.GetSpellDamage(enemy, SpellSlot.E))
+                        if (enemy.Health <= DamageManager.EDamage(enemy))
                         {
                             Program.E.Cast(enemy);
                         }
                     }
                     if (Program.Ignite != null && MenuManager.KillStealMenu["KsIgnite"].Cast<CheckBox>().CurrentValue && Program.Ignite.IsReady())
                     {
-                        var predHealth = Prediction.Health.GetPrediction(enemy, (int)(Variables._Player.Distance(enemy.Position) * 1000 / 2000));
-                        if (predHealth <= Variables._Player.GetSummonerSpellDamage(enemy, DamageLibrary.SummonerSpells.Ignite))
+                        if (enemy.Health <= Variables._Player.GetSummonerSpellDamage(enemy, DamageLibrary.SummonerSpells.Ignite))
                         {
                             Program.Ignite.Cast(enemy);
                         }
