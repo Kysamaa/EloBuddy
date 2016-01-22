@@ -573,9 +573,9 @@ namespace Aka_s_Vayne_reworked.Logic
         /// <returns></returns>
         public static AIHeroClient GetClosestEnemy(Vector3 from)
         {
-            if (Orbwalker.GetTarget() is AIHeroClient)
+            if (Orbwalker.LastTarget is AIHeroClient)
             {
-                var owAI = Orbwalker.GetTarget() as AIHeroClient;
+                var owAI = Orbwalker.LastTarget as AIHeroClient;
                 if (owAI.IsValidTarget(Variables._Player.GetAutoAttackRange(null) + 120f, true, from))
                 {
                     return owAI;

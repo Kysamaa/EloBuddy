@@ -20,7 +20,7 @@ namespace Aka_s_Vayne_reworked.Events
 
         public static void AAReset()
         {
-            var target = Orbwalker.GetTarget();
+            var target = Orbwalker.LastTarget;
 
             if (Variables.stopmove && Game.Time*1000 > Variables.lastaaclick + Variables._Player.AttackCastDelay*1000)
             {
@@ -102,7 +102,7 @@ namespace Aka_s_Vayne_reworked.Events
 
         public static void FastBotrk()
         {
-            var target = Orbwalker.GetTarget() as Obj_AI_Base;
+            var target = Orbwalker.LastTarget as Obj_AI_Base;
 
             if (MenuManager.ItemMenu["botrk"].Cast<CheckBox>().CurrentValue && target != null &&
                 (target.Distance(Variables._Player) > 500f ||
@@ -253,7 +253,7 @@ namespace Aka_s_Vayne_reworked.Events
 
         public static void QKs()
         {
-            var currentTarget = Orbwalker.GetTarget() as Obj_AI_Base;
+            var currentTarget = Orbwalker.LastTarget as Obj_AI_Base;
 
             if (!currentTarget.IsValidTarget() || currentTarget.IsZombie || currentTarget.IsInvulnerable || currentTarget.IsDead)
             {

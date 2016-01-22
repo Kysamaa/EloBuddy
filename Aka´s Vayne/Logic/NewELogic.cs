@@ -91,8 +91,8 @@ namespace Aka_s_Vayne_reworked.Logic
                 if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building) || collFlags2.HasFlag(CollisionFlags.Wall) || collFlags2.HasFlag(CollisionFlags.Building))
                 {
                     if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue &&
-                        Orbwalker.GetTarget() != null &&
-                        !target.NetworkId.Equals(Orbwalker.GetTarget().NetworkId))
+                        Orbwalker.LastTarget != null &&
+                        !target.NetworkId.Equals(Orbwalker.LastTarget.NetworkId))
                     {
                         return null;
                     }
@@ -127,8 +127,8 @@ namespace Aka_s_Vayne_reworked.Logic
                         var collFlags = NavMesh.GetCollisionFlags(finalPosition);
                         if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building)) //not sure about building, I think its turrets, nexus etc
                         {
-                            if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue && Orbwalker.GetTarget() != null &&
-                                            !target.NetworkId.Equals(Orbwalker.GetTarget().NetworkId))
+                            if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue && Orbwalker.LastTarget != null &&
+                                            !target.NetworkId.Equals(Orbwalker.LastTarget.NetworkId))
                             {
                                 return null;
                             }
@@ -167,8 +167,8 @@ namespace Aka_s_Vayne_reworked.Logic
                 var numberOfChecks = (float)Math.Ceiling(pushDistance / 30f);
 
 
-                if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue && Orbwalker.GetTarget() != null &&
-                            !target.NetworkId.Equals(Orbwalker.GetTarget().NetworkId))
+                if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue && Orbwalker.LastTarget != null &&
+                            !target.NetworkId.Equals(Orbwalker.LastTarget.NetworkId))
                 {
                     continue;
                 }
@@ -221,7 +221,7 @@ namespace Aka_s_Vayne_reworked.Logic
                 var prediction = Program.E2.GetPrediction(Hero);
 
                 if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue &&
-                    Hero.NetworkId != Orbwalker.GetTarget().NetworkId)
+                    Hero.NetworkId != Orbwalker.LastTarget.NetworkId)
                 {
                     continue;
                 }
@@ -298,7 +298,7 @@ namespace Aka_s_Vayne_reworked.Logic
             foreach (var Hero in HeroList)
             {
                 if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue &&
-                    Hero.NetworkId != Orbwalker.GetTarget().NetworkId)
+                    Hero.NetworkId != Orbwalker.LastTarget.NetworkId)
                 {
                     continue;
                 }

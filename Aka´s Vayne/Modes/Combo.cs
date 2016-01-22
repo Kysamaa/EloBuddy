@@ -26,7 +26,7 @@ namespace Aka_s_Vayne_reworked.Modes
         public static void UseQ()
         {
             var mode = MenuManager.ComboMenu["Qmode"].Cast<Slider>().CurrentValue;
-            var target = Orbwalker.GetTarget() as AIHeroClient;
+            var target = Orbwalker.LastTarget as AIHeroClient;
 
             if (Functions.Modes.Combo.AfterAttack && MenuManager.ComboMenu["UseQa"].Cast<CheckBox>().CurrentValue)
             {
@@ -63,7 +63,7 @@ namespace Aka_s_Vayne_reworked.Modes
 
         public static void UseQ2()
         {
-            var target = Orbwalker.GetTarget() as Obj_AI_Base;
+            var target = Orbwalker.LastTarget as Obj_AI_Base;
 
             if (Functions.Modes.Combo.AfterAttack && MenuManager.ComboMenu["UseQa"].Cast<CheckBox>().CurrentValue)
             {
@@ -97,7 +97,7 @@ namespace Aka_s_Vayne_reworked.Modes
         public static void UseE()
         {
             var mode = MenuManager.CondemnMenu["Condemnmode"].Cast<Slider>().CurrentValue;
-            var target = Orbwalker.GetTarget() as Obj_AI_Base;
+            var target = Orbwalker.LastTarget as Obj_AI_Base;
 
             if (target == null) return;
             if (Functions.Modes.Combo.AfterAttack && MenuManager.CondemnMenu["UseEa"].Cast<CheckBox>().CurrentValue)
@@ -135,7 +135,7 @@ namespace Aka_s_Vayne_reworked.Modes
         public static void UseE2()
         {
             var mode = MenuManager.CondemnMenu["Condemnmode"].Cast<Slider>().CurrentValue;
-            var target = Orbwalker.GetTarget() as Obj_AI_Base;
+            var target = Orbwalker.LastTarget as Obj_AI_Base;
 
             if (target == null || !Program.E.IsReady()) return;
             if (Functions.Modes.Combo.AfterAttack && MenuManager.CondemnMenu["UseEa"].Cast<CheckBox>().CurrentValue)
