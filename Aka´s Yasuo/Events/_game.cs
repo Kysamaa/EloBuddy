@@ -14,7 +14,6 @@ namespace AkaYasuo.Events
                (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)))
             {
                 var TsTarget = TargetSelector.GetTarget(Program.Q.Range, DamageType.Physical);
-                Orbwalker.ForcedTarget = TsTarget;
 
                 if (TsTarget == null)
                 {
@@ -25,34 +24,32 @@ namespace AkaYasuo.Events
                 {
                     PredictionResult QPred = Program.Q.GetPrediction(TsTarget);
 
-                    if (Program.Q3.IsReady() && Variables.Q3READY(Variables._Player) && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High &&
+                    if (Program.Q3.IsReady() && Variables.Q3READY(Variables._Player) &&
                         MenuManager.HarassMenu["AutoQ3"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
                     {
-                        Program.Q.Cast(QPred.CastPosition);
+                        Program.Q.Cast(TsTarget.Position);
                         Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
-                    else if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && !Variables.Q3READY(Variables._Player) && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium &&
+                    else if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && !Variables.Q3READY(Variables._Player) &&
                              MenuManager.HarassMenu["Q"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
                     {
-                        Program.Q.Cast(QPred.CastPosition);
+                        Program.Q.Cast(TsTarget.Position);
                         Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
                 }
                 else if (!MenuManager.HarassMenu["QunderTower"].Cast<CheckBox>().CurrentValue)
                 {
-                    PredictionResult QPred = Program.Q.GetPrediction(TsTarget);
-
-                    if (!Variables.UnderTower(Variables._Player.ServerPosition) && Program.Q3.IsReady() && Variables.Q3READY(Variables._Player) && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High &&
+                    if (!Variables.UnderTower(Variables._Player.ServerPosition) && Program.Q3.IsReady() && Variables.Q3READY(Variables._Player) &&
                         MenuManager.HarassMenu["AutoQ3"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
                     {
-                        Program.Q.Cast(QPred.CastPosition);
+                        Program.Q.Cast(TsTarget.Position);
                         Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
-                    if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && !Variables.Q3READY(Variables._Player) && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium &&
+                    if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && !Variables.Q3READY(Variables._Player) &&
                         MenuManager.HarassMenu["Q"].Cast<CheckBox>().CurrentValue && !Variables.IsDashing &&
                         !Variables.UnderTower(Variables._Player.ServerPosition))
                     {
-                        Program.Q.Cast(QPred.CastPosition);
+                        Program.Q.Cast(TsTarget.Position);
                         Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
                 }
@@ -71,12 +68,10 @@ namespace AkaYasuo.Events
                     {
                         return;
                     }
-                    PredictionResult QPred = Program.Q.GetPrediction(TsTarget);
-
-                    if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && !Variables.Q3READY(Variables._Player) && QPred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.Medium &&
+                    if (!Variables.Q3READY(Variables._Player) && Program.Q.IsReady() && !Variables.Q3READY(Variables._Player) &&
                              MenuManager.HarassMenu["Q"].Cast<CheckBox>().CurrentValue && !Variables.isDashing)
                     {
-                        Program.Q.Cast(QPred.CastPosition);
+                        Program.Q.Cast(TsTarget.Position);
                         Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
                 }

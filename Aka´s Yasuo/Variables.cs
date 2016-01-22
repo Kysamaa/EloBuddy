@@ -229,6 +229,11 @@ namespace AkaYasuo
             return false;
         }
 
+        public static int GetNewQSpeed()
+        {
+            return (int)(1 / (1 / 0.5 * Player.Instance.AttackSpeedMod));
+        }
+
         public static Vector2 LineIntersectionPoint(Vector2 ps1, Vector2 pe1, Vector2 ps2,
         Vector2 pe2)
         {

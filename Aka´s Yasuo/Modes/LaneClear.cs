@@ -28,7 +28,7 @@ namespace AkaYasuo.Modes
                         Program.Q.Cast(minion.ServerPosition);
                         Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
-                    else if (!Variables.Q3READY(Variables._Player) && minion.Health + DamageManager.EDamage(minion) >= DamageManager.GetQDmg(minion) && Program.E.IsReady())
+                    else if (!Variables.Q3READY(Variables._Player) && minion.Health + DamageManager.EDamage(minion) >= DamageManager.GetQDmg(minion) && Variables.CanCastE(minion))
                     {
                         Program.Q.Cast(minion.ServerPosition);
                         Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
@@ -41,7 +41,7 @@ namespace AkaYasuo.Modes
                         Program.Q.Cast(minion.ServerPosition);
                         Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                     }
-                    else if (Variables.Q3READY(Variables._Player) && minion.Health + DamageManager.EDamage(minion) >= DamageManager.GetQDmg(minion) && Program.E.IsReady())
+                    else if (Variables.Q3READY(Variables._Player) && minion.Health + DamageManager.EDamage(minion) >= DamageManager.GetQDmg(minion) && Variables.CanCastE(minion))
                     {
                         Program.Q.Cast(minion.ServerPosition);
                         Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
@@ -55,7 +55,7 @@ namespace AkaYasuo.Modes
                 {
                     if (!Variables.UnderTower((Vector3) Variables.PosAfterE(minion)))
                     {
-                        if (minion.Health <= DamageManager.EDamage(minion))
+                        if (minion.Health <= DamageManager.GetEDmg(minion))
                         {
                             Program.E.Cast(minion);
                         }

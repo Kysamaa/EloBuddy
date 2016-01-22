@@ -57,7 +57,7 @@ namespace AkaYasuo.Modes
                     }
                     if (!Program.Q.IsReady() && Program.E.IsReady() && MenuManager.KillStealMenu["KsE"].Cast<CheckBox>().CurrentValue && (Variables._Player.GetSpellDamage(enemy, SpellSlot.E) >= enemy.Health) && Variables.CanCastE(enemy))
                     {
-                        if (enemy.Health <= DamageManager.EDamage(enemy))
+                        if (enemy.Health <= DamageManager.GetEDmg(enemy))
                         {
                             Program.E.Cast(enemy);
                         }

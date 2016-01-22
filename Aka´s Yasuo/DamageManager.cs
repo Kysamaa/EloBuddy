@@ -28,6 +28,14 @@ namespace AkaYasuo
                          + 1.5 * (Variables._Player.FlatPhysicalDamageMod)));
         }
 
+        public static double GetEDmg(Obj_AI_Base target)
+        {
+            var stacksPassive = Variables._Player.Buffs.Find(b => b.DisplayName.Equals("YasuoDashScalar"));
+            var Estacks = (stacksPassive != null) ? stacksPassive.Count : 0;
+            var damage = ((Program.E.Level * 20) + 50) * (1 + 0.25 * Estacks) + (Variables._Player.FlatMagicDamageMod * 0.6);
+            return Variables._Player.CalculateDamageOnUnit(target, DamageType.Magical, (float)damage);
+        }
+
         public static double GetQDmg(Obj_AI_Base target)
         {
             var dmgItem = 0d;

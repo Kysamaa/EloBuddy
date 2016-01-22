@@ -23,14 +23,14 @@ namespace AkaYasuo.Modes
 
                 if (!minion.IsDead && MenuManager.LastHitMenu["Q"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady() && minion.IsValidTarget() && !Variables.Q3READY(Variables._Player))
                 {
-                    if (minion.Health <= DamageManager.QDamage(minion))
+                    if (minion.Health <= DamageManager.GetQDmg(minion))
                     {
                         Program.Q.Cast(minion.ServerPosition);
                     }
                 }
                 if (!minion.IsDead && MenuManager.LastHitMenu["Q3"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady() && minion.IsValidTarget() && Variables.Q3READY(Variables._Player))
                 {
-                    if (minion.Health <= DamageManager.QDamage(minion))
+                    if (minion.Health <= DamageManager.GetQDmg(minion))
                     {
                         Program.Q.Cast(minion.ServerPosition);
                     }
@@ -39,7 +39,7 @@ namespace AkaYasuo.Modes
                 {
                     if (!Variables.UnderTower((Vector3) Variables.PosAfterE(minion)))
                     {
-                        if (minion.Health <= DamageManager.EDamage(minion))
+                        if (minion.Health <= DamageManager.GetEDmg(minion))
                         {
                             Program.E.Cast(minion);
                         }

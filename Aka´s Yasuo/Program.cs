@@ -17,8 +17,8 @@ namespace AkaYasuo
     internal class Program
     {
 
-        public static Spell.Skillshot Q;
-        public static Spell.Targeted E, Q3;
+        public static Spell.Skillshot Q, Q3;
+        public static Spell.Targeted E;
         public static Spell.Skillshot W;
         public static Spell.Active R;
         public static Spell.Targeted Ignite;
@@ -36,9 +36,14 @@ namespace AkaYasuo
                 return;
             }
 
-            Q = new Spell.Skillshot(SpellSlot.Q, 475, EloBuddy.SDK.Enumerations.SkillShotType.Linear, (int) 250f,
-                (int) 8700f, (int) 15f);
-            Q3 = new Spell.Targeted(SpellSlot.Q, 1000);
+            Q = new Spell.Skillshot(SpellSlot.Q, 450, EloBuddy.SDK.Enumerations.SkillShotType.Linear, 250, Variables.GetNewQSpeed(), 1)
+            {
+                AllowedCollisionCount = int.MaxValue
+            };
+            Q3 = new Spell.Skillshot(SpellSlot.Q, 900, EloBuddy.SDK.Enumerations.SkillShotType.Linear, 300, 1200, 50)
+            {
+                AllowedCollisionCount = int.MaxValue
+            };
             W = new Spell.Skillshot(SpellSlot.W, 400, EloBuddy.SDK.Enumerations.SkillShotType.Cone);
             E = new Spell.Targeted(SpellSlot.E, 475);
             R = new Spell.Active(SpellSlot.R, 1200);
