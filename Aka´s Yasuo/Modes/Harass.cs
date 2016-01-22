@@ -26,7 +26,6 @@ namespace AkaYasuo.Modes
                 Program.E.Cast(bestMinion);
             }
             var TsTarget = TargetSelector.GetTarget(1300, DamageType.Physical);
-            Orbwalker.ForcedTarget = TsTarget;
 
             if (TsTarget == null)
             {
