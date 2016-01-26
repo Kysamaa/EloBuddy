@@ -42,12 +42,8 @@ namespace AddonTemplate
                 // Initialize the menu
                 Menu = Config.Menu.AddSubMenu("Modes");
 
-                // Initialize all modes
-                // Combo
                 Combo.Initialize();
                 Menu.AddSeparator();
-
-                // Harass
                 Harass.Initialize();
                 Menu.AddSeparator();
                 Flee.Initialize();
@@ -60,6 +56,7 @@ namespace AddonTemplate
                 Menu.AddSeparator();
                 Drawing.Initialize();
                 Menu.AddSeparator();
+                Items.Initialize();
 
             }
 
@@ -142,7 +139,7 @@ namespace AddonTemplate
                     // Here is another option on how to use the menu, but I prefer the
                     // way that I used in the combo class
                     Menu.AddGroupLabel("Harass");
-                   _UseQ = Menu.Add("UseQHarrass", new CheckBox("Use Q(Auto)"));
+                    _UseQ = Menu.Add("UseQHarrass", new CheckBox("Use Q(Auto)"));
                     _useW = Menu.Add("UseWHarass", new CheckBox("Use W"));
                     _useE = Menu.Add("UseEHarass", new CheckBox("Use E(Auto)"));
                     // Adding a slider, we have a little more options with them, using {0} {1} and {2}
@@ -287,32 +284,32 @@ namespace AddonTemplate
             }
 
             public static class Drawing
-                {
-                    private static readonly CheckBox _useQ;
-                    private static readonly CheckBox _useW;
-                    private static readonly CheckBox _useE;
-                    private static readonly CheckBox _useR;
-                    private static readonly CheckBox _DrawonlyReady;
+            {
+                private static readonly CheckBox _useQ;
+                private static readonly CheckBox _useW;
+                private static readonly CheckBox _useE;
+                private static readonly CheckBox _useR;
+                private static readonly CheckBox _DrawonlyReady;
 
                 public static bool UseQ
-                    {
-                        get { return _useQ.CurrentValue; }
-                    }
+                {
+                    get { return _useQ.CurrentValue; }
+                }
 
-                    public static bool UseW
-                    {
-                        get { return _useW.CurrentValue; }
-                    }
+                public static bool UseW
+                {
+                    get { return _useW.CurrentValue; }
+                }
 
-                    public static bool UseE
-                    {
-                        get { return _useE.CurrentValue; }
-                    }
+                public static bool UseE
+                {
+                    get { return _useE.CurrentValue; }
+                }
 
-                    public static bool UseR
-                    {
-                        get { return _useR.CurrentValue; }
-                    }
+                public static bool UseR
+                {
+                    get { return _useR.CurrentValue; }
+                }
 
                 public static bool DrawOnlyReady
                 {
@@ -320,24 +317,138 @@ namespace AddonTemplate
                 }
 
                 static Drawing()
-                    {
-                        // Initialize the menu values
-                        Menu.AddGroupLabel("Drawings?");
-                        _useQ = Menu.Add("DrawQ", new CheckBox("Draw Q"));
-                        _useW = Menu.Add("DrawW", new CheckBox("Draw W"));
-                        _useE = Menu.Add("DrawE", new CheckBox("Draw E"));
-                        _useR = Menu.Add("DrawR", new CheckBox("Draw R"));
-                        _DrawonlyReady = Menu.Add("DrawOnlyReady", new CheckBox("Draw Only if Spells are ready"));
+                {
+                    // Initialize the menu values
+                    Menu.AddGroupLabel("Drawings?");
+                    _useQ = Menu.Add("DrawQ", new CheckBox("Draw Q"));
+                    _useW = Menu.Add("DrawW", new CheckBox("Draw W"));
+                    _useE = Menu.Add("DrawE", new CheckBox("Draw E"));
+                    _useR = Menu.Add("DrawR", new CheckBox("Draw R"));
+                    _DrawonlyReady = Menu.Add("DrawOnlyReady", new CheckBox("Draw Only if Spells are ready"));
                 }
 
-                    public static void Initialize()
-                    {
-                    }
+                public static void Initialize()
+                {
                 }
-
             }
+
+            public static class Items
+            {
+                private static readonly CheckBox _Items;
+                private static readonly Slider _myHp;
+                private static readonly KeyBind _Qss;
+                private static readonly Slider _Delay;
+                private static readonly CheckBox _Blind;
+                private static readonly CheckBox _Charm;
+                private static readonly CheckBox _Fear;
+                private static readonly CheckBox _Polymorph;
+                private static readonly CheckBox _Stun;
+                private static readonly CheckBox _Silence;
+                private static readonly CheckBox _Taunt;
+                private static readonly CheckBox _Supression;
+                private static readonly CheckBox _Snare;
+
+                public static bool items
+                {
+                    get { return _Items.CurrentValue; }
+                }
+
+                public static int myHp
+                {
+                    get { return _myHp.CurrentValue; }
+                }
+
+                public static bool Qss
+                {
+                    get { return _Qss.CurrentValue; }
+                }
+
+                public static int Delay
+                {
+                    get { return _Delay.CurrentValue; }
+                }
+
+                public static bool Blind
+                {
+                    get { return _Blind.CurrentValue; }
+                }
+
+                public static bool Charm
+                {
+                    get { return _Charm.CurrentValue; }
+                }
+
+                public static bool Fear
+                {
+                    get { return _Fear.CurrentValue; }
+                }
+
+                public static bool Polymorph
+                {
+                    get { return _Polymorph.CurrentValue; }
+                }
+
+                public static bool Stun
+                {
+                    get { return _Stun.CurrentValue; }
+                }
+
+                public static bool Silence
+                {
+                    get { return _Silence.CurrentValue; }
+                }
+
+                public static bool Taunt
+                {
+                    get { return _Taunt.CurrentValue; }
+                }
+
+                public static bool Supression
+                {
+                    get { return _Supression.CurrentValue; }
+                }
+
+                public static bool Snare
+                {
+                    get { return _Snare.CurrentValue; }
+                }
+
+                static Items()
+                {
+                    Menu.AddGroupLabel("Items");
+                    _Items = Menu.Add("Items", new CheckBox("Use Items"));
+                    _myHp = Menu.Add("myhp", new Slider("Use BOTRK if my HP is <=", 70, 0, 101));
+                    Menu.AddSeparator();
+                    _Qss = Menu.Add("use", new KeyBind("Use QSS/Mercurial", true, KeyBind.BindTypes.PressToggle, 'K'));
+                    _Delay = Menu.Add("delay", new Slider("Activation Delay", 1000, 0, 2000));
+                    _Blind = Menu.Add("Blind",
+                        new CheckBox("Blind", false));
+                    _Charm = Menu.Add("Charm",
+                        new CheckBox("Charm"));
+                    _Fear = Menu.Add("Fear",
+                        new CheckBox("Fear"));
+                    _Polymorph = Menu.Add("Polymorph",
+                        new CheckBox("Polymorph"));
+                    _Stun = Menu.Add("Stun",
+                        new CheckBox("Stun"));
+                    _Snare = Menu.Add("Snare",
+                        new CheckBox("Snare"));
+                    _Silence = Menu.Add("Silence",
+                        new CheckBox("Silence", false));
+                    _Taunt = Menu.Add("Taunt",
+                        new CheckBox("Taunt"));
+                    _Supression = Menu.Add("Suppression",
+                        new CheckBox("Suppression"));
+                }
+
+                public static void Initialize()
+                {
+                }
+            }
+
         }
     }
+}
 
             
         

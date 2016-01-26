@@ -13,6 +13,7 @@ namespace AddonTemplate
         public static Spell.Active W { get; private set; }
         public static Spell.Skillshot E { get; private set; }
         public static Spell.Targeted R { get; private set; }
+        public static Item Qss, Mercurial;
 
         static SpellManager()
         {
@@ -21,6 +22,9 @@ namespace AddonTemplate
             W = new Spell.Active(SpellSlot.W, 200);
             E = new Spell.Skillshot(SpellSlot.E, 550, SkillShotType.Cone, 250, 100, 120);
             R = new Spell.Targeted(SpellSlot.R, 460);
+
+            Qss = new Item((int)ItemId.Quicksilver_Sash);
+            Mercurial = new Item((int)ItemId.Mercurial_Scimitar);
 
         }
 

@@ -69,7 +69,9 @@ namespace AddonTemplate.Modes
                             if (Damages.RDamage(enemy, passiveCounter) >= enemy.Health + Damages.PassiveDmg(enemy, 1))
                             {
                                 if (!enemy.HasBuffOfType(BuffType.Invulnerability)
-                                    && !enemy.HasBuffOfType(BuffType.SpellShield))
+                                       && !enemy.HasBuffOfType(BuffType.SpellShield)
+                                       && !enemy.HasBuff("kindredrnodeathbuff")
+                                       && !enemy.HasUndyingBuff())
                                 {
                                     R.Cast(enemy);
                                 }

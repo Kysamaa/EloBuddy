@@ -17,6 +17,9 @@ namespace AddonTemplate.Modes
 
         public override void Execute()
         {
+            var itarget = TargetSelector.GetTarget(1000, DamageType.Physical);
+            Items.UseItems(itarget);
+
             if (Settings.UseE)
             {
                 var etarget = TargetSelector.GetTarget(E.Range, DamageType.Physical);
@@ -29,6 +32,7 @@ namespace AddonTemplate.Modes
                     }
                 }
             }
+
             if (Settings.UseW)
             {
                 var target = TargetSelector.GetTarget(W.Range, DamageType.Physical);
@@ -44,11 +48,9 @@ namespace AddonTemplate.Modes
                     if (Q.IsReady() && target != null)
                     {
                         Q.Cast();
-                    }
-
-
-                
+                    }              
             }
+
             if (Settings.UseR && R.IsReady())
             {
                 var target = TargetSelector.GetTarget(E.Range, DamageType.Physical);
@@ -62,7 +64,9 @@ namespace AddonTemplate.Modes
                             target.Health + Damages.PassiveDmg(target, 1))
                         {
                             if (!target.HasBuffOfType(BuffType.Invulnerability)
-                                && !target.HasBuffOfType(BuffType.SpellShield))
+                                && !target.HasBuffOfType(BuffType.SpellShield)
+                                && !target.HasBuff("kindredrnodeathbuff")
+                                && !target.HasUndyingBuff())
                             {
                                 R.Cast(target);
                             }

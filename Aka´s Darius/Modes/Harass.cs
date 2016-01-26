@@ -17,9 +17,9 @@ namespace AddonTemplate.Modes
 
         public override void Execute()
         {
-            // TODO: Add harass logic here
-            // See how I used the Settings.UseQ and Settings.Mana here, this is why I love
-            // my way of using the menu in the Config class!
+            var itarget = TargetSelector.GetTarget(1000, DamageType.Physical);
+            Items.UseItems(itarget);
+
             if (Settings.UseW && Player.Instance.ManaPercent > Settings.Mana && W.IsReady())
             {
                 var target = TargetSelector.GetTarget(W.Range, DamageType.Physical);

@@ -16,6 +16,9 @@ namespace AddonTemplate.Modes
 
         public override void Execute()
         {
+            var itarget = TargetSelector.GetTarget(1000, DamageType.Physical);
+            Items.UseItems(itarget);
+
             if (Config.Modes.Combo.UseW)
             {
                 var target = TargetSelector.GetTarget(W.Range, DamageType.Physical);
