@@ -32,7 +32,7 @@ namespace AddonTemplate.Modes
                 {
                     W.Cast();
                 }
-
+                Items.UseItems(m);
             }
         }
     }

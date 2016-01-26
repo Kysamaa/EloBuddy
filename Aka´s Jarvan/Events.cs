@@ -10,7 +10,7 @@ namespace AddonTemplate
 {
     public static class Events
     {
-        static Events()
+        public static void Load()
         {
             GameObject.OnCreate += OnCreateObj;
             GameObject.OnDelete += OnDeleteObj;

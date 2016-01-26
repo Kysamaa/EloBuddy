@@ -55,6 +55,7 @@
     <Compile Include="Damages.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="ModeManager.cs" />
+    <Compile Include="Modes\Items.cs" />
     <Compile Include="Modes\PermaActive.cs" />
     <Compile Include="Modes\Flee.cs" />
     <Compile Include="Modes\LaneClear.cs" />

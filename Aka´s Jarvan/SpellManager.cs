@@ -15,6 +15,7 @@ namespace AddonTemplate
         public static Spell.Skillshot E { get; private set; }
         public static Spell.Targeted R { get; private set; }
         public static Vector3 Epos = default(Vector3);
+        public static Item Qss, Mercurial;
 
         static SpellManager()
         {
@@ -23,6 +24,9 @@ namespace AddonTemplate
             W = new Spell.Active(SpellSlot.W, 520);
             E = new Spell.Skillshot(SpellSlot.E, 860,SkillShotType.Circular);
             R = new Spell.Targeted(SpellSlot.R, 650);
+
+            Qss = new Item((int)ItemId.Quicksilver_Sash);
+            Mercurial = new Item((int)ItemId.Mercurial_Scimitar);
 
         }
 

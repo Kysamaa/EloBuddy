@@ -21,6 +21,9 @@ namespace AddonTemplate.Modes
 
         public override void Execute()
         {
+            var itarget = TargetSelector.GetTarget(1000, DamageType.Physical);
+            Items.UseItems(itarget);
+
             if (Settings.UseRk && R.IsReady() && E.IsReady() && Q.IsReady())
             {
                 var target = TargetSelector.GetTarget(R.Range, DamageType.Physical);
@@ -30,16 +33,19 @@ namespace AddonTemplate.Modes
                 }
             }
 
-            var qtarget = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
+            var qtarget = TargetSelector.GetTarget(E.Range, DamageType.Physical);
             if (Settings.UseE && E.IsReady() &&
                 (qtarget.IsValidTarget(Q.Range) && Q.IsReady()))
             {
                 var vec = qtarget.ServerPosition - ObjectManager.Player.Position;
                 var castBehind = E.GetPrediction(qtarget).CastPosition + Vector3.Normalize(vec)*100;
                 E.Cast(castBehind);
-                Q.Cast(castBehind);
             }
 
+            if (Settings.UseQ && Q.IsReady() && qtarget.IsValidTarget(200, true, SpellManager.Epos) && SpellManager.Epos != default(Vector3))
+            {
+                Q.Cast(SpellManager.Epos);
+            }
 
             if (Settings.UseW)
             {

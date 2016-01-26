@@ -18,28 +18,62 @@ namespace AddonTemplate.Modes
 
         public override void Execute()
         {
-            // TODO: Add harass logic here
-            // See how I used the Settings.UseQ and Settings.Mana here, this is why I love
-            // my way of using the menu in the Config class
-                var qtarget = TargetSelector.GetTarget(E.Range, DamageType.Physical);
-                if (Settings.UseE && E.IsReady() && Player.Instance.ManaPercent > Settings.Mana &&
-                    (qtarget.IsValidTarget(Q.Range) && Q.IsReady()))
-                {
-                    var vec = qtarget.ServerPosition - ObjectManager.Player.Position;
-                    var castBehind = E.GetPrediction(qtarget).CastPosition + Vector3.Normalize(vec) * 100;
-                    E.Cast(castBehind);
-                    Q.Cast(castBehind);
-                }
+            var itarget = TargetSelector.GetTarget(1000, DamageType.Physical);
+            Items.UseItems(itarget);
 
-            if (Config.Modes.Combo.UseQ && Q.IsReady() && Player.Instance.ManaPercent > Settings.Mana)
+
+            if (Settings.Harassmode && !Q.IsReady() && E.IsReady() && Player.Instance.ManaPercent > Settings.Mana)
             {
-                var wtarget = TargetSelector.GetTarget(W.Range, DamageType.Physical);
-                var prede = Q.GetPrediction(wtarget);
+                var wtarget = TargetSelector.GetTarget(E.Range, DamageType.Physical);
+                //var predq = Q.GetPrediction(wtarget);
+                var prede = E.GetPrediction(wtarget);
                 if (prede.HitChance >= HitChance.Medium)
                 {
                     if (wtarget != null)
                     {
-                        Q.Cast(prede.CastPosition);
+                        E.Cast(prede.CastPosition);
+                    }
+                }
+            }
+
+            if (Settings.Harassmode && Q.IsReady() && Player.Instance.ManaPercent > Settings.Mana)
+            {
+                var wtarget = TargetSelector.GetTarget(E.Range, DamageType.Physical);
+                var predq = Q.GetPrediction(wtarget);
+                //var prede = E.GetPrediction(wtarget);
+                if (predq.HitChance >= HitChance.Medium)
+                {
+                    if (wtarget != null)
+                    {
+                        Q.Cast(predq.CastPosition);
+                    }
+                }
+            }
+
+            if (!Settings.Harassmode && Q.IsReady() && SpellManager.Epos != default(Vector3) && Player.Instance.ManaPercent > Settings.Mana)
+            {
+                var wtarget = TargetSelector.GetTarget(E.Range, DamageType.Physical);
+                var predq = Q.GetPrediction(wtarget);
+                //var prede = E.GetPrediction(wtarget);
+                if (predq.HitChance >= HitChance.Medium)
+                {
+                    if (wtarget != null)
+                    {
+                        Q.Cast(SpellManager.Epos);
+                    }
+                }
+            }
+
+            if (!Settings.Harassmode && E.IsReady() && Player.Instance.ManaPercent > Settings.Mana)
+            {
+                var wtarget = TargetSelector.GetTarget(E.Range, DamageType.Physical);
+                //var predq = Q.GetPrediction(wtarget);
+                var prede = E.GetPrediction(wtarget);
+                if (prede.HitChance >= HitChance.Medium)
+                {
+                    if (wtarget != null)
+                    {
+                        E.Cast(prede.CastPosition);
                     }
                 }
             }
@@ -47,11 +81,11 @@ namespace AddonTemplate.Modes
             {
                 var target = TargetSelector.GetTarget(W.Range, DamageType.Physical);
                 if (target != null)
-                    {
-                        W.Cast();
-                    }
+                {
+                    W.Cast();
                 }
             }
         }
     }
+}
 

@@ -16,22 +16,19 @@ namespace AddonTemplate.Modes
 
         public override void Execute()
         {
-            if (Settings.UseE)
+            var itarget = TargetSelector.GetTarget(1000, DamageType.Physical);
+            Items.UseItems(itarget);
+
+            if (Settings.UseE && Settings.UseQ)
             {
                 if (E.IsReady() && Q.IsReady())
                 {
                     E.Cast(Game.CursorPos);
-                }
-
-            }
-            if (Settings.UseQ)
-            {
-                if (Q.IsReady() && !E.IsReady())
-                {
                     Q.Cast(Game.CursorPos);
                 }
 
             }
+
             if (Config.Modes.Combo.UseW)
             {
                 var target = TargetSelector.GetTarget(W.Range, DamageType.Physical);

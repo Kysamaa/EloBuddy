@@ -19,24 +19,24 @@ namespace AddonTemplate.Modes
                     Q.Range).Where(
                         m => !m.IsDead && m.IsValid && !m.IsInvulnerable);
 
-                     {
-                         foreach (var m in minions)
-                         {
-                             if (Settings.UseQ)
-                             {
-                                 E.Cast(m);
-                             }
-                             if (Settings.UseQ)
-                             {
-                                 Q.Cast(m);
-                             }
-                             if (Settings.UseW)
-                             {
-                                 W.Cast();
-                             }
-
-                         }
-                     }
+            {
+                foreach (var m in minions)
+                {
+                    if (Settings.UseQ)
+                    {
+                        E.Cast(m);
+                    }
+                    if (Settings.UseQ)
+                    {
+                        Q.Cast(m);
+                    }
+                    if (Settings.UseW)
+                    {
+                        W.Cast();
+                    }
+                    Items.UseItems(m);
+                }
+            }
         }
     }
 }
