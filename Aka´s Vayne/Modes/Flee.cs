@@ -31,7 +31,7 @@ namespace Aka_s_Vayne_reworked.Modes
         {
             if (MenuManager.FleeMenu["FleeUseQ"].Cast<CheckBox>().CurrentValue)
             {
-                if (Program.Q.IsReady() && !(Game.CursorPos.IsDangerousPosition()))
+                if (Program.Q.IsReady() && !(Game.CursorPos.IsSafe()))
                 {
                     Player.CastSpell(SpellSlot.Q, Game.CursorPos);
                 }

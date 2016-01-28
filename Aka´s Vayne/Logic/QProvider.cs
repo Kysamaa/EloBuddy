@@ -29,7 +29,7 @@ namespace Aka_s_Vayne_reworked.Logic
 
             var positions = DashHelper.GetRotatedQPositions();
             var enemyPositions = DashHelper.GetEnemyPoints();
-            var safePositions = positions.Where(pos => !enemyPositions.Contains(pos.To2D())).ToList();
+            var safePositions = positions.Where(pos => !enemyPositions.Contains(pos.To2D()));
             var BestPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f);
             var AverageDistanceWeight = .60f;
             var ClosestDistanceWeight = .40f;
@@ -37,14 +37,14 @@ namespace Aka_s_Vayne_reworked.Logic
             var bestWeightedAvg = 0f;
 
             var highHealthEnemiesNear =
-                EntityManager.Heroes.Enemies.Where(m => !m.IsMelee && m.IsValidTarget(1300f) && m.HealthPercent > 7).ToList()
+                EntityManager.Heroes.Enemies.Where(m => !m.IsMelee && m.IsValidTarget(1300f) && m.HealthPercent > 7)
                     ;
 
             var alliesNear = EntityManager.Heroes.Allies.Count(ally => !ally.IsMe && ally.IsValidTarget(1500f, false));
 
             var enemiesNear =
                 EntityManager.Heroes.Enemies.Where(
-                    m => m.IsValidTarget(Variables._Player.GetAutoAttackRange(m) + 300f + 65f)).ToList();
+                    m => m.IsValidTarget(Variables._Player.GetAutoAttackRange(m) + 300f + 65f));
 
             #endregion
 
@@ -71,7 +71,7 @@ namespace Aka_s_Vayne_reworked.Logic
             {
                 //Logic for 1 enemy near
                 var position = (Vector3)ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f);
-                return position.IsSafeEx() ? position : Vector3.Zero;
+                return position.To2D().IsSafeEx() ? position : Vector3.Zero;
             }
 
             #endregion
@@ -128,8 +128,8 @@ namespace Aka_s_Vayne_reworked.Logic
                 && ObjectManager.Player.Distance(closeNonMeleeEnemy) <= closeNonMeleeEnemy.AttackRange - 85
                 && !closeNonMeleeEnemy.IsMelee)
             {
-                return ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f).IsSafeEx2()
-                    ? (Vector3) ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f)
+                return ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f).IsSafeEx()
+                    ? ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f).To3D()
                     : Vector3.Zero;
             }
 
@@ -151,26 +151,26 @@ namespace Aka_s_Vayne_reworked.Logic
                 {
                     var closestDist = ObjectManager.Player.ServerPosition.Distance(enemy.ServerPosition);
                     var weightedAvg = closestDist*ClosestDistanceWeight + avgDist*AverageDistanceWeight;
-                    if (weightedAvg > bestWeightedAvg && position.IsSafeEx())
+                    if (weightedAvg > bestWeightedAvg && position.To2D().IsSafeEx())
                     {
                         bestWeightedAvg = weightedAvg;
-                        BestPosition = (Vector2) position;
+                        BestPosition = position.To2D();
                     }
                 }
             }
 
             #endregion
 
-            var endPosition = (BestPosition.IsSafe2()) ? BestPosition : Vector2.Zero;
+            var endPosition = (BestPosition.To3D().IsSafe()) ? BestPosition.To3D() : Vector3.Zero;
 
             #region Couldn't find a suitable position, tumble to nearest ally logic
 
-            if (endPosition == Vector2.Zero)
+            if (endPosition == Vector3.Zero)
             {
                 //Try to find another suitable position. This usually means we are already near too much enemies turrets so just gtfo and tumble
                 //to the closest ally ordered by most health.
                 var alliesClose =
-                    EntityManager.Heroes.Allies.Where(ally => !ally.IsMe && ally.IsValidTarget(1500, false)).ToList();
+                    EntityManager.Heroes.Allies.Where(ally => !ally.IsMe && ally.IsValidTarget(1500, false));
                 if (alliesClose.Any() && enemiesNear.Any())
                 {
                     var closestMostHealth =
@@ -188,9 +188,9 @@ namespace Aka_s_Vayne_reworked.Logic
                     {
                         var tempPosition = ObjectManager.Player.ServerPosition.Extend(closestMostHealth.ServerPosition,
                             300f);
-                        if (tempPosition.IsSafeEx2())
+                        if (tempPosition.IsSafeEx())
                         {
-                            endPosition = tempPosition;
+                            endPosition = tempPosition.To3D();
                         }
                     }
 
@@ -202,12 +202,12 @@ namespace Aka_s_Vayne_reworked.Logic
 
             #region Couldn't even tumble to ally, just go to mouse
 
-            if (endPosition == Vector2.Zero)
+            if (endPosition == Vector3.Zero)
             {
                 var mousePosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f);
-                if (mousePosition.IsSafe2())
+                if (mousePosition.To3D().IsSafe())
                 {
-                    endPosition = mousePosition;
+                    endPosition = mousePosition.To3D();
                 }
             }
 
@@ -215,333 +215,6 @@ namespace Aka_s_Vayne_reworked.Logic
 
             return (Vector3) endPosition;
         }
-    }
-
-    public static class GameObjects
-    {
-        #region Static Fields
-
-        /// <summary>
-        ///     The ally heroes list.
-        /// </summary>
-        private static readonly List<AIHeroClient> AllyHeroesList = new List<AIHeroClient>();
-
-        /// <summary>
-        ///     The ally inhibitors list.
-        /// </summary>
-        private static readonly List<Obj_BarracksDampener> AllyInhibitorsList = new List<Obj_BarracksDampener>();
-
-        /// <summary>
-        ///     The ally list.
-        /// </summary>
-        private static readonly List<Obj_AI_Base> AllyList = new List<Obj_AI_Base>();
-
-        /// <summary>
-        ///     The ally minions list.
-        /// </summary>
-        private static readonly List<Obj_AI_Minion> AllyMinionsList = new List<Obj_AI_Minion>();
-
-        /// <summary>
-        ///     The ally shops list.
-        /// </summary>
-        private static readonly List<Obj_Shop> AllyShopsList = new List<Obj_Shop>();
-
-        /// <summary>
-        ///     The ally spawn points list.
-        /// </summary>
-        private static readonly List<Obj_SpawnPoint> AllySpawnPointsList = new List<Obj_SpawnPoint>();
-
-        /// <summary>
-        ///     The ally turrets list.
-        /// </summary>
-        private static readonly List<Obj_AI_Turret> AllyTurretsList = new List<Obj_AI_Turret>();
-
-        /// <summary>
-        ///     The ally wards list.
-        /// </summary>
-        private static readonly List<Obj_AI_Minion> AllyWardsList = new List<Obj_AI_Minion>();
-
-        /// <summary>
-        ///     The attackable unit list.
-        /// </summary>
-        private static readonly List<AttackableUnit> AttackableUnitsList = new List<AttackableUnit>();
-
-        /// <summary>
-        ///     The enemy heroes list.
-        /// </summary>
-        private static readonly List<AIHeroClient> EnemyHeroesList = new List<AIHeroClient>();
-
-        /// <summary>
-        ///     The enemy inhibitors list.
-        /// </summary>
-        private static readonly List<Obj_BarracksDampener> EnemyInhibitorsList = new List<Obj_BarracksDampener>();
-
-        /// <summary>
-        ///     The enemy list.
-        /// </summary>
-        private static readonly List<Obj_AI_Base> EnemyList = new List<Obj_AI_Base>();
-
-        /// <summary>
-        ///     The enemy minions list.
-        /// </summary>
-        private static readonly List<Obj_AI_Minion> EnemyMinionsList = new List<Obj_AI_Minion>();
-
-        /// <summary>
-        ///     The enemy shops list.
-        /// </summary>
-        private static readonly List<Obj_Shop> EnemyShopsList = new List<Obj_Shop>();
-
-        /// <summary>
-        ///     The enemy spawn points list.
-        /// </summary>
-        private static readonly List<Obj_SpawnPoint> EnemySpawnPointsList = new List<Obj_SpawnPoint>();
-
-        /// <summary>
-        ///     The enemy turrets list.
-        /// </summary>
-        private static readonly List<Obj_AI_Turret> EnemyTurretsList = new List<Obj_AI_Turret>();
-
-        /// <summary>
-        ///     The enemy wards list.
-        /// </summary>
-        private static readonly List<Obj_AI_Minion> EnemyWardsList = new List<Obj_AI_Minion>();
-
-        /// <summary>
-        ///     The game objects list.
-        /// </summary>
-        private static readonly List<GameObject> GameObjectsList = new List<GameObject>();
-
-        /// <summary>
-        ///     The heroes list.
-        /// </summary>
-        private static readonly List<AIHeroClient> HeroesList = new List<AIHeroClient>();
-
-        /// <summary>
-        ///     The inhibitors list.
-        /// </summary>
-        private static readonly List<Obj_BarracksDampener> InhibitorsList = new List<Obj_BarracksDampener>();
-
-        /// <summary>
-        ///     The jungle large list.
-        /// </summary>
-        private static readonly List<Obj_AI_Minion> JungleLargeList = new List<Obj_AI_Minion>();
-
-        /// <summary>
-        ///     The jungle legendary list.
-        /// </summary>
-        private static readonly List<Obj_AI_Minion> JungleLegendaryList = new List<Obj_AI_Minion>();
-
-        /// <summary>
-        ///     The jungle list.
-        /// </summary>
-        private static readonly List<Obj_AI_Minion> JungleList = new List<Obj_AI_Minion>();
-
-        /// <summary>
-        ///     The jungle small list.
-        /// </summary>
-        private static readonly List<Obj_AI_Minion> JungleSmallList = new List<Obj_AI_Minion>();
-
-        /// <summary>
-        ///     The minions list.
-        /// </summary>
-        private static readonly List<Obj_AI_Minion> MinionsList = new List<Obj_AI_Minion>();
-
-        /// <summary>
-        ///     The nexus list.
-        /// </summary>
-        private static readonly List<Obj_HQ> NexusList = new List<Obj_HQ>();
-
-        /// <summary>
-        ///     The shops list.
-        /// </summary>
-        private static readonly List<Obj_Shop> ShopsList = new List<Obj_Shop>();
-
-        /// <summary>
-        ///     The spawn points list.
-        /// </summary>
-        private static readonly List<Obj_SpawnPoint> SpawnPointsList = new List<Obj_SpawnPoint>();
-
-        /// <summary>
-        ///     The turrets list.
-        /// </summary>
-        private static readonly List<Obj_AI_Turret> TurretsList = new List<Obj_AI_Turret>();
-
-        /// <summary>
-        ///     The wards list.
-        /// </summary>
-        private static readonly List<Obj_AI_Minion> WardsList = new List<Obj_AI_Minion>();
-
-        /// <summary>
-        ///     Indicates whether the <see cref="GameObjects" /> stack was initialized and saved required instances.
-        /// </summary>
-        private static bool initialized;
-
-        #endregion
-
-        /// <summary>
-        ///     Gets the game objects.
-        /// </summary>
-        public static IEnumerable<GameObject> AllGameObjects = GameObjectsList;
-
-        /// <summary>
-        ///     Gets the ally.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Base> Ally = AllyList;
-
-        /// <summary>
-        ///     Gets the ally heroes.
-        /// </summary>
-        public static IEnumerable<AIHeroClient> AllyHeroes = AllyHeroesList;
-
-        /// <summary>
-        ///     Gets the ally inhibitors.
-        /// </summary>
-        public static IEnumerable<Obj_BarracksDampener> AllyInhibitors = AllyInhibitorsList;
-
-        /// <summary>
-        ///     Gets the ally minions.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Minion> AllyMinions = AllyMinionsList;
-
-        /// <summary>
-        ///     Gets or sets the ally nexus.
-        /// </summary>
-        public static Obj_HQ AllyNexus { get; set; }
-
-        /// <summary>
-        ///     Gets the ally shops.
-        /// </summary>
-        public static IEnumerable<Obj_Shop> AllyShops = AllyShopsList;
-
-        /// <summary>
-        ///     Gets the ally spawn points.
-        /// </summary>
-        public static IEnumerable<Obj_SpawnPoint> AllySpawnPoints = AllySpawnPointsList;
-
-        /// <summary>
-        ///     Gets the ally turrets.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Turret> AllyTurrets = AllyTurretsList;
-
-        /// <summary>
-        ///     Gets the ally wards.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Minion> AllyWards = AllyWardsList;
-
-        /// <summary>
-        ///     Gets the attackable units.
-        /// </summary>
-        public static IEnumerable<AttackableUnit> AttackableUnits = AttackableUnitsList;
-
-        /// <summary>
-        ///     Gets the enemy.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Base> Enemy = EnemyList;
-
-        /// <summary>
-        ///     Gets the enemy heroes.
-        /// </summary>
-        public static IEnumerable<AIHeroClient> EnemyHeroes = EnemyHeroesList;
-
-        /// <summary>
-        ///     Gets the enemy inhibitors.
-        /// </summary>
-        public static IEnumerable<Obj_BarracksDampener> EnemyInhibitors = EnemyInhibitorsList;
-
-        /// <summary>
-        ///     Gets the enemy minions.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Minion> EnemyMinions = EnemyMinionsList;
-
-        /// <summary>
-        ///     Gets or sets the enemy nexus.
-        /// </summary>
-        public static Obj_HQ EnemyNexus { get; set; }
-
-        /// <summary>
-        ///     Gets the enemy shops.
-        /// </summary>
-        public static IEnumerable<Obj_Shop> EnemyShops = EnemyShopsList;
-
-        /// <summary>
-        ///     Gets the enemy spawn points.
-        /// </summary>
-        public static IEnumerable<Obj_SpawnPoint> EnemySpawnPoints = EnemySpawnPointsList;
-
-        /// <summary>
-        ///     Gets the enemy turrets.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Turret> EnemyTurrets = EnemyTurretsList;
-
-        /// <summary>
-        ///     Gets the enemy wards.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Minion> EnemyWards = EnemyWardsList;
-
-        /// <summary>
-        ///     Gets the heroes.
-        /// </summary>
-        public static IEnumerable<AIHeroClient> Heroes = HeroesList;
-
-        /// <summary>
-        ///     Gets the inhibitors.
-        /// </summary>
-        public static IEnumerable<Obj_BarracksDampener> Inhibitors = InhibitorsList;
-
-        /// <summary>
-        ///     Gets the jungle.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Minion> Jungle = JungleList;
-
-        /// <summary>
-        ///     Gets the jungle large.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Minion> JungleLarge = JungleLargeList;
-
-        /// <summary>
-        ///     Gets the jungle legendary.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Minion> JungleLegendary = JungleLegendaryList;
-
-        /// <summary>
-        ///     Gets the jungle small.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Minion> JungleSmall = JungleSmallList;
-
-        /// <summary>
-        ///     Gets the minions.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Minion> Minions = MinionsList;
-
-        /// <summary>
-        ///     Gets the nexuses.
-        /// </summary>
-        public static IEnumerable<Obj_HQ> Nexuses = NexusList;
-
-        /// <summary>
-        ///     Gets or sets the player.
-        /// </summary>
-        public static AIHeroClient Player { get; set; }
-
-        /// <summary>
-        ///     Gets the shops.
-        /// </summary>
-        public static IEnumerable<Obj_Shop> Shops = ShopsList;
-
-        /// <summary>
-        ///     Gets the spawn points.
-        /// </summary>
-        public static IEnumerable<Obj_SpawnPoint> SpawnPoints = SpawnPointsList;
-
-        /// <summary>
-        ///     Gets the turrets.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Turret> Turrets = TurretsList;
-
-        /// <summary>
-        ///     Gets the wards.
-        /// </summary>
-        public static IEnumerable<Obj_AI_Minion> Wards = WardsList;
     }
 
     internal class DashHelper
@@ -575,7 +248,7 @@ namespace Aka_s_Vayne_reworked.Logic
         {
             if (Orbwalker.LastTarget is AIHeroClient)
             {
-                var owAI = Orbwalker.LastTarget as AIHeroClient;
+                var owAI = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(), DamageType.Physical);
                 if (owAI.IsValidTarget(Variables._Player.GetAutoAttackRange(null) + 120f, true, from))
                 {
                     return owAI;
@@ -619,9 +292,9 @@ namespace Aka_s_Vayne_reworked.Logic
                                                                        en.Health >
                                                                        ObjectManager.Player.GetAutoAttackDamage(en)*3 +
                                                                        Variables._Player.GetSpellDamage(en, SpellSlot.W) +
-                                                                       Variables._Player.GetSpellDamage(en, SpellSlot.Q)).ToList()
+                                                                       Variables._Player.GetSpellDamage(en, SpellSlot.Q))
                     ;
-                var enemiesEx = EntityManager.Heroes.Enemies.Where(en => en.IsValidTarget(1200f, true, from)).ToList();
+                var enemiesEx = EntityManager.Heroes.Enemies.Where(en => en.IsValidTarget(1200f, true, from));
                 var LHEnemies = enemiesEx.Count() - enemies.Count();
 
                 var totalDistance = (LHEnemies > 1 && enemiesEx.Count() > 2)
@@ -689,7 +362,7 @@ namespace Aka_s_Vayne_reworked.Logic
         /// <returns></returns>
         public static bool IsSafe(this Vector3 position)
         {
-            return position.IsSafeEx()
+            return position.To2D().IsSafeEx()
                    && position.IsNotIntoEnemies()
                    && EntityManager.Heroes.Enemies.All(m => m.Distance(position) > 350f)
                    &&
@@ -699,46 +372,12 @@ namespace Aka_s_Vayne_reworked.Logic
             //Either it is not under turret or both the player and the position are under turret already and the health percent is greater than 10.
         }
 
-        public static bool IsSafe2(this Vector2 position)
-        {
-            return position.IsSafeEx2()
-                   && position.IsNotIntoEnemies2()
-                   && EntityManager.Heroes.Enemies.All(m => m.Distance(position) > 350f)
-                   &&
-                   (!other.UnderEnemyTower((Vector2) position) ||
-                    (other.UnderEnemyTower((Vector2) Variables._Player.ServerPosition) &&
-                     other.UnderEnemyTower((Vector2) position) && ObjectManager.Player.HealthPercent > 10));
-            //Either it is not under turret or both the player and the position are under turret already and the health percent is greater than 10.
-        }
-
-        public static bool IsSafeEx2(this Vector2 Position)
-        {
-            if (other.UnderEnemyTower((Vector2) Position) &&
-                !other.UnderEnemyTower((Vector2) Variables._Player.ServerPosition))
-            {
-                return false;
-            }
-            var range = 1000f;
-            var lowHealthAllies =
-                EntityManager.Heroes.Allies.Where(a => a.IsValidTarget(range, false) && a.HealthPercent < 10 && !a.IsMe);
-            var lowHealthEnemies =
-                EntityManager.Heroes.Allies.Where(a => a.IsValidTarget(range) && a.HealthPercent < 10);
-            var enemies = ObjectManager.Player.CountEnemiesInRange(range);
-            var allies = ObjectManager.Player.CountAlliesInRange(range);
-            var enemyTurrets = Turrets.EnemyTurrets.Where(m => m.IsValidTarget(975f));
-            var allyTurrets = Turrets.AllyTurrets.Where(m => m.IsValidTarget(975f, false));
-
-            return (allies - lowHealthAllies.Count() + allyTurrets.Count()*2 + 1 >=
-                    enemies - lowHealthEnemies.Count() +
-                    (!other.UnderEnemyTower((Vector2) Variables._Player.ServerPosition) ? enemyTurrets.Count()*2 : 0));
-        }
-
         /// <summary>
         /// Determines whether the position is Safe using the allies/enemies logic
         /// </summary>
         /// <param name="Position">The position.</param>
         /// <returns></returns>
-        public static bool IsSafeEx(this Vector3 Position)
+        public static bool IsSafeEx(this Vector2 Position)
         {
             if (other.UnderEnemyTower((Vector2) Position) &&
                 !other.UnderEnemyTower((Vector2) Variables._Player.ServerPosition))

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Aka_s_Vayne_reworked.Functions;
 using EloBuddy;
 using EloBuddy.SDK;
@@ -85,20 +83,22 @@ namespace Aka_s_Vayne_reworked.Logic
                 var pushDistance = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
                 var targetPosition = Program.E2.GetPrediction(target).UnitPosition;
                 var finalPosition = targetPosition.Extend(fromPosition, -pushDistance);
-                var finalPosition2 = targetPosition.Extend(fromPosition, -(pushDistance/2f));
+                var finalPosition2 = targetPosition.Extend(fromPosition, -(pushDistance / 2f));
                 var collFlags = NavMesh.GetCollisionFlags(finalPosition);
                 var collFlags2 = NavMesh.GetCollisionFlags(finalPosition2);
                 if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building) || collFlags2.HasFlag(CollisionFlags.Wall) || collFlags2.HasFlag(CollisionFlags.Building))
                 {
                     if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue &&
-                        Orbwalker.LastTarget != null &&
-                        !target.NetworkId.Equals(Orbwalker.LastTarget.NetworkId))
+                        TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),
+    DamageType.Physical) != null &&
+                        !target.NetworkId.Equals(TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),
+    DamageType.Physical).NetworkId))
                     {
                         return null;
                     }
 
                     if (target.Health + 10 <=
-                        ObjectManager.Player.GetAutoAttackDamage(target)*
+                        ObjectManager.Player.GetAutoAttackDamage(target) *
                         MenuManager.CondemnMenu["noeaa"].Cast<Slider>().CurrentValue)
                     {
                         return null;
@@ -112,42 +112,42 @@ namespace Aka_s_Vayne_reworked.Logic
     }
 
     class Shine
+    {
+        public static Obj_AI_Base GetTarget(Vector3 fromPosition)
         {
-            public static Obj_AI_Base GetTarget(Vector3 fromPosition)
+            foreach (var target in EntityManager.Heroes.Enemies.Where(h => h.IsValidTarget(Program.E.Range)))
             {
-                foreach (var target in EntityManager.Heroes.Enemies.Where(h => h.IsValidTarget(Program.E.Range)))
+                var pushDistance = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
+                var targetPosition = Program.E2.GetPrediction(target).UnitPosition;
+                var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition).Normalized();
+                float checkDistance = pushDistance / 40f;
+                for (int i = 0; i < 40; i++)
                 {
-                    var pushDistance = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
-                    var targetPosition = Program.E2.GetPrediction(target).UnitPosition;
-                    var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition).Normalized();
-                    float checkDistance = pushDistance / 40f;
-                    for (int i = 0; i < 40; i++)
+                    Vector3 finalPosition = targetPosition + (pushDirection * checkDistance * i);
+                    var collFlags = NavMesh.GetCollisionFlags(finalPosition);
+                    if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building)) //not sure about building, I think its turrets, nexus etc
                     {
-                        Vector3 finalPosition = targetPosition + (pushDirection * checkDistance * i);
-                        var collFlags = NavMesh.GetCollisionFlags(finalPosition);
-                        if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building)) //not sure about building, I think its turrets, nexus etc
+                        if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue && TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),DamageType.Physical) != null &&
+                                        !target.NetworkId.Equals(TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),DamageType.Physical).NetworkId))
                         {
-                            if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue && Orbwalker.LastTarget != null &&
-                                            !target.NetworkId.Equals(Orbwalker.LastTarget.NetworkId))
-                            {
-                                return null;
-                            }
-
-                            if (target.Health + 10 <=
-                                            ObjectManager.Player.GetAutoAttackDamage(target) *
-                                            MenuManager.CondemnMenu["noeaa"].Cast<Slider>().CurrentValue)
-                            {
-                                return null;
-                            }
-
-                            return target;
+                            return null;
                         }
+
+                        if (target.Health + 10 <=
+                                        ObjectManager.Player.GetAutoAttackDamage(target) *
+                                        MenuManager.CondemnMenu["noeaa"].Cast<Slider>().CurrentValue)
+                        {
+                            return null;
+                        }
+
+                        return target;
                     }
                 }
-
-                return null;
             }
+
+            return null;
         }
+    }
 
     class VHReborn
     {
@@ -167,8 +167,8 @@ namespace Aka_s_Vayne_reworked.Logic
                 var numberOfChecks = (float)Math.Ceiling(pushDistance / 30f);
 
 
-                if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue && Orbwalker.LastTarget != null &&
-                            !target.NetworkId.Equals(Orbwalker.LastTarget.NetworkId))
+                if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue && TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),DamageType.Physical) != null &&
+                            !target.NetworkId.Equals(TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),DamageType.Physical).NetworkId))
                 {
                     continue;
                 }
@@ -211,7 +211,7 @@ namespace Aka_s_Vayne_reworked.Logic
             var MinChecksPercent = MenuManager.CondemnMenu["condemnPercent"].Cast<Slider>().CurrentValue;
             var PushDistance = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
 
-            if (other.UnderEnemyTower((Vector2) Variables._Player.ServerPosition))
+            if (other.UnderEnemyTower((Vector2)Variables._Player.ServerPosition))
             {
                 return null;
             }
@@ -221,7 +221,7 @@ namespace Aka_s_Vayne_reworked.Logic
                 var prediction = Program.E2.GetPrediction(Hero);
 
                 if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue &&
-                    Hero.NetworkId != Orbwalker.LastTarget.NetworkId)
+                    Hero.NetworkId != TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),DamageType.Physical).NetworkId)
                 {
                     continue;
                 }
@@ -298,7 +298,7 @@ namespace Aka_s_Vayne_reworked.Logic
             foreach (var Hero in HeroList)
             {
                 if (MenuManager.CondemnMenu["UseEc"].Cast<CheckBox>().CurrentValue &&
-                    Hero.NetworkId != Orbwalker.LastTarget.NetworkId)
+                    Hero.NetworkId != TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),DamageType.Physical).NetworkId)
                 {
                     continue;
                 }
@@ -358,5 +358,41 @@ namespace Aka_s_Vayne_reworked.Logic
             return vList;
         }
     }
+    class Jungle
+    {
+        public static void JungleCondemn()
+        {
+            foreach (
+                var jungleMobs in
+                    ObjectManager.Get<Obj_AI_Minion>()
+                        .Where(
+                            o =>
+                                o.IsValidTarget(Program.E.Range) && o.Team == GameObjectTeam.Neutral && o.IsVisible &&
+                                !o.IsDead))
+            {
+                if (jungleMobs.BaseSkinName == "SRU_Razorbeak" || jungleMobs.BaseSkinName == "SRU_Red" ||
+                    jungleMobs.BaseSkinName == "SRU_Blue" || jungleMobs.BaseSkinName == "SRU_Dragon" ||
+                    jungleMobs.BaseSkinName == "SRU_Krug" || jungleMobs.BaseSkinName == "SRU_Gromp" ||
+                    jungleMobs.BaseSkinName == "Sru_Crab")
+                {
+                    var pushDistance = MenuManager.CondemnMenu["pushDistance"].Cast<Slider>().CurrentValue;
+                    var targetPosition = Program.E2.GetPrediction(jungleMobs).UnitPosition;
+                    var pushDirection = (targetPosition - Variables._Player.ServerPosition).Normalized();
+                    float checkDistance = pushDistance / 40f;
+                    for (int i = 0; i < 40; i++)
+                    {
+                        var finalPosition = targetPosition + (pushDirection * checkDistance * i);
+                        var collFlags = NavMesh.GetCollisionFlags(finalPosition);
+                        if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building))
+                        {
+                            Program.E.Cast(jungleMobs);
+                        }
+                    }
+
+                }
+            }
+        }
+    }
 }
+
 

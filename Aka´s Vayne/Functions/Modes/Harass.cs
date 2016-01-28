@@ -12,7 +12,7 @@ namespace Aka_s_Vayne_reworked.Functions.Modes
         {
             foreach (AIHeroClient qTarget in EntityManager.Heroes.Enemies.Where(x => x.IsValidTarget(550)))
             {
-                if (qTarget.Buffs.Any(buff => buff.Name == "vaynesilvereddebuff" && buff.Count == 2) && !Game.CursorPos.IsDangerousPosition())
+                if (qTarget.Buffs.Any(buff => buff.Name == "vaynesilvereddebuff" && buff.Count == 2) && !Game.CursorPos.IsSafe())
                 {
                     Player.CastSpell(SpellSlot.Q, Game.CursorPos);
                 }

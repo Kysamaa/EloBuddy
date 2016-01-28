@@ -197,7 +197,7 @@ namespace Aka_s_Vayne_reworked.Evade
             }
         }
 
-        private static void OnDeleteMissile(Skillshot skillshot, Obj_SpellMissile missile)
+        private static void OnDeleteMissile(Skillshot skillshot, MissileClient missile)
         {
             if (skillshot.SpellData.SpellName == "VelkozQ")
             {

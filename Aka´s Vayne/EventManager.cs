@@ -29,7 +29,7 @@ namespace Aka_s_Vayne_reworked
             Game.OnUpdate += Game_OnUpdate;
             Player.OnIssueOrder += Player_OnIssueOrder;
             Drawing.OnDraw += OnDraw;
-            ELogic.LoadFlash();
+            Mechanics.LoadFlash();
             Traps.Load();
             Turrets.Load();
             Evade.EvadeHelper.OnLoad();
@@ -63,7 +63,7 @@ namespace Aka_s_Vayne_reworked
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) Modes.Combo.Load();
           //if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) ||
           //(Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))) Modes.LCLH.Load();
-          //if (MenuManager.ComboMenu["AAReset"].Cast<CheckBox>().CurrentValue) _game.EloBuddyOrbDisabler();
+          if (MenuManager.ComboMenu["AAReset"].Cast<CheckBox>().CurrentValue) _game.EloBuddyOrbDisabler();
         }
 
         public static void GameObject_OnCreate(GameObject sender, EventArgs args)

@@ -20,30 +20,27 @@ namespace Aka_s_Vayne_reworked.Events
 
         public static void AAReset()
         {
-            var target = Orbwalker.LastTarget;
+            var Target = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),
+DamageType.Physical);
 
-            if (Variables.stopmove && Game.Time*1000 > Variables.lastaaclick + Variables._Player.AttackCastDelay*1000)
+            if (Variables.stopmove && Game.Time * 1000 > Variables.lastaaclick + Variables._Player.AttackCastDelay * 1000)
             {
                 Variables.stopmove = false;
             }
-
             if (!Variables.stopmove)
             {
-                if (Game.Time*1000 >
-                    Variables.lastaa + Variables._Player.AttackCastDelay*1000 - Game.Ping/2 +
+                if (Game.Time * 1000 >
+                    Variables.lastaa + Variables._Player.AttackCastDelay * 1000 - Game.Ping / 2 +
                     MenuManager.ComboMenu["AACancel"].Cast<Slider>().CurrentValue)
                 {
                     Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 }
             }
-
-            if (target != null &&
-                Game.Time*1000 > Variables.lastaa + Variables._Player.AttackDelay*1000 - Game.Ping/2*4.3)
+            if (Target != null && Game.Time * 1000 > Variables.lastaa + Variables._Player.AttackDelay * 1000 - Game.Ping / 2 * 4.3)
             {
                 Variables.stopmove = true;
-                Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+                Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
             }
-
         }
 
         public static void AutoBuyTrinkets()
@@ -51,26 +48,20 @@ namespace Aka_s_Vayne_reworked.Events
             if (Game.MapId == GameMapId.SummonersRift)
             {
                 if (Variables._Player.IsInShopRange() &&
-                    MenuManager.MechanicMenu["autobuy"].Cast<CheckBox>().CurrentValue &&
-                    Variables._Player.Level > 6 && Item.HasItem((int) ItemId.Warding_Totem_Trinket))
+                    MenuManager.MechanicMenu["autobuyt"].Cast<CheckBox>().CurrentValue &&
+                    Variables._Player.Level > 9 && Item.HasItem((int) ItemId.Warding_Totem_Trinket))
                 {
-                    Shop.BuyItem(ItemId.Scrying_Orb_Trinket);
+                    //Shop.BuyItem(ItemId.Farsight_Orb_Trinket);
                 }
                 if (Variables._Player.IsInShopRange() &&
-                    MenuManager.MechanicMenu["autobuy"].Cast<CheckBox>().CurrentValue &&
-                    !Item.HasItem((int) ItemId.Oracles_Lens_Trinket, Variables._Player) && Variables._Player.Level > 6 &&
+                    MenuManager.MechanicMenu["autobuyt"].Cast<CheckBox>().CurrentValue &&
+                    !Item.HasItem((int) ItemId.Sweeping_Lens_Trinket, Variables._Player) && Variables._Player.Level > 6 &&
                     EntityManager.Heroes.Enemies.Any(
                         h =>
                             h.BaseSkinName == "Rengar" || h.BaseSkinName == "Talon" ||
                             h.BaseSkinName == "Vayne"))
                 {
                     Shop.BuyItem(ItemId.Sweeping_Lens_Trinket);
-                }
-                if (Variables._Player.IsInShopRange() &&
-                    MenuManager.MechanicMenu["autobuy"].Cast<CheckBox>().CurrentValue &&
-                    Variables._Player.Level >= 9 && Item.HasItem((int) ItemId.Sweeping_Lens_Trinket))
-                {
-                    Shop.BuyItem(ItemId.Oracles_Lens_Trinket);
                 }
             }
         }
@@ -102,7 +93,8 @@ namespace Aka_s_Vayne_reworked.Events
 
         public static void FastBotrk()
         {
-            var target = Orbwalker.LastTarget as Obj_AI_Base;
+            var target = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),
+    DamageType.Physical);
 
             if (MenuManager.ItemMenu["botrk"].Cast<CheckBox>().CurrentValue && target != null &&
                 (target.Distance(Variables._Player) > 500f ||
@@ -253,7 +245,8 @@ namespace Aka_s_Vayne_reworked.Events
 
         public static void QKs()
         {
-            var currentTarget = Orbwalker.LastTarget as Obj_AI_Base;
+            var currentTarget = TargetSelector.GetTarget((int)Variables._Player.GetAutoAttackRange(),
+    DamageType.Physical);
 
             if (!currentTarget.IsValidTarget() || currentTarget.IsZombie || currentTarget.IsInvulnerable || currentTarget.IsDead)
             {
@@ -276,7 +269,7 @@ namespace Aka_s_Vayne_reworked.Events
                 if (extendedPosition.IsSafe())
                 {
                     Orbwalker.ResetAutoAttack();
-                    Player.CastSpell(SpellSlot.Q, (Vector3) extendedPosition);
+                    Player.CastSpell(SpellSlot.Q, extendedPosition);
                 }
             }
         }

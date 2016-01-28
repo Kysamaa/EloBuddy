@@ -17,83 +17,6 @@ namespace AddonTemplate.Logic
 
         private static QProvider Provider = new QProvider();
 
-        public static void Cast(Vector3 position)
-        {
-            TumbleOrderPos = position;
-            if (position != Vector3.Zero)
-            {
-                Player.CastSpell(SpellSlot.Q, TumbleOrderPos);
-            }
-        }
-
-        public static bool IsDangerousPosition(this Vector3 pos)
-        {
-            var collFlags = NavMesh.GetCollisionFlags(pos);
-            return
-                EntityManager.Heroes.Enemies.Any(
-                    e => e.IsValidTarget(600) && e.IsVisible &&
-                        e.Distance(pos) < 375) ||
-                Traps.EnemyTraps.Any(t => pos.Distance(t.Position) < 125) ||
-                (Aka_s_Vayne_reworked.Functions.other.UnderEnemyTower((Vector2)pos) && Aka_s_Vayne_reworked.Functions.other.UnderEnemyTower((Vector2)Variables._Player.Position)) || collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building);
-        }
-
-        public static Vector3 GetJungleSafeTumblePos(Obj_AI_Base target)
-        {
-            var cursorPos = Game.CursorPos;
-            if (IsSafeTumblePos(cursorPos)) return cursorPos;
-
-            if (!target.IsValidTarget()) return Vector3.Zero;
-
-            var targetPosition = target.ServerPosition;
-
-            var myTumbleRangeCircle =
-                new QGeometry.Circle(ObjectManager.Player.ServerPosition.To2D(), 300).topolygon().ToClipperPath();
-
-            var goodCandidates = from p in myTumbleRangeCircle
-                                 select new Vector2(p.X, p.Y).To3D() into v3
-                                 let dist = v3.Distance(targetPosition)
-                                 where dist > MenuManager.ComboMenu["QDistance"].Cast<Slider>().CurrentValue && dist < 500
-                                 select v3;
-
-            return goodCandidates.OrderByDescending(candidate => candidate.Distance(cursorPos)).FirstOrDefault();
-        }
-
-        public static Vector3 GetSafeTumblePos(AIHeroClient target)
-        {
-            if (!target.IsValidTarget()) return Vector3.Zero;
-
-            var targetPosition = target.ServerPosition;
-
-            var myTumbleRangeCircle =
-                new QGeometry.Circle(ObjectManager.Player.ServerPosition.To2D(), 300).topolygon().ToClipperPath();
-
-            var goodCandidates = from p in myTumbleRangeCircle
-                                 select new Vector2(p.X, p.Y).To3D() into v3
-                                 let dist = v3.Distance(targetPosition)
-                                 where dist > MenuManager.ComboMenu["QDistance"].Cast<Slider>().CurrentValue && dist < 500
-                                 select v3;
-
-            return goodCandidates.OrderBy(candidate => candidate.Distance(Game.CursorPos)).FirstOrDefault();
-        }
-
-        public static bool IsSafeTumblePos(Vector3 position)
-        {
-            return
-                !ObjectManager.Get<AIHeroClient>()
-                    .Any(e => e.IsEnemy && e.Distance(position) < MenuManager.ComboMenu["QDistance"].Cast<Slider>().CurrentValue);
-        }
-
-        public static void JungleClear()
-        {
-            Obj_AI_Base jungleMobs = EntityManager.MinionsAndMonsters.GetJungleMonsters(Variables._Player.Position, Program.Q.Range, true).FirstOrDefault();
-            {
-                if (MenuManager.JungleClearMenu["JCQ"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.Q.Range))
-                {
-                    QLogic.Cast(GetJungleSafeTumblePos(jungleMobs));
-                }
-            }
-        }
-
         public static Vector3 NewQPrediction()
         {
             if (!MenuManager.ComboMenu["QE"].Cast<CheckBox>().CurrentValue &&
@@ -128,7 +51,7 @@ namespace AddonTemplate.Logic
 
         public static bool IsSafe(this Vector3 position, bool noQIntoEnemiesCheck = false)
         {
-            if (Aka_s_Vayne_reworked.Functions.other.UnderEnemyTower((Vector2)position) && !Aka_s_Vayne_reworked.Functions.other.UnderEnemyTower((Vector2)Variables._Player.Position))
+            if (other.UnderEnemyTower((Vector2)position) && !other.UnderEnemyTower((Vector2)Variables._Player.Position))
             {
                 return false;
             }
@@ -237,18 +160,14 @@ namespace AddonTemplate.Logic
                         var QPosition = smartQCheck ? smartQPosition : Game.CursorPos;
                         var QPosition2 = Provider.GetQPosition() != Vector3.Zero ? Provider.GetQPosition() : QPosition;
 
-                        if (!Aka_s_Vayne_reworked.Functions.other.UnderEnemyTower((Vector2)QPosition2) || (other.UnderEnemyTower((Vector2)QPosition2) && other.UnderEnemyTower((Vector2)Variables._Player.Position)))
+                        if (!other.UnderEnemyTower((Vector2)QPosition2) || (other.UnderEnemyTower((Vector2)QPosition2) && other.UnderEnemyTower((Vector2)Variables._Player.Position)))
                         {
                             CastQ(QPosition2);
                         }
                         break;
                     case 1:
                         //To mouse
-                        var Position = (Vector3)ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f);
-                        if (position.IsSafe())
-                        {
-                            DefaultQCast(Position, target);
-                        }
+                        DefaultQCast(position, target);
                         break;
                     case 3:
                         //Away from melee enemies
@@ -286,7 +205,7 @@ namespace AddonTemplate.Logic
             var EnemyPoints = GetEnemyPoints();
             if (afterTumblePosition.IsSafe(true) || (!EnemyPoints.Contains(Game.CursorPos.To2D())) || (Variables.EnemiesClose.Count() == 1))
             {
-                if (afterTumblePosition.Distance(Target.ServerPosition) <= Target.GetAutoAttackRange())
+                if (afterTumblePosition.Distance(Target.ServerPosition) <= Variables._Player.GetAutoAttackRange(Target))
                 {
                     CastQ(position);
                 }
@@ -305,7 +224,6 @@ namespace AddonTemplate.Logic
                     endPosition = (Vector3)qBurstModePosition;
                 }
             }
-
             Player.CastSpell(SpellSlot.Q, endPosition);
         }
 

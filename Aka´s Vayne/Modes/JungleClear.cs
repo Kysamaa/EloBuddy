@@ -1,4 +1,5 @@
 ﻿using EloBuddy;
+using Aka_s_Vayne_reworked.Logic;
 using AddonTemplate.Logic;
 using EloBuddy.SDK.Menu.Values;
 
@@ -15,9 +16,9 @@ namespace Aka_s_Vayne_reworked.Modes
         public static void UseQ()
         {
             if (MenuManager.JungleClearMenu["JCQ"].Cast<CheckBox>().CurrentValue && Program.Q.IsReady() &&
-                !Game.CursorPos.IsDangerousPosition())
+                !Game.CursorPos.IsSafe())
             {
-                QLogic.JungleClear();
+                //QLogic.JungleClear();
             }
         }
 
@@ -25,7 +26,7 @@ namespace Aka_s_Vayne_reworked.Modes
         {
             if (MenuManager.JungleClearMenu["JCE"].Cast<CheckBox>().CurrentValue && Program.E.IsReady())
             {
-                ELogic.JungleCondemn();
+                Jungle.JungleCondemn();
             }
         }
     }

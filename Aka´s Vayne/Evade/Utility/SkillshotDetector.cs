@@ -28,7 +28,7 @@ namespace Aka_s_Vayne_reworked.Evade.Utility
 {
     public static class SkillshotDetector
     {
-        public delegate void OnDeleteMissileH(Skillshot skillshot, Obj_SpellMissile missile);
+        public delegate void OnDeleteMissileH(Skillshot skillshot, MissileClient missile);
 
         public delegate void OnDetectSkillshotH(Skillshot skillshot);
 
@@ -63,12 +63,12 @@ namespace Aka_s_Vayne_reworked.Evade.Utility
 
         private static void ObjSpellMissileOnOnCreate(GameObject sender, EventArgs args)
         {
-            if (!sender.IsValid || !(sender is Obj_SpellMissile))
+            if (!sender.IsValid || !(sender is MissileClient))
             {
                 return; //not sure if needed
             }
 
-            var missile = (Obj_SpellMissile) sender;
+            var missile = (MissileClient) sender;
 
             var unit = missile.SpellCaster;
             if (!unit.IsValid || (unit.Team == ObjectManager.Player.Team))
@@ -110,12 +110,12 @@ namespace Aka_s_Vayne_reworked.Evade.Utility
         /// </summary>
         private static void ObjSpellMissileOnOnDelete(GameObject sender, EventArgs args)
         {
-            if (!(sender is Obj_SpellMissile))
+            if (!(sender is MissileClient))
             {
                 return;
             }
 
-            var missile = (Obj_SpellMissile) sender;
+            var missile = (MissileClient) sender;
 
             if (!(missile.SpellCaster is AIHeroClient))
             {

@@ -107,14 +107,12 @@ namespace Aka_s_Vayne_reworked.Events
         public static void ProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe) return;
-            if (args.SData.Name.ToLower().Contains("vaynetumble"))
+            if (args.SData.Name.ToLower().Contains("VayneTumble"))
             {
                 Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
             }
-
-            if (!sender.IsMe) return;
             var mousePos = Variables._Player.Position.Extend(Game.CursorPos, Program.Q.Range);
-            if (args.SData.Name.ToLower().Contains("attack"))
+            if (args.SData.Name.ToLower().Contains("Attack"))
             {
                 Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
             }
@@ -143,7 +141,6 @@ namespace Aka_s_Vayne_reworked.Events
                 Variables.stopmove = false;
                 Variables.lastaa = Game.Time*1000;
             }
-
         }
 
         public static void SpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -163,7 +160,7 @@ namespace Aka_s_Vayne_reworked.Events
                     if (minion == null) return;
                     var dmg = Variables._Player.GetSpellDamage(minion, SpellSlot.Q) +
                               Variables._Player.GetAutoAttackDamage(minion);
-                    if (Prediction.Health.GetPrediction(minion, (int) (Variables._Player.AttackDelay*1000)) <= dmg/2 &&
+                    if (Prediction.Health.GetPrediction(minion, (int)(Variables._Player.AttackDelay * 1000)) <= dmg / 2 &&
                         (Orbwalker.LastTarget == null || Orbwalker.LastTarget.NetworkId != minion.NetworkId))
                     {
 
@@ -195,26 +192,6 @@ namespace Aka_s_Vayne_reworked.Events
                     Program.E.Cast(LastHitE);
                 }
             }
-
-            if (sender.Spellbook.Owner.IsMe)
-            {
-                if (args.Slot == SpellSlot.Q)
-                {
-                    if (QLogic.TumbleOrderPos != Vector3.Zero)
-                    {
-                        if (QLogic.TumbleOrderPos.IsDangerousPosition())
-                        {
-                            QLogic.TumbleOrderPos = Vector3.Zero;
-                            args.Process = false;
-                        }
-                        else
-                        {
-                            QLogic.TumbleOrderPos = Vector3.Zero;
-                        }
-                    }
-                }
-            }
-
         }
     }
 }

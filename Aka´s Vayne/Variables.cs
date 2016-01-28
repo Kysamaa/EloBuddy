@@ -42,7 +42,7 @@ namespace Aka_s_Vayne_reworked
             get
             {
                 return
-                    HeroManager.Enemies.FindAll(
+                    EntityManager.Heroes.Enemies.FindAll(
                         m =>
                             m.Distance(ObjectManager.Player, true) <= Math.Pow(1000, 2) && m.IsValidTarget(1500, false) &&
                             m.CountEnemiesInRange(m.IsMelee ? m.AttackRange * 1.5f : m.AttackRange + 20 * 1.5f) > 0);
@@ -54,7 +54,7 @@ namespace Aka_s_Vayne_reworked
             get
             {
                 return
-                    HeroManager.Enemies.FindAll(
+                    EntityManager.Heroes.Enemies.FindAll(
                         m => m.IsMelee && m.Distance(ObjectManager.Player) <= _Player.GetAutoAttackRange(m)
                             && (m.ServerPosition.To2D() + (m.BoundingRadius + 25f) * m.Direction.To2D().Perpendicular()).Distance(ObjectManager.Player.ServerPosition.To2D()) <= m.ServerPosition.Distance(ObjectManager.Player.ServerPosition)
                             && m.IsValidTarget(1200, false));

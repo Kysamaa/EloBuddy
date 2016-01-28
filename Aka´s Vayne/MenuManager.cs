@@ -64,11 +64,11 @@ namespace Aka_s_Vayne_reworked
             ComboMenu.Add("UseQspam", new CheckBox("Ignore checks", false));
             ComboMenu.AddLabel("In Burstmode Vayne will Tumble in Walls for a faster Reset.");
             ComboMenu.Add("Mirin", new CheckBox("Burstmode"));
-          //ComboMenu.AddGroupLabel("AA Resets");
-          //ComboMenu.AddLabel("Once you untick´d the AA Reset you have to reload[F5]");
-          //ComboMenu.Add("AAReset", new CheckBox("Use my AA Reset"));
-          //ComboMenu.AddLabel("If your AA´s Cancel use this, or deactivate my AA Reset.");
-          //ComboMenu.Add("AACancel", new Slider("AA Cancel", 0, 0, 20));
+          ComboMenu.AddGroupLabel("AA Resets");
+          ComboMenu.AddLabel("Once you untick´d the AA Reset you have to reload[F5]");
+          ComboMenu.Add("AAReset", new CheckBox("Use my AA Reset"));
+          ComboMenu.AddLabel("If your AA´s Cancel use this, or deactivate my AA Reset.");
+          ComboMenu.Add("AACancel", new Slider("AA Cancel", 0, 0, 20));
             ComboMenu.AddGroupLabel("W Settings");
             ComboMenu.Add("focusw", new CheckBox("Focus W", false));
             ComboMenu.AddGroupLabel("E Settings");
@@ -85,15 +85,8 @@ namespace Aka_s_Vayne_reworked
         {
             CondemnMenu = VMenu.AddSubMenu("Condemn", "Condemn");
             CondemnMenu.AddGroupLabel("Condemn");
-            // CondemnMenu.AddLabel("1: Perfect 2: Smart 3: Sharpshooter 4: Gosu 5: VHR");
-            // CondemnMenu.AddLabel("6: Fastest 7: Legacy 8: Marksman 9: Old 10: Hiki 11: VHR2 12: Fluxys");
             CondemnMenu.AddLabel("1:Best 2:New 3:Marksman 4:Shine");
-            //CondemnMenu.Add("Condemnmode", new Slider("Condemn Mode", 3, 1, 3));
-            //  CondemnMenu.Add("Condemnmode", new Slider("Condemn Mode", 4, 1, 12));
             CondemnMenu.Add("Condemnmode", new Slider("Condemn Mode", 1, 1, 4));
-            //CondemnMenu.Add("condemnmethod1", new CheckBox("Condemn 1(Hiki)", false));
-            //CondemnMenu.Add("condemnmethod2", new CheckBox("Condemn 2(VHR)", false));
-            //CondemnMenu.Add("condemnmethod3", new CheckBox("Condemn 3(Fluxy)"));
             CondemnMenu.Add("UseEauto", new CheckBox("Use auto E?"));
             CondemnMenu.Add("UseEc", new CheckBox("Only Stun current target?", false));
             CondemnMenu.Add("condemnPercent", new Slider("Condemn Hitchance %", 33, 1));
@@ -209,7 +202,8 @@ namespace Aka_s_Vayne_reworked
             MechanicMenu.AddGroupLabel("Utility");
             MechanicMenu.Add("skinhack", new CheckBox("Activate Skin hack"));
             MechanicMenu.Add("skinId", new Slider("Skin Hack", 0, 0, 9));
-            MechanicMenu.Add("autobuy", new CheckBox("Autobuy Starters/Trinkets"));
+            MechanicMenu.Add("autobuy", new CheckBox("Autobuy Starters"));
+            MechanicMenu.Add("autobuyt", new CheckBox("Autobuy Trinkets", false));
             MechanicMenu.AddLabel("1: Max W 2: Max Q(my style :3)");
             MechanicMenu.Add("autolvl", new CheckBox("Activate Auto level"));
             MechanicMenu.Add("autolvls", new Slider("Level Mode", 1, 1, 2));
