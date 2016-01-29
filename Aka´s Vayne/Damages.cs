@@ -19,14 +19,14 @@ namespace AddonTemplate
         {
             return
                 (int)
-                    (new int[] { 45, 80, 115, 150, 185 }[Program.Q.Level - 1] +
+                    (new int[] { 45, 80, 115, 150, 185 }[Program.E.Level - 1] +
                      0.5 * (Variables._Player.TotalAttackDamage));
         }
 
         public static float EDamage(Obj_AI_Base target)
         {
             return Variables._Player.CalculateDamageOnUnit(target, DamageType.Physical, ERawDamage()) *
-                   (Variables._Player.HasBuff("SummonerExhaustSlow") ? 0.5f : 1);
+                   (Variables._Player.HasBuff("SummonerExhaustSlow") ? 0.6f : 1);
         }
 
         public static float Wdmg(Obj_AI_Base target)
