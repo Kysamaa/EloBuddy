@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B827F35C-EE8F-438D-966E-CAF54ADBC2A9}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AkaCore</RootNamespace>
+    <AssemblyName>AkaCore</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EloBuddy">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\EloBuddy.dll</HintPath>
+    </Reference>
+    <Reference Include="EloBuddy.Sandbox">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\EloBuddy.Sandbox.dll</HintPath>
+    </Reference>
+    <Reference Include="EloBuddy.SDK">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\EloBuddy.SDK.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AkaLib\Initialize.cs" />
+    <Compile Include="AkaLib\Item.cs" />
+    <Compile Include="Features\Activator\AItems\Bilge.cs" />
+    <Compile Include="Features\Activator\AItems\Botrk.cs" />
+    <Compile Include="Features\Activator\AItems\Glory.cs" />
+    <Compile Include="Features\Activator\AItems\HextechPro.cs" />
+    <Compile Include="Features\Activator\AItems\Hextech.cs" />
+    <Compile Include="Features\Activator\AItems\HextechGLP.cs" />
+    <Compile Include="Features\Activator\AItems\Hydra.cs" />
+    <Compile Include="Features\Activator\AItems\Queens.cs" />
+    <Compile Include="Features\Activator\AItems\Talis.cs" />
+    <Compile Include="Features\Activator\AItems\Tiamat.cs" />
+    <Compile Include="Features\Activator\AItems\Titanic.cs" />
+    <Compile Include="Features\Activator\AItems\Youmuss.cs" />
+    <Compile Include="Features\Activator\DItems\FaceAlly.cs" />
+    <Compile Include="Features\Activator\DItems\FaceMe.cs" />
+    <Compile Include="Features\Activator\DItems\Glory.cs" />
+    <Compile Include="Features\Activator\DItems\Omen.cs" />
+    <Compile Include="Features\Activator\DItems\Seraph.cs" />
+    <Compile Include="Features\Activator\DItems\SolariAlly.cs" />
+    <Compile Include="Features\Activator\DItems\SolariMe.cs" />
+    <Compile Include="Features\Activator\DItems\Talis.cs" />
+    <Compile Include="Features\Activator\DItems\Zhonyas.cs" />
+    <Compile Include="Features\Activator\IModule.cs" />
+    <Compile Include="Features\Activator\AItems\Qss.cs" />
+    <Compile Include="Features\Activator\AInitialize.cs" />
+    <Compile Include="Features\Activator\Pots\Biscuit.cs" />
+    <Compile Include="Features\Activator\Pots\CorruptPot.cs" />
+    <Compile Include="Features\Activator\Pots\HpPot.cs" />
+    <Compile Include="Features\Activator\Pots\HunterPot.cs" />
+    <Compile Include="Features\Activator\Pots\RefillPot.cs" />
+    <Compile Include="Features\Activator\Summoners\Barrier.cs" />
+    <Compile Include="Features\Activator\Summoners\DubStepIgnite.cs" />
+    <Compile Include="Features\Activator\Summoners\Exhaust.cs" />
+    <Compile Include="Features\Activator\Summoners\HealAlly.cs" />
+    <Compile Include="Features\Activator\Summoners\HealMe.cs" />
+    <Compile Include="Features\Activator\Summoners\Smite.cs" />
+    <Compile Include="Features\Orbwalk\AutoCatch\Axe.cs" />
+    <Compile Include="Features\Orbwalk\AutoCatch\Events.cs" />
+    <Compile Include="Features\Orbwalk\IModule.cs" />
+    <Compile Include="Features\Orbwalk\OInitialize.cs" />
+    <Compile Include="Features\Utility\IModule.cs" />
+    <Compile Include="Features\Utility\Modules\Autobuy.cs" />
+    <Compile Include="Features\Utility\Modules\Autobuytrinkets.cs" />
+    <Compile Include="Features\Utility\Modules\Autolantern.cs" />
+    <Compile Include="Features\Utility\Modules\Autolvl.cs" />
+    <Compile Include="Features\Utility\Modules\FPS Protection.cs" />
+    <Compile Include="Features\Utility\Modules\Skinhack.cs" />
+    <Compile Include="Features\Utility\UInitialize.cs" />
+    <Compile Include="Manager\EventManager.cs" />
+    <Compile Include="Manager\Load.cs" />
+    <Compile Include="Manager\MenuManager.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\Evade\" />
+    <Folder Include="Features\TS\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
