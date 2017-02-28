@@ -26,5 +26,5 @@ Berb
 wladi0
 Pepes
 Levvena
-VayneVersion 7.4.2.1
+VayneVersion 7.4.2.2
 VayneStatus Stable
