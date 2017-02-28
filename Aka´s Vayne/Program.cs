@@ -8,6 +8,7 @@ using EloBuddy.SDK.Events;
 using System.IO;
 using System.Reflection;
 using System.Net;
+using System.Drawing;
 
 namespace Aka_s_Vayne
 {
@@ -23,6 +24,7 @@ namespace Aka_s_Vayne
 
                 if (!File.Exists(dllpath))
                 {
+                    Chat.Print("Updating..", Color.WhiteSmoke);
                     DownloadDll().GetAwaiter().GetResult();
                     InvokeScript();
                 }
@@ -36,6 +38,7 @@ namespace Aka_s_Vayne
                                       
                     if (Vver != Lver)
                     {
+                        Chat.Print("Updating..", Color.WhiteSmoke);
                         DownloadDll().GetAwaiter().GetResult();
                     }
                     
@@ -56,6 +59,7 @@ namespace Aka_s_Vayne
                 var main = myType.GetMethod("Main");
                 if (main != null)
                 {
+                    Chat.Print("Initializing..", Color.WhiteSmoke);
                     main.Invoke(null, null);
                 }
             }
