@@ -24,5 +24,5 @@ Toyota7
 MrArticuno
 Berb
 Pepes
-VayneVersion 7.4.2.0
+VayneVersion 7.4.2.1
 VayneStatus Stable
