@@ -34,5 +34,7 @@ kakyo
 1488
 Acceleratedbomb
 bioblast
+sdone
+unluckyme
 VayneVersion 7.4.2.2
 VayneStatus Stable
