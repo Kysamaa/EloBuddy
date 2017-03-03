@@ -38,5 +38,9 @@ sdone
 unluckyme
 Galenowa19
 Natsuno
+ishallprevail
+supercar325
+amphibe99
+junyeon
 VayneVersion 7.4.2.2
 VayneStatus Stable
