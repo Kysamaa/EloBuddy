@@ -35,7 +35,8 @@ namespace Aka_s_Vayne
                     String webData = client.DownloadString("https://raw.githubusercontent.com/Kysamaa/EloBuddy/master/Paid/Auth.txt");
                     var Vver = Assembly.GetName().Version.ToString();
                     var Lver = webData.Substring(webData.IndexOf("VayneVersion") + 13, 7);
-                                      
+                     
+                                    
                     if (Vver != Lver)
                     {
                         Chat.Print("Updating..", Color.WhiteSmoke);

@@ -47,5 +47,5 @@ scriptshalkalis
 glazed donut
 fasfad
 zael22
-VayneVersion 7.4.2.2
+VayneVersion 7.4.3.0
 VayneStatus Stable
