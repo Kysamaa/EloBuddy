@@ -54,5 +54,6 @@ SunAngel1
 Richar
 Biophyte
 neil43
+Berniebob
 VayneVersion 7.4.3.2
 VayneStatus Stable
