@@ -52,5 +52,5 @@ scripterino123
 179660632
 SunAngel1
 Richar
-VayneVersion 7.4.3.1
+VayneVersion 7.4.3.0
 VayneStatus Stable
