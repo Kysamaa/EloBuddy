@@ -33,13 +33,13 @@ namespace AkaLoader
                     String webData = client.DownloadString("http://www.akaeb.com/Auth.txt");
                     var Vver = Assembly.GetName().Version.ToString();
                     var Lver = webData.Substring(webData.IndexOf("Version") + 7, 7);
-                        
+                     
                     if (Vver != Lver)
                     {
                         Chat.Print("Updating..", Color.WhiteSmoke);
                         DownloadDll().GetAwaiter().GetResult();
                     }
-
+                    
                     //Console.Write(Vver);
                     InvokeScript();
                 }
