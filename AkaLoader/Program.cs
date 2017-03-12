@@ -30,7 +30,7 @@ namespace AkaLoader
                 {
                     Assembly Assembly = Assembly.Load(File.ReadAllBytes(dllpath));
                     WebClient client = new WebClient();
-                    String webData = client.DownloadString("http://www.akaeb.com/Auth.txt");
+                    String webData = client.DownloadString("https://raw.githubusercontent.com/Kysamaa/EloBuddy/master/AkaLoader/Paid/Auth.txt");
                     var Vver = Assembly.GetName().Version.ToString();
                     var Lver = webData.Substring(webData.IndexOf("Version") + 7, 7);
                      
@@ -66,7 +66,7 @@ namespace AkaLoader
         private static async Task DownloadDll()
         {
             WebClient client = new WebClient();
-            client.DownloadFile("http://www.akaeb.com/aka.dll", dllpath);
+            client.DownloadFile("https://github.com/Kysamaa/EloBuddy/raw/master/AkaLoader/Paid/aka.dll", dllpath);
         }
     }
 }
