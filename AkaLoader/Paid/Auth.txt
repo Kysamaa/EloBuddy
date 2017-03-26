@@ -85,7 +85,7 @@ a4341016
 ShmilyD
 rm3010
 Eloy
-fastgto1385
+Fastgto1385
 lixi754321
 SirMeep
 sh1d0
@@ -115,7 +115,6 @@ m7amedoq
 faisalrko
 yorik100
 lihanqiu66
-fastgto1385
 stylernic
 Version 7.6.1.0
 VayneStatus Stable
