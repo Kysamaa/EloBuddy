@@ -1,5 +1,5 @@
-Achuchu
 Aka
+Achuchu
 MeLoSenpai
 Chaos
 Tony
@@ -113,7 +113,9 @@ knviet08
 xuNNyy
 m7amedoq
 faisalrko
-Version 7.5.1.0
+Version 7.6.1.0
 VayneStatus Stable
 DravenStatus Stable
 GankplankStatus Beta
+ThreshStatus Stable
+PredStatus Free Beta
