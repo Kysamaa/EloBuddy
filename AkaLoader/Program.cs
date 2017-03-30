@@ -14,7 +14,10 @@ namespace AkaLoader
 {
     class Program
     {
-        private static string dllpath = @"C:\Users\" + Environment.UserName + @"\AppData\Roaming\EloBuddy\Addons\Libraries\aka.dll";
+       //private static string dllpath = @"C:\Users\" + Environment.UserName + @"\AppData\Roaming\EloBuddy\Addons\Libraries\aka.dll";
+
+        private static string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        private static string dllpath = Path.Combine(appdata, @"EloBuddy\Addons\Libraries\aka.dll");
 
         static void Main(string[] args)
         {
@@ -38,7 +41,7 @@ namespace AkaLoader
 
                         if (Vver != Lver)
                         {
-                            Chat.Print("Updating..", Color.WhiteSmoke);
+                            Chat.Print("Updating..", Color.SkyBlue);
                             DownloadDll().GetAwaiter().GetResult();
                         }
 
