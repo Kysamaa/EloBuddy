@@ -32,15 +32,14 @@ namespace AkaLoader
                     WebClient client = new WebClient();
                     String webData = client.DownloadString("https://raw.githubusercontent.com/Kysamaa/EloBuddy/master/AkaLoader/Paid/Auth.txt");
                     var Vver = Assembly.GetName().Version.ToString();
-                    var Lver = webData.Substring(webData.IndexOf("Version") + 7, 7);
-                     
+                    var Lver = webData.Substring(webData.IndexOf("Version") + 8, 7);
+                    
                     if (Vver != Lver)
                     {
                         Chat.Print("Updating..", Color.WhiteSmoke);
                         DownloadDll().GetAwaiter().GetResult();
                     }
                     
-                    //Console.Write(Vver);
                     InvokeScript();
                 }
             };
@@ -66,7 +65,7 @@ namespace AkaLoader
         private static async Task DownloadDll()
         {
             WebClient client = new WebClient();
-            client.DownloadFile("https://github.com/Kysamaa/EloBuddy/raw/master/AkaLoader/Paid/aka.dll", dllpath);
+            await Task.Run(() => client.DownloadFile("https://github.com/Kysamaa/EloBuddy/raw/master/AkaLoader/Paid/aka.dll", dllpath));
         }
     }
 }
