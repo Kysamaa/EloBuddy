@@ -28,19 +28,26 @@ namespace AkaLoader
                 }
                 else
                 {
-                    Assembly Assembly = Assembly.Load(File.ReadAllBytes(dllpath));
-                    WebClient client = new WebClient();
-                    String webData = client.DownloadString("https://raw.githubusercontent.com/Kysamaa/EloBuddy/master/AkaLoader/Paid/Auth.txt");
-                    var Vver = Assembly.GetName().Version.ToString();
-                    var Lver = webData.Substring(webData.IndexOf("Version") + 8, 7);
-                    
-                    if (Vver != Lver)
+                    try
                     {
-                        Chat.Print("Updating..", Color.WhiteSmoke);
-                        DownloadDll().GetAwaiter().GetResult();
+                        Assembly Assembly = Assembly.Load(File.ReadAllBytes(dllpath));
+                        WebClient client = new WebClient();
+                        String webData = client.DownloadString("https://raw.githubusercontent.com/Kysamaa/EloBuddy/master/AkaLoader/Paid/Auth.txt");
+                        var Vver = Assembly.GetName().Version.ToString();
+                        var Lver = webData.Substring(webData.IndexOf("Version") + 8, 7);
+
+                        if (Vver != Lver)
+                        {
+                            Chat.Print("Updating..", Color.WhiteSmoke);
+                            DownloadDll().GetAwaiter().GetResult();
+                        }
+
+                        InvokeScript();
                     }
-                    
-                    InvokeScript();
+                    catch
+                    {
+                        Chat.Print("Update error please clean eb root folder.");
+                    }
                 }
             };
         }
@@ -56,16 +63,33 @@ namespace AkaLoader
                 var main = myType.GetMethod("OnLoad");
                 if (main != null)
                 {
-                    Chat.Print("Initializing..", Color.WhiteSmoke);
-                    main.Invoke(null, null);
+                    try
+                    {
+                        main.Invoke(null, null);
+                    }
+                    catch (TargetInvocationException e)
+                    {
+                        Chat.Print("Failed to initialize.");
+                        Console.Write(e);
+                    }
                 }
             }
         }
 
         private static async Task DownloadDll()
         {
-            WebClient client = new WebClient();
-            await Task.Run(() => client.DownloadFile("https://github.com/Kysamaa/EloBuddy/raw/master/AkaLoader/Paid/aka.dll", dllpath));
+            if (File.Exists(dllpath)) File.Delete(dllpath);
+
+            try
+            {
+                WebClient client = new WebClient();
+                await Task.Run(() => client.DownloadFile("https://github.com/Kysamaa/EloBuddy/raw/master/AkaLoader/Paid/aka.dll", dllpath));
+            }
+            catch (WebException e)
+            {
+                Chat.Print("Check if you have an safe connection.");
+                Console.Write(e);
+            }
         }
     }
 }
