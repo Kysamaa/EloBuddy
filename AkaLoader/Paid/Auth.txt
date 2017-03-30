@@ -122,6 +122,8 @@ FoxR
 Sinceless
 meowingmeow
 sdghsdgdhg
+Orionx
+Noragiri
 Version 7.6.3.0
 VayneStatus Stable
 DravenStatus Stable
