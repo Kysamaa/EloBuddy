@@ -65,7 +65,7 @@ TrueLove
 frankfan87
 t2beatme
 qq19900402
-SpiritRapier
+spiritrapier
 smidis
 SkyLikezZ
 123Affe321
@@ -125,8 +125,10 @@ sdghsdgdhg
 Orionx
 Noragiri
 calmzeh
+birubiru
 Version 7.6.3.0
 VayneStatus Stable
+DariusStatus Stable
 DravenStatus Stable
 GankplankStatus Beta
 ThreshStatus Stable
