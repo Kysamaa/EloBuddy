@@ -132,6 +132,7 @@ FurkanS
 palino
 loveni131420
 skyliamusis
+rocksinel
 Version 7.6.4.0
 VayneStatus Stable
 DariusStatus Stable
