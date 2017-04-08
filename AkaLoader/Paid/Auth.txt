@@ -135,7 +135,7 @@ skyliamusis
 rocksinel
 caonimabi123
 ez2payz
-Tinytacosftw
+tinytacosftw
 Version 7.6.4.0
 VayneStatus Stable
 DariusStatus Stable
