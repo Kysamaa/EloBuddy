@@ -156,9 +156,9 @@ gn00433002
 cofado211
 spiidry
 Version 7.6.4.0
-VayneStatus Stable
 DariusStatus Stable
 DravenStatus Stable
 GankplankStatus Beta
 ThreshStatus Stable
 PredStatus Free Beta
+VayneStatus Fixing
