@@ -144,7 +144,7 @@ tinytacosftw
 bangrim
 AndHisNameisJohnCena
 Zeekey
-Shuixpera
+ShuixperaWa
 ailtonhack
 sytrus
 harrison0915
@@ -157,6 +157,7 @@ cofado211
 spiidry
 zhixiangweng
 firebreath96
+WildLorderin
 Version 7.6.4.0
 DariusStatus Stable
 DravenStatus Stable
