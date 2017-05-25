@@ -1,0 +1,6 @@
+C:\Users\Alex\Desktop\AddonTemplate\AddonTemplate\bin\Debug\AddonTemplate.exe.config
+C:\Users\Alex\Desktop\AddonTemplate - Copy\AddonTemplate\bin\Debug\AddonTemplate.exe.config
+C:\Users\Alex\Desktop\AddonTemplate - Copy\AddonTemplate\obj\Debug\AddonTemplate.csprojResolveAssemblyReference.cache
+C:\Users\Alex\Desktop\Aka´s Jarvan\AddonTemplate\bin\Debug\AddonTemplate.exe.config
+C:\Users\Alex\Desktop\Aka´s Jarvan\AddonTemplate\bin\Debug\Aka´s Jarvan.exe.config
+C:\Users\Alex\Desktop\Aka´s Jarvan\AddonTemplate\bin\Debug\Akas Jarvan.exe.config
