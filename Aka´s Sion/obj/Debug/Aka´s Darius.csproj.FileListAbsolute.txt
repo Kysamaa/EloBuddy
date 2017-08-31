@@ -1,0 +1,22 @@
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Darius\bin\Debug\Akas Jarvan.exe.config
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Darius\obj\Debug\Akas Jarvan.exe
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Darius\obj\Debug\Akas Jarvan.pdb
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Darius\bin\Debug\Akas Jarvan.exe
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Darius\bin\Debug\Akas Jarvan.pdb
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Darius\bin\Debug\EloBuddy.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Darius\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Darius\bin\Debug\SharpDX.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Darius\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Darius\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Darius\obj\Debug\Aka´s Darius.csprojResolveAssemblyReference.cache
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\bin\Debug\Akas Jarvan.exe.config
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\obj\Debug\Akas Jarvan.exe
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\obj\Debug\Akas Jarvan.pdb
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\bin\Debug\Akas Jarvan.exe
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\bin\Debug\Akas Jarvan.pdb
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\bin\Debug\EloBuddy.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\bin\Debug\SharpDX.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Alex\Documents\GitHub\EloBuddy\Aka´s Sion\obj\Debug\Aka´s Darius.csprojResolveAssemblyReference.cache
